@@ -1,0 +1,93 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: janjaap
+ * Date: 2019-03-15
+ * Time: 14:21
+ */
+
+namespace Lib\Models;
+use PDO;
+
+
+class Exam
+{
+    protected $pdo;
+    protected $fields;
+    public $idexam, $description;
+
+    public function __construct($db)
+    {
+         $this->pdo = $db;
+    }
+
+    public function read() {
+        $sql = "SELECT * FROM exam";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);
+        return $stmt->fetchAll();
+    }
+
+    public function readById($idexam) {
+        $sql = "select 
+                e.idexam, 
+                e.description as exam_description, 
+                p.idproces, 
+                p.description as proces_description, 
+                ass.idassignment, 
+                ass.description as assignment_description,
+                a.idaspect,
+                a.description as aspect_description,
+                a.score
+                from exam as e
+                join proces as p on e.idexam =  p.idexam
+                join assignment as ass on p.idproces = ass.idproces
+                join aspect as a on ass.idassignment = a.idassignment
+                where e.idexam = :idexam;";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':idexam', $idexam, PDO::PARAM_INT);
+        $stmt->execute();
+        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $this->getProcessesForExam($stmt->fetchAll());
+    }
+
+    function getProcessesForExam($exams) {
+        $processes = [];
+        foreach($exams as $exam) {
+             $processes[$exam['idproces']] = ['idproces' => $exam['idproces'], 'description' => $exam['proces_description']];
+        }
+    }
+    public function createTable()
+    {
+
+        $sql = "CREATE TABLE IF NOT EXISTS `results`.`exam` (
+          `idexam` INT NOT NULL,
+          `description` VARCHAR(45) NULL,
+          `active` INT NOT NULL DEFAULT 1,
+          PRIMARY KEY (`idexam`))
+        ENGINE = InnoDB;";
+
+        $stmt = $this->pdo->query($sql);
+
+    }
+
+    public function dropTable() {
+        $sql = "DROP TABLE IF EXISTS `results`.`student` ;";
+        $stmt = $this->pdo->query($sql);
+    }
+
+    public function seedTable() {
+        $sql = [
+            "REPLACE INTO `results`.`exam` (`idexam`, `description`, `active`) VALUES (505, 'Veilig programmeren', 1);",
+            "REPLACE INTO `results`.`exam` (`idexam`, `description`, `active`) VALUES (023, 'Digitale Vaardigheden', 1);",
+            "REPLACE INTO `results`.`exam` (`idexam`, `description`, `active`) VALUES (251871, 'B1-K1', 1);",
+            "REPLACE INTO `results`.`exam` (`idexam`, `description`, `active`) VALUES (251872, 'B1-K2', 1);"
+        ];
+
+        foreach($sql as $q) {
+            $stmt = $this->pdo->query($q);
+        }
+    }
+}

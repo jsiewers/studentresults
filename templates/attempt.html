@@ -1,13 +1,18 @@
 
 {% extends "layout.html" %}
 {% block content %}
-<h1>Students</h1>
+<h1>Student</h1>
 <table>
-    {% for student in students %}
     <tr>
         <td>{{ student.fullName() }}</td>
-        <td><a href="results/{{ student.idstudent }}">results</a></td>
     </tr>
     {% endfor %}
 </table>
+<h1>Exam</h1>
+<table>
+    <tr>
+        <td>hallo</td>
+    </tr>
+</table>
+
 {% endblock %}

@@ -20,7 +20,7 @@ return [
             'host'=> '127.0.0.1',
             'user' => 'web',
             'pass' => '230mod',
-            'dbname' => 'mydb'
+            'dbname' => 'results'
         ]
     ],
 ];

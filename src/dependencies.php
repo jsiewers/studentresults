@@ -3,6 +3,8 @@
 use Lib\Controllers\SeedController;
 use Lib\Controllers\ResultController;
 use Lib\Controllers\StudentController;
+use Lib\Controllers\ExamController;
+use Lib\Controllers\ProcesController;
 
 $container = $app->getContainer();
 
@@ -55,6 +57,7 @@ $container['Aspect'] = function ($c) {
     return new Aspect($c->get('db'));
 };
 
+
 $container['SeedController'] = function ($c) {
     return new SeedController($c->get('db'));
 };
@@ -69,6 +72,10 @@ $container['StudentController'] = function ($c) {
 
 $container['ExamController'] = function ($c) {
     return new ExamController($c->get('db'), $c->get('view'));
+};
+
+$container['ProcesController'] = function ($c) {
+    return new ProcesController($c->get('db'), $c->get('view'));
 };
 $container['validator'] = function($c) {
     return new \Lib\Validators\Validator;

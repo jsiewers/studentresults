@@ -9,6 +9,7 @@
 namespace Lib\Controllers;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Lib\Models\Exam;
 
 class ExamController
 
@@ -27,8 +28,28 @@ class ExamController
         $attempt = new Exam($this->db);
 
          $this->view->render($response, 'attempt.html', [
-            'student' =>  $student->readById($request->getAttribute('idstudent')),
+             'student' =>  $student->readById($request->getAttribute('idstudent')),
              'attempt' => $attempt->readById($request->getAttribute('idexam')),
+        ]);
+    }
+
+    public function new_form(Request $request, Response $response, array $args = []) {
+        $exam = new Exam($this->db);
+        $exams = $exam->read();
+        $this->view->render($response, 'new_exam.html', [
+            'exams' => $exams,
+        ]);
+    }
+
+    public function save(Request $request, Response $response, array $args = []) {
+        $exam = new Exam($this->db);
+        $exam->idexam = ($request->getParsedBodyParam('idexam'));
+        $exam->description = ($request->getParsedBodyParam('description'));
+        $exam->save();
+
+        $exams = $exam->read();
+        $this->view->render($response, 'new_exam.html', [
+            'exams' => $exams,
         ]);
     }
 }

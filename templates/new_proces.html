@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>New Proces</h1>
+<form id="procesform" action="/proces/{{ idexam }}{% if not idexam %}0{% endif %}/new" method="post">
+    <label for="idexam">Exam Id</label>
+    <select id="idexam" name="idexam" onchange="procesform.submit()">
+        {% for exam in exams %}
+        <option value="{{ exam.idexam }}" {% if exam.idexam == idexam %}SELECTED{% endif %}>{{ exam.description }}</option>
+        {% endfor %}
+    </select>
+    <label for="description">Description</label>
+    <input type="text" id="description" name="description"><br>
+
+    <input type="submit" name="btnsubmit">
+</form>
+<table>
+{% for proces in processes %}
+<tr>
+    <td>{{ proces.idproces }}</td>
+    <td>{{ proces.description }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

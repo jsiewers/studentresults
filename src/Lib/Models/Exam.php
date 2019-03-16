@@ -29,6 +29,28 @@ class Exam
         return $stmt->fetchAll();
     }
 
+    public function save() {
+        try {
+            $sql = "INSERT INTO exam (idexam, description, active) VALUES (:idexam, :description, 1)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
+            $stmt->bindParam(':description', $this->description, PDO::PARAM_STR);
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            $result = $e->getMessage();
+        }
+        return $result;
+    }
+
+    public function form() {
+        $formdata = [
+            ['idexam' => ['type' => 'text', 'label' => 'Exam ID', 'value' => '']],
+            ['description' => ['type' => 'text', 'label' => 'Omschrijving', 'value' => '']],
+        ];
+    }
+
+
+
     public function readById($idexam) {
         $sql = "select 
                 e.idexam, 
@@ -64,7 +86,7 @@ class Exam
 
         $sql = "CREATE TABLE IF NOT EXISTS `results`.`exam` (
           `idexam` INT NOT NULL,
-          `description` VARCHAR(45) NULL,
+          `description` VARCHAR(254) NULL,
           `active` INT NOT NULL DEFAULT 1,
           PRIMARY KEY (`idexam`))
         ENGINE = InnoDB;";

@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>New Exam</h1>
+<form action="/exam/new" method="post">
+    <label for="idexam">Exam Id</label>
+    <input type="text" id="idexam" name="idexam">
+
+    <label for="description">Description</label>
+    <input type="text" id="description" name="description">
+
+    <input type="submit" name="submit">
+</form>
+<table>
+{% for exam in exams %}
+<tr>
+    <td>{{ exam.idexam }}</td>
+    <td>{{ exam.description }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

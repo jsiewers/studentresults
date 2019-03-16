@@ -29,6 +29,15 @@ class Exam
         return $stmt->fetchAll();
     }
 
+    public function readById($idexam) {
+        $sql = "SELECT * FROM exam WHERE idexam = :idexam";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':idexam', $idexam, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);
+        return $stmt->fetch();
+    }
+
     public function save() {
         try {
             $sql = "INSERT INTO exam (idexam, description, active) VALUES (:idexam, :description, 1)";
@@ -51,7 +60,7 @@ class Exam
 
 
 
-    public function readById($idexam) {
+    public function readResultByExam($idexam) {
         $sql = "select 
                 e.idexam, 
                 e.description as exam_description, 

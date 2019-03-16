@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>New Assignment</h1>
+<p>Exam: {{ exam.description }}</p>
+<p>Proces: {{ proces.description }}</p>
+<form id="assignmentform" action="/assignment/{{ exam.idexam }}{% if not exam.idexam %}0{% endif %}/{{ proces.idproces }}{% if not proces.idproces %}0{% endif %}/new" method="post">
+    <label for="idproces">Proces</label>
+    <select id="idproces" name="idproces" onchange="assignmentform.submit()">
+        {% for p in processes %}
+        <option value="{{ p.idproces }}" {% if p.idproces == idproces %}SELECTED{% endif %}>{{ p.description }}</option>
+        {% endfor %}
+    </select>
+    <label for="description">Description</label>
+    <input type="text" id="description" name="description"><br>
+
+    <input type="submit" name="btnsubmit">
+</form>
+<table>
+    {% for assignment in assignments %}
+    <tr>
+        <td>{{ assignment.idassignment }}</td>
+        <td><a href="/aspect/{{ exam.idexam }}/{{ proces.idproces }}/{{ assignment.idassignment }}/new">{{ assignment.description }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

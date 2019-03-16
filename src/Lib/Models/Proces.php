@@ -13,7 +13,7 @@ class Proces
 {
     protected $pdo;
     protected $fields;
-    public $idexam, $description;
+    public $idproces, $idexam, $description;
 
     public function __construct($db)
     {
@@ -24,16 +24,24 @@ class Proces
         $sql = "SELECT * FROM proces";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Proces::class, [$this->db]);
         return $stmt->fetchAll();
     }
 
+    public function readById($idproces) {
+        $sql = "SELECT * FROM proces WHERE idproces = :idproces";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':idproces', $idproces, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Proces::class, [$this->db]);
+        return $stmt->fetch();
+    }
     public function readByExam($idexam) {
         $sql = "SELECT * FROM proces WHERE idexam = :idexam";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $idexam, PDO::PARAM_INT);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Proces::class, [$this->db]);
         return $stmt->fetchAll();
     }
 

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>New Aspect</h1>
+<p>Exam: {{ exam.description }}</p>
+<p>Proces: {{ proces.description }}</p>
+<form id="aspectform" action="/aspect/{{ exam.idexam }}/{{ proces.idproces }}/{{ idassignment }}/new" method="post">
+    <label for="idassignment">Assignment</label>
+    <select id="idassignment" name="idassignment" onchange="aspectform.submit()">
+        {% for a in assignments %}
+        <option value="{{ a.idassignment }}" {% if a.idassignment == idassignment %}SELECTED{% endif %}>{{ a.description }}</option>
+        {% endfor %}
+    </select>
+    <label for="description">Description</label>
+    <input type="text" id="description" name="description"><br>
+    <select name="score">
+        <option>0</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+    </select><br>
+    <input type="submit" name="btnsubmit">
+</form>
+<table>
+    {% for aspect in aspects %}
+    <tr>
+        <td>{{ aspect.idaspect }}</td>
+        <td>{{ aspect.description }}</td>
+        <td>{{ aspect.score }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

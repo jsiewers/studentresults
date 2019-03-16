@@ -10,6 +10,7 @@ namespace Lib\Controllers;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Lib\Models\Exam;
+use Lib\Models\Student;
 
 class ExamController
 

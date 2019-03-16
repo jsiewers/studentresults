@@ -5,6 +5,8 @@ use Lib\Controllers\ResultController;
 use Lib\Controllers\StudentController;
 use Lib\Controllers\ExamController;
 use Lib\Controllers\ProcesController;
+use Lib\Controllers\AssignmentController;
+use Lib\Controllers\AspectController;
 
 $container = $app->getContainer();
 
@@ -77,6 +79,14 @@ $container['ExamController'] = function ($c) {
 $container['ProcesController'] = function ($c) {
     return new ProcesController($c->get('db'), $c->get('view'));
 };
+
+$container['AssignmentController'] = function ($c) {
+    return new AssignmentController($c->get('db'), $c->get('view'));
+};
+$container['AspectController'] = function ($c) {
+    return new AspectController($c->get('db'), $c->get('view'));
+};
+
 $container['validator'] = function($c) {
     return new \Lib\Validators\Validator;
 };

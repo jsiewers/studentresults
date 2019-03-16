@@ -25,20 +25,22 @@ class ProcesController
 
 
     public function new_form(Request $request, Response $response, array $args = []) {
+        $idexam = $request->getAttribute('idexam');
         $exam = new Exam($this->db);
         $exams = $exam->read();
 
         $proces = new Proces($this->db);
-        $processes = $proces->read();
+        $processes = $proces->readByExam($idexam);
 
         $this->view->render($response, 'new_proces.html', [
             'exams' => $exams,
-            'idexam' => $request->getParsedBodyParam('idexam'),
+            'idexam' => $idexam,
             'processes' => $processes,
         ]);
     }
 
     public function save(Request $request, Response $response, array $args = []) {
+        $idexam = $request->getParsedBodyParam('idexam');
         $proces = new Proces($this->db);
         $proces->idexam = ($request->getParsedBodyParam('idexam'));
         $proces->description = ($request->getParsedBodyParam('description'));
@@ -53,7 +55,7 @@ class ProcesController
 
         $this->view->render($response, 'new_proces.html', [
             'exams' => $exams,
-            'idexam' => $proces->idexam,
+            'idexam' => $idexam,
             'processes' => $processes,
         ]);
     }

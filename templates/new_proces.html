@@ -18,6 +18,7 @@
 <tr>
     <td>{{ proces.idproces }}</td>
     <td>{{ proces.description }}</td>
+    <td><a href="/assignment/{{ idexam }}{% if not idexam %}0{% endif %}/{{ proces.idproces }}/new">add assignments</a></td>
 </tr>
 {% endfor %}
 </table>

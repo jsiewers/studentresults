@@ -14,7 +14,7 @@
 {% for exam in exams %}
 <tr>
     <td>{{ exam.idexam }}</td>
-    <td>{{ exam.description }}</td>
+    <td><a href="/proces/{{ exam.idexam }}/new">{{ exam.description }}</a></td>
 </tr>
 {% endfor %}
 </table>

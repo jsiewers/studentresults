@@ -81,7 +81,7 @@ class Exam
                 join proces as p on e.idexam =  p.idexam
                 join assignment as ass on p.idproces = ass.idproces
                 join aspect as a on ass.idassignment = a.idassignment
-                where e.idexam = :idexam;";
+                where e.idexam = :idexam order by score ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $idexam, PDO::PARAM_INT);
         $stmt->execute();

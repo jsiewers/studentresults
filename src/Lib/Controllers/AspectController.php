@@ -19,11 +19,18 @@ use Lib\Models\Aspect;
 class AspectController
 {
     protected $db, $view;
+    protected $exam, $proces, $assignments;
 
+    /**
+     * AspectController constructor.
+     * @param $db
+     * @param $view
+     */
     public function __construct($db, $view)
     {
         $this->db = $db;
         $this->view = $view;
+
     }
 
 
@@ -60,7 +67,7 @@ class AspectController
     {
         $idexam = $request->getAttribute('idexam');
         $idproces = $request->getAttribute('idproces');
-        $idassignment = $request->getParsedBodyParam('idassignment');
+        $idassignment = $request->getAttribute('idassignment');
 
         $exam = new Exam($this->db);
         $exam = $exam->readById($idexam);
@@ -70,7 +77,6 @@ class AspectController
 
         $assignment = new Assignment($this->db);
         $assignments = $assignment->readByProces($proces->idproces);
-        $assignment = $assignment->readById($idassignment);
 
         $aspect = new Aspect($this->db);
         $aspect->idassignment = $idassignment;
@@ -82,6 +88,42 @@ class AspectController
         }
         $aspects = $aspect->readByAssignment($idassignment);
 
+
+        $this->view->render($response, 'new_aspect.html', [
+            'exam' => $exam,
+            'proces' => $proces,
+            'idassignment' => $idassignment,
+            'assignments' => $assignments,
+            'aspects' => $aspects,
+        ]);
+    }
+
+    public function update(Request $request, Response $response, array $args = []) {
+
+        $idexam = $request->getAttribute('idexam');
+        $idproces = $request->getAttribute('idproces');
+        $idassignment = $request->getAttribute('idassignment');
+        $idaspect = $request->getAttribute('idaspect');
+
+        $exam = new Exam($this->db);
+        $exam = $exam->readById($idexam);
+
+        $proces = new Proces($this->db);
+        $proces = $proces->readById($idproces);
+
+        $assignment = new Assignment($this->db);
+        $assignments = $assignment->readByProces($proces->idproces);
+
+        $aspect = new Aspect($this->db);
+        $aspect->idaspect = $idaspect;
+        $aspect->idassignment = $idassignment;
+        $aspect->description = $request->getParsedBodyParam('description');
+        $aspect->score = $request->getParsedBodyParam('score');
+
+        if (!empty($aspect->description)) {
+            $aspect->update();
+        }
+        $aspects = $aspect->readByAssignment($idassignment);
 
         $this->view->render($response, 'new_aspect.html', [
             'exam' => $exam,

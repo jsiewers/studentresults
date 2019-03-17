@@ -55,6 +55,25 @@ class Aspect
         return $result;
     }
 
+    public function update() {
+        try {
+            $sql = "update aspect set 
+                      idassignment = :idassignment, 
+                      description = :description, 
+                      score = :score WHERE idaspect = :idaspect;";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':idaspect', $this->idaspect, PDO::PARAM_INT);
+            $stmt->bindParam(':idassignment', $this->idassignment, PDO::PARAM_INT);
+            $stmt->bindParam(':description', $this->description, PDO::PARAM_STR);
+            $stmt->bindParam(':score', $this->score, PDO::PARAM_INT);
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+        return $result;
+    }
+
+
     public function createTable()
     {
         $sql = "CREATE TABLE IF NOT EXISTS `results`.`aspect` (

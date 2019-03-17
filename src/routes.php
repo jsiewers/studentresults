@@ -13,6 +13,7 @@ $app->get('/assignment/{idexam}/{idproces}/new', 'AssignmentController:new_form'
 $app->post('/assignment/{idexam}/{idproces}/new', 'AssignmentController:save');
 $app->get('/aspect/{idexam }/{idproces }/{idassignment}/new', 'AspectController:new_form');
 $app->post('/aspect/{idexam }/{idproces }/{idassignment}/new', 'AspectController:save');
+$app->post('/aspect/{idexam }/{idproces }/{idassignment}/{idaspect}/update', 'AspectController:update');
 $app->get('/results/{idstudent}', 'ResultController:results');
 $app->get('/students', 'StudentController:show');
 $app->get('/attempt/{idstudent}/{idexam}', 'ExamController:attempt');

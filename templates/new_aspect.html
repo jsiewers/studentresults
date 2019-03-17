@@ -22,11 +22,23 @@
 </form>
 <table>
     {% for aspect in aspects %}
-    <tr>
-        <td>{{ aspect.idaspect }}</td>
-        <td>{{ aspect.description }}</td>
-        <td>{{ aspect.score }}</td>
+    <form id="aspectform" action="/aspect/{{ exam.idexam }}/{{ proces.idproces }}/{{ idassignment }}/{{ aspect.idaspect }}/update" method="post">
+        <tr>
+        <td>
+            <textarea style="width:400px;" id="description" name="description">{{ aspect.description }}</textarea>
+        </td>
+            <td>
+            <select name="score">
+                {% for i in 0..3%}
+                <option {% if aspect.score == i %}SELECTED{% endif %}>{{ i }}</option>
+                {% endfor %}
+            </select><br>
+            </td>
+            <td>
+            <input type="submit" name="btnsubmit">
+            </td>
     </tr>
+    </form>
     {% endfor %}
 </table>
 {% endblock %}

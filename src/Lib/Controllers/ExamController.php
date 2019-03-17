@@ -24,13 +24,16 @@ class ExamController
     }
 
     public function attempt(Request $request, Response $response, array $args = []) {
-
+        $idexam = $request->getAttribute('idexam');
         $student = new Student($this->db);
-        $attempt = new Exam($this->db);
+        $exam = new Exam($this->db);
+        $attempt = $exam->readExamWithDeps($idexam);
 
          $this->view->render($response, 'attempt.html', [
              'student' =>  $student->readById($request->getAttribute('idstudent')),
-             'attempt' => $attempt->readById($request->getAttribute('idexam')),
+             'attempt' => $attempt,
+             'exam' => $exam,
+
         ]);
     }
 
@@ -54,3 +57,5 @@ class ExamController
         ]);
     }
 }
+
+

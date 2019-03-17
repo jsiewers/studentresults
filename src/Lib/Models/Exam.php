@@ -7,6 +7,7 @@
  */
 
 namespace Lib\Models;
+
 use PDO;
 
 
@@ -18,10 +19,11 @@ class Exam
 
     public function __construct($db)
     {
-         $this->pdo = $db;
+        $this->pdo = $db;
     }
 
-    public function read() {
+    public function read()
+    {
         $sql = "SELECT * FROM exam";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
@@ -29,7 +31,9 @@ class Exam
         return $stmt->fetchAll();
     }
 
-    public function readById($idexam) {
+
+    public function readById($idexam)
+    {
         $sql = "SELECT * FROM exam WHERE idexam = :idexam";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $idexam, PDO::PARAM_INT);
@@ -38,7 +42,8 @@ class Exam
         return $stmt->fetch();
     }
 
-    public function save() {
+    public function save()
+    {
         try {
             $sql = "INSERT INTO exam (idexam, description, active) VALUES (:idexam, :description, 1)";
             $stmt = $this->pdo->prepare($sql);
@@ -51,7 +56,8 @@ class Exam
         return $result;
     }
 
-    public function form() {
+    public function form()
+    {
         $formdata = [
             ['idexam' => ['type' => 'text', 'label' => 'Exam ID', 'value' => '']],
             ['description' => ['type' => 'text', 'label' => 'Omschrijving', 'value' => '']],
@@ -59,8 +65,8 @@ class Exam
     }
 
 
-
-    public function readResultByExam($idexam) {
+    public function readExamWithDeps($idexam)
+    {
         $sql = "select 
                 e.idexam, 
                 e.description as exam_description, 
@@ -79,17 +85,24 @@ class Exam
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $idexam, PDO::PARAM_INT);
         $stmt->execute();
-        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $this->getProcessesForExam($stmt->fetchAll());
+        $resultset = $stmt->fetchAll();
+        $exam = [];
+        foreach ($resultset as $p) {
+            $exam['description'] = $p['exam_description'];
+            $exam['processes'][$p['idproces']]['description'] = $p['proces_description'];
+            $exam['processes'][$p['idproces']]['idproces'] = $p['idproces'];
+            $exam['processes'][$p['idproces']]['assignments'] [$p['idassignment']]['description'] = $p['assignment_description'];
+            $exam['processes'][$p['idproces']]['assignments'] [$p['idassignment']]['idassignment'] = $p['idassignment'];
+            $exam['processes'][$p['idproces']]['assignments'] [$p['idassignment']]['aspects'][$p['idaspect']]['description'] = $p['aspect_description'];
+            $exam['processes'][$p['idproces']]['assignments'] [$p['idassignment']]['aspects'][$p['idaspect']]['idaspect'] = $p['idaspect'];
+
+        }
+        //var_dump($exam);
+        return $exam;
     }
 
-    function getProcessesForExam($exams) {
-        $processes = [];
-        foreach($exams as $exam) {
-             $processes[$exam['idproces']] = ['idproces' => $exam['idproces'], 'description' => $exam['proces_description']];
-        }
-    }
+
     public function createTable()
     {
 
@@ -104,12 +117,14 @@ class Exam
 
     }
 
-    public function dropTable() {
+    public function dropTable()
+    {
         $sql = "DROP TABLE IF EXISTS `results`.`student` ;";
         $stmt = $this->pdo->query($sql);
     }
 
-    public function seedTable() {
+    public function seedTable()
+    {
         $sql = [
             "REPLACE INTO `results`.`exam` (`idexam`, `description`, `active`) VALUES (505, 'Veilig programmeren', 1);",
             "REPLACE INTO `results`.`exam` (`idexam`, `description`, `active`) VALUES (023, 'Digitale Vaardigheden', 1);",
@@ -117,7 +132,7 @@ class Exam
             "REPLACE INTO `results`.`exam` (`idexam`, `description`, `active`) VALUES (251872, 'B1-K2', 1);"
         ];
 
-        foreach($sql as $q) {
+        foreach ($sql as $q) {
             $stmt = $this->pdo->query($q);
         }
     }

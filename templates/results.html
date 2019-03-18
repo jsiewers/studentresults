@@ -21,7 +21,7 @@
         <td>{{ result.exam_description }}</td>
         <td>{{ result.exam_date }}</td>
         <td>{{ result.score }}</td>
-        <td><a href="/attempt/{{ student.idstudent }}/{{ exam.idexam }}">Details</a></td>
+        <td><a href="/result/{{ student.idstudent }}/{{ result.idexam }}/{{ result.exam_date }}">Details</a></td>
     </tr>
     {% endfor %}
 </table>

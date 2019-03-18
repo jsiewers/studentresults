@@ -90,6 +90,7 @@ class Exam
         $exam = [];
         foreach ($resultset as $p) {
             $exam['description'] = $p['exam_description'];
+            $exam['idexam'] = $p['idexam'];
             $exam['processes'][$p['idproces']]['description'] = $p['proces_description'];
             $exam['processes'][$p['idproces']]['idproces'] = $p['idproces'];
             $exam['processes'][$p['idproces']]['assignments'] [$p['idassignment']]['description'] = $p['assignment_description'];

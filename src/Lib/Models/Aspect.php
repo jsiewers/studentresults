@@ -66,9 +66,9 @@ class Aspect
             $stmt->bindParam(':idassignment', $this->idassignment, PDO::PARAM_INT);
             $stmt->bindParam(':description', $this->description, PDO::PARAM_STR);
             $stmt->bindParam(':score', $this->score, PDO::PARAM_INT);
-            $stmt->execute();
+            $result = $stmt->execute();
         } catch (\PDOException $e) {
-            echo $e->getMessage();
+            $result =  $e->getMessage();
         }
         return $result;
     }

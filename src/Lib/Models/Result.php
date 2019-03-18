@@ -14,37 +14,84 @@ class Result
 {
     protected $pdo;
     protected $fields;
-    public $exam_date, $idstudent, $idexam, $exam_description, $idproces, $proces_description, $idassignment, $assignement_description, $idaspect, $aspect_description;
+    public $exam_date, $idstudent, $idexam, $exam_description, $idproces, $p_description, $idassignment, $assignement_description, $idaspect, $aspect_description;
 
     public function __construct($db)
     {
         $this->pdo = $db;
     }
 
-    public function resultsByStudent($idstudent) {
-        $sql = "select r.idstudent,
+    public function save() {
+        try {
+            $sql = "insert into result (idstudent, idaspect, exam_date) values (:idstudent, :idaspect, :exam_date);";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(":idstudent", $this->idstudent, PDO::PARAM_INT);
+            $stmt->bindParam(":idaspect", $this->idaspect, PDO::PARAM_INT);
+            $stmt->bindParam(":exam_date", $this->exam_date, PDO::PARAM_INT);
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function resultsByExam() {
+        $sql = "select 
                 r.exam_date, 
-                e.idexam, 
-                e.description as exam_description, 
                 p.idproces, 
                 p.description as proces_description, 
                 ass.idassignment, 
                 ass.description as assignment_description,
                 a.idaspect,
-                a.description as aspect_description
+                a.description as aspect_description,
+                a.score
                 from result as r
                 join aspect as a on r.idaspect = a.idaspect
-                join student as s on r.idstudent = s.idstudent
                 join assignment as ass on a.idassignment = ass.idassignment
                 join proces as p on ass.idproces = p.idproces
                 join exam as e on p.idexam = e.idexam
-                where r.idstudent = :idstudent;";
+                where e.idexam = :idexam and r.idstudent = :idstudent and exam_date = :exam_date";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
+        $stmt->bindParam(':idstudent', $this->idstudent, PDO::PARAM_INT);
+        $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
+        $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_INT);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Result::class, [$this->db]);
-        return $stmt->fetchAll();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        foreach($stmt->fetchAll() as $p) {
+            $result[$p["idproces"]]["description"] = $p["proces_description"];
+            $result[$p["idproces"]]["assignments"][$p["idassignment"]]["description"] = $p["assignment_description"];
+            $result[$p["idproces"]]["assignments"][$p["idassignment"]]["aspect_description"] = $p["aspect_description"];
+            $result[$p["idproces"]]["assignments"][$p["idassignment"]]["aspect_score"] = $p["score"];
+            $result[$p["idproces"]]["proces_score"] += $p["score"];
+            $result["exam_score"] += $p["score"];
+            $result["exam_date"] = $p["exam_date"];
+        }
+        return $result;
     }
+
+//    public function resultsByStudent($idstudent) {
+//        $sql = "select r.idstudent,
+//                r.exam_date,
+//                e.idexam,
+//                e.description as exam_description,
+//                p.idproces,
+//                p.description as proces_description,
+//                ass.idassignment,
+//                ass.description as assignment_description,
+//                a.idaspect,
+//                a.description as aspect_description
+//                from result as r
+//                join aspect as a on r.idaspect = a.idaspect
+//                join student as s on r.idstudent = s.idstudent
+//                join assignment as ass on a.idassignment = ass.idassignment
+//                join proces as p on ass.idproces = p.idproces
+//                join exam as e on p.idexam = e.idexam
+//                where r.idstudent = :idstudent;";
+//        $stmt = $this->pdo->prepare($sql);
+//        $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
+//        $stmt->execute();
+//        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Result::class, [$this->db]);
+//        return $stmt->fetchAll();
+//    }
 
     public function examResultsByStudent($idstudent) {
         $sql = "select 

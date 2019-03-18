@@ -1,13 +1,6 @@
 
 {% extends "layout.html" %}
 {% block content %}
-<h1>Student</h1>
-<table>
-    <tr>
-        <td>{{ student.fullName() }}</td>
-    </tr>
-</table>
-<h1>Exam</h1>
 <ul>
     {% for processes in attempt %}
     {% for proces in processes  %}
@@ -15,9 +8,20 @@
     {% endfor %}
     {% endfor %}
 </ul>
+<h1>Student</h1>
+<table>
+    <tr>
+        <td>{{ student.fullName() }}</td>
+    </tr>
+</table>
+<h1>Exam</h1>
+<h3>{{ exam.description }}</h3>
+<form action="/attempt/{{ student.idstudent }}/{{ exam.idexam }}" method="post">
+
+<p>Datum:&nbsp; <input type="date" name="exam_date"></p>
+
     {% for processes in attempt %}
         {% for proces in processes %}
-<form action="/attempt" method="post">
 <table id="proces_{{ proces.idproces }}">
         <tr>
             <td colspan="8"><b>{{ proces.description }}</b></td>
@@ -28,7 +32,7 @@
             </tr>
             <tr>
                 {% for aspect in assignment.aspects %}
-                <td style="vertical-align: top; width:2%;"><input type="radio" name="{{ assignment.idassignment }}" value="{{ aspect.idaspect }}"></td>
+                <td style="vertical-align: top; width:2%;"><input type="radio" name="_{{ assignment.idassignment }}" value="{{ aspect.idaspect }}"></td>
                 <td style="vertical-align: top; width:23%;">{{ aspect.description }}</td>
                 {% endfor %}
             </tr>
@@ -36,6 +40,7 @@
         {% endfor %}
 </table>
     {% endfor %}
+    <input type="submit" name="btnsubmit">
 </form>
 
 {% endblock %}

@@ -29,6 +29,8 @@ class ExamController
         $exam = new Exam($this->db);
         $attempt = $exam->readExamWithDeps($idexam);
 
+        $exam = $exam->readById($idexam);
+
          $this->view->render($response, 'attempt.html', [
              'student' =>  $student->readById($request->getAttribute('idstudent')),
              'attempt' => $attempt,

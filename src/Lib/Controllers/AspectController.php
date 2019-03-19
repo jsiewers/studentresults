@@ -67,7 +67,8 @@ class AspectController
     {
         $idexam = $request->getAttribute('idexam');
         $idproces = $request->getAttribute('idproces');
-        $idassignment = $request->getAttribute('idassignment');
+        //$idassignment = $request->getAttribute('idassignment');
+        $idassignment = $request->getParsedBodyParam('idassignment');
 
         $exam = new Exam($this->db);
         $exam = $exam->readById($idexam);

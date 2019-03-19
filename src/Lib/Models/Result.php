@@ -14,7 +14,7 @@ class Result
 {
     protected $pdo;
     protected $fields;
-    public $exam_date, $idstudent, $idexam, $exam_description, $idproces, $p_description, $idassignment, $assignement_description, $idaspect, $aspect_description;
+    public $exam_date, $idstudent, $idexam, $exam_description, $idproces, $p_description, $idassignment, $assignement_description, $idaspect, $aspect_description, $exam_score;
 
     public function __construct($db)
     {
@@ -56,16 +56,24 @@ class Result
         $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_INT);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $exam_score = 0;
+        $exam_date = '';
         foreach($stmt->fetchAll() as $p) {
             $result[$p["idproces"]]["description"] = $p["proces_description"];
             $result[$p["idproces"]]["assignments"][$p["idassignment"]]["description"] = $p["assignment_description"];
             $result[$p["idproces"]]["assignments"][$p["idassignment"]]["aspect_description"] = $p["aspect_description"];
             $result[$p["idproces"]]["assignments"][$p["idassignment"]]["aspect_score"] = $p["score"];
             $result[$p["idproces"]]["proces_score"] += $p["score"];
-            $result["exam_score"] += $p["score"];
-            $result["exam_date"] = $p["exam_date"];
+            $exam_score += $p["score"];
+            $exam_date = $p["exam_date"];
         }
-        return $result;
+        $examresult =  [
+            'result' => $result,
+            'exam_score' => $exam_score,
+            'exam_date' => $exam_date
+        ];
+
+        return $examresult;
     }
 
 //    public function resultsByStudent($idstudent) {

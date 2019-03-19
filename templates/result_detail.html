@@ -1,34 +1,40 @@
-
 {% extends "layout.html" %}
 {% block content %}
 
 <h1>Student</h1>
 <table>
     <tr>
-        <td>{{ student.fullName() }}</td>
+        <td>{{ student.idstudent }} {{ student.fullName() }}</td>
     </tr>
 </table>
 <h1>Exam</h1>
 <h3>{{ exam.description }}</h3>
 
-    <p>Datum:&nbsp;{{ results.exam_date }}</p>
+<p>Datum:&nbsp;{{ result.exam_date |date("d/m/Y") }}</p>
 
-    {% for proces in results %}
-    <table id="proces_{{ proces.idproces }}">
-        <tr>
-            <td colspan="8"><b>{{ proces.description }}</b></td>
-        </tr>
-        {% for assignment in proces.assignments %}
-        <tr>
-            <td colspan="8">{{ assignment.description}}</td>
-        </tr>
-        <tr>
-            {% for aspect in assignment.aspects %}
-            <td style="vertical-align: top; width:2%;">{{ assignment.aspect_description }}></td>
-            <td style="vertical-align: top; width:23%;">{{ assignment.aspect_score }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
+{% for proces in results %}
+<table style="width:100%;">
+    <tr>
+        <td colspan="2"><b>{{ proces.description }}</b></td>
+    </tr>
+    {% for assignment in proces.assignments %}
+    <tr>
+        <td colspan="2"> {{ assignment.description}}</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top; width:95%;">{{ assignment.aspect_description }}</td>
+        <td style="vertical-align: top; width:5%;">{{ assignment.aspect_score }}</td>
+    </tr>
     {% endfor %}
+    <tr>
+        <td style="text-align: right;">
+            Score voor dit proces:
+        </td>
+        <td>
+            {{proces.proces_score }}
+        </td>
+    </tr>
+</table>
+{% endfor %}
+<p style="text-align:right;">Totaal score examen: {{ result.exam_score }}</p>
 {% endblock %}

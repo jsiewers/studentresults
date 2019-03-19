@@ -56,12 +56,14 @@ class ResultController
         $result->exam_date = $request->getAttribute("exam_date");
         $result->idstudent = $request->getAttribute("idstudent");
         $result->idexam = $request->getAttribute("idexam");
-        $results = $result->resultsByExam();
+        $examresults = $result->resultsByExam();
+        $result->exam_score = $examresults['exam_score'];
 
         $this->view->render($response, 'result_detail.html', [
             'student' => $student->readById($request->getAttribute('idstudent')),
             'exam' => $exam->readById($request->getAttribute('idexam')),
-            'results' => $results
+            'results' => $examresults['result'],
+            'result' => $result
         ]);
 
     }

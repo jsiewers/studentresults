@@ -22,7 +22,7 @@
 </form>
 <table>
     {% for aspect in aspects %}
-    <form id="aspectform" action="/aspect/{{ exam.idexam }}/{{ proces.idproces }}/{{ idassignment }}/{{ aspect.idaspect }}/update" method="post">
+    <form action="/aspect/{{ exam.idexam }}/{{ proces.idproces }}/{{ idassignment }}/{{ aspect.idaspect }}/update" method="post">
         <tr>
         <td>
             <textarea style="width:400px;" id="description" name="description">{{ aspect.description }}</textarea>

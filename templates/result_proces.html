@@ -11,30 +11,23 @@
 <h3>{{ exam.description }}</h3>
 
 <p>Datum:&nbsp;{{ result.exam_date |date("d/m/Y") }}</p>
+<table style="width:100%;">
 
 {% for proces in results %}
-<table style="width:100%;">
     <tr>
         <td colspan="2"><b>{{ proces.description }}</b></td>
-    </tr>
-    {% for assignment in proces.assignments %}
-    <tr>
-        <td colspan="2"> {{ assignment.description}}</td>
-    </tr>
-    <tr>
-        <td style="vertical-align: top; width:95%;">{{ assignment.aspect_description | nl2br }}</td>
-        <td style="vertical-align: top; width:5%;">{{ assignment.aspect_score }}</td>
-    </tr>
-    {% endfor %}
-    <tr>
         <td style="text-align: right;">
             Score voor dit proces:
         </td>
-        <td>
+        <td style="text-align:right;">
             {{proces.proces_score }}
         </td>
     </tr>
-</table>
 {% endfor %}
-<p style="text-align:right;">Totaal score examen: {{ result.exam_score }}</p>
+    <tr>
+        <td style="text-align:right;" colspan="4">
+            Totaal score examen: {{ result.exam_score }}
+        </td>
+    </tr>
+</table>
 {% endblock %}

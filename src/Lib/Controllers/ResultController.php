@@ -50,6 +50,11 @@ class ResultController
     }
 
     public function detail(Request $request, Response $response, array $args = []) {
+        if($request->getAttribute('template') == 'detail') {
+            $template = 'result_detail.html';
+        } else {
+            $template = 'result_proces.html';
+        }
         $student = new Student($this->db);
         $exam = new Exam($this->db);
         $result = new Result($this->db);
@@ -59,7 +64,7 @@ class ResultController
         $examresults = $result->resultsByExam();
         $result->exam_score = $examresults['exam_score'];
 
-        $this->view->render($response, 'result_detail.html', [
+        $this->view->render($response, $template, [
             'student' => $student->readById($request->getAttribute('idstudent')),
             'exam' => $exam->readById($request->getAttribute('idexam')),
             'results' => $examresults['result'],

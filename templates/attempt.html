@@ -33,7 +33,7 @@
             <tr>
                 {% for aspect in assignment.aspects %}
                 <td style="vertical-align: top; width:2%;"><input type="radio" name="_{{ assignment.idassignment }}" value="{{ aspect.idaspect }}"></td>
-                <td style="vertical-align: top; width:23%;">{{ aspect.description }}</td>
+                <td style="vertical-align: top; width:23%;">{{ aspect.description | nl2br }}</td>
                 {% endfor %}
             </tr>
         {% endfor %}

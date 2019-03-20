@@ -1,16 +1,23 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>Student</h1>
-<table>
+<table style="width:100%;">
     <tr>
-        <td>{{ student.idstudent }} {{ student.fullName() }}</td>
+        <td colspan="4"><b>{{ exam.idexam }} {{ exam.description }}</b></td>
+    </tr>
+    <tr>
+        <td>Naam student</td>
+        <td>{{ student.fullName() }}</td>
+        <td>Studentnummer</td>
+        <td>{{ student.idstudent }}</td>
+    </tr>
+    <tr>
+        <td>Plaats:</td>
+        <td>Almere</td>
+        <td>Datum:</td>
+        <td>{{ result.exam_date |date("d/m/Y") }}</td>
     </tr>
 </table>
-<h1>Exam</h1>
-<h3>{{ exam.description }}</h3>
-
-<p>Datum:&nbsp;{{ result.exam_date |date("d/m/Y") }}</p>
 
 {% for proces in results %}
 <table style="width:100%;">
@@ -23,19 +30,65 @@
     </tr>
     <tr>
         <td style="vertical-align: top; width:95%;">{{ assignment.aspect_description | nl2br }}</td>
-        <td style="vertical-align: top; width:5%;">{{ assignment.aspect_score }}</td>
+        <td style="vertical-align: top; width:5%; text-align:right;">{{ assignment.aspect_score }}</td>
     </tr>
     {% endfor %}
     <tr>
         <td style="text-align: right;">
             Score voor dit proces:
         </td>
-        <td>
+        <td style="text-align: right;">
             {{proces.proces_score }}
         </td>
     </tr>
-</table>
+
 {% endfor %}
-<p style="text-align:right;">Totaal score examen: {{ result.exam_score }}</p>
-<p style="text-align:right;">Cijfer: {{ result.exam_grade }}</p>
+    <tr>
+        <td style="text-align:right;">
+            Totaal score examen:
+        </td>
+        <td style="text-align:right;">
+            {{ result.exam_score }}
+        </td>
+    </tr>
+</table>
+<table style="width:100%;">
+    <tr>
+        <td style="text-align:right;">
+            Eindcijfer:
+        </td>
+        <td style="text-align:center; font-size:2em">
+            <b>{{ result.exam_grade }}</b>
+        </td>
+        <td style="text-align:right;">
+            O/V/G:
+        </td>
+        <td style="text-align:center; font-size:2em">
+            <b>{% if result.exam_grade >= 8 %}G{% elseif result.exam_grade >= 5.5 %}V{% else %}O{% endif %}</b>
+        </td>
+    </tr>
+</table>
+<table class="noborder" style="width:70%;">
+    <tr>
+        <td>Handtekening beoordelaar 1</td>
+        <td>Handtekening beoordelaar 2</td>
+    </tr>
+    <tr>
+        <td>
+            <img class="handtekening" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png">
+        </td>
+        <td>
+            <img class="handtekening"  src="{{ base_url() }}/assets/img/handtekening_piet.png">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Jan Jaap Siewers
+        </td>
+        <td>
+            Piet de Vries
+        </td>
+    </tr>
+</table>
+<p class="pagebreak" p>
 {% endblock %}

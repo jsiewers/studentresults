@@ -3,11 +3,30 @@ body {
     font-size: 14px;
 }
 
+
 div.wrapper {
     width:80%;
     margin:auto;
     margin-top:2em;
 }
+
+nav ul {
+    background-color:black;
+    padding:10px;
+    list-style-type: none;
+}
+nav ul li {
+    color:white;
+    display:inline-block;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    text-decoration:none;
+    font-weight:700;
+    color:white;
+}
+
 
 form.exam_create {
     border:1px solid black;
@@ -41,6 +60,10 @@ table, tr, td {
     border:black solid 1px;
     padding:5px;
 }
+table.noborder, table.noborder td, table.noborder tr {
+    border:none;
+}
+
 
 ul.list {
     border:black solid 1px;

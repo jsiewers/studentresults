@@ -1,7 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-
-<h3>Beoordeling</h3>
 <table style="width:100%;">
     <tr>
         <td colspan ="4"><b>{{ exam.idexam }} {{ exam.description }}</b></td>
@@ -23,19 +21,56 @@
 
 {% for proces in results %}
     <tr>
-        <td colspan="2"><b>{{ proces.description }}</b></td>
+        <td>{{ proces.description }}</td>
         <td style="text-align: right;">
-            Score voor dit proces:
-        </td>
-        <td style="text-align:right;">
-            {{proces.proces_score }}
+            {{ proces.proces_score }}
         </td>
     </tr>
 {% endfor %}
     <tr>
-        <td style="text-align:right;" colspan="4">
-            Totaal score examen: {{ result.exam_score }}
+        <td style="text-align:right;">
+            Totaal aantal punten:
+        </td>
+        <td style="text-align: right;">{{ result.exam_score }}</td>
+</table>
+<table style="width:100%;">
+<tr>
+    <td style="width:70%;"></td>
+    <td style="text-align:right;">
+            Eindcijfer:
+        </td>
+        <td style="text-align:center;" colspan="4">
+            <span style="font-size: 2em; font-weight:700;">{{ result.exam_grade }}</span>
+        </td>
+        <td style="text-align:right;">
+            O/V/G:
+        </td>
+        <td style="text-align:center;">
+            <span style="font-size: 2em; font-weight:700;">{% if result.exam_grade >= 8 %}G{% elseif result.exam_grade >= 5.5 %}V{% else %}O{% endif %}</span>
         </td>
     </tr>
 </table>
+<table class="noborder" style="width:70%;">
+    <tr>
+        <td>Handtekening beoordelaar 1</td>
+        <td>Handtekening beoordelaar 2</td>
+    </tr>
+    <tr>
+        <td>
+            <img class="handtekening" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png">
+        </td>
+        <td>
+            <img class="handtekening"  src="{{ base_url() }}/assets/img/handtekening_piet.png">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Jan Jaap Siewers
+        </td>
+        <td>
+            Piet de Vries
+        </td>
+    </tr>
+</table>
+<p class="pagebreak" p>
 {% endblock %}

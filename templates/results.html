@@ -15,14 +15,16 @@
 </table>
 <p>Tot nu toe behaalde resultaten</p>
 <table>
-    {% for result in examresults %}
+    {% for key, result in examresults %}
     <tr>
-        <td>{{ result.idexam }}</td>
-        <td>{{ result.exam_description }}</td>
-        <td>{{ result.exam_date }}</td>
-        <td>{{ result.score }}</td>
-        <td><a href="/result/{{ student.idstudent }}/{{ result.idexam }}/{{ result.exam_date }}/detail">Details</a></td>
-        <td><a href="/result/{{ student.idstudent }}/{{ result.idexam }}/{{ result.exam_date }}/proces">Proces</a></td>
+        <td>{{ key }}</td>
+        <td>{{ result.description }}</td>
+        {% for date, attempt in result.attempt%}
+        <td>{{ date }}</td>
+        <td><b>{{ attempt.grade }}</b></td>
+        <td><a href="/result/{{ student.idstudent }}/{{ key }}/{{ date }}/detail">v1</a></td>
+        <td><a href="/result/{{ student.idstudent }}/{{ key }}/{{ date }}/proces">v2</a></td>
+        {% endfor %}
     </tr>
     {% endfor %}
 </table>

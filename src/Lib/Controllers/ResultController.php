@@ -57,7 +57,7 @@ class ResultController
         }
         $student = new Student($this->db);
         $exam = new Exam($this->db);
-        $exam->readById($request->getAttribute('idexam'));
+        $exam = $exam->readById($request->getAttribute('idexam'));
 
         $result = new Result($this->db);
         $result->exam_date = $request->getAttribute("exam_date");

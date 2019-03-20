@@ -105,6 +105,7 @@ class Result
         $sql = "select 
                 ANY_VALUE(e.description) as exam_description,
                 ANY_VALUE(a.idaspect) as idaspect,
+                ANY_VALUE(e.caesura) as caesura,
                 r.exam_date, 
                 e.idexam,
                 SUM(a.score) as score 
@@ -119,9 +120,16 @@ class Result
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Result::class, [$this->db]);
-        //$stmt->setFetchMode(PDO::FETCH_ASSOC);
-        return $stmt->fetchAll();
+        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Result::class, [$this->db]);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        foreach($stmt->fetchAll() as $r) {
+            $caesura = explode(" ", $r['caesura']);
+            $exams[$r['idexam']]['description'] = $r['exam_description'];
+            $exams[$r['idexam']]['attempt'][$r['exam_date']]['idaspect'] = $r['idaspect'];
+            $exams[$r['idexam']]['attempt'][$r['exam_date']]['score'] = $r['score'];
+            $exams[$r['idexam']]['attempt'][$r['exam_date']]['grade'] = $caesura[$r['score']];
+        }
+        return $exams;
     }
 
     public function createTable()

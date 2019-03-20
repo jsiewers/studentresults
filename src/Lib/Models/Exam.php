@@ -15,7 +15,7 @@ class Exam
 {
     protected $pdo;
     protected $fields;
-    public $idexam, $description;
+    public $idexam, $description, $caesura;
 
     public function __construct($db)
     {
@@ -68,7 +68,7 @@ class Exam
     public function readExamWithDeps($idexam)
     {
         $sql = "select 
-                e.idexam, 
+                e.idexam,
                 e.description as exam_description, 
                 p.idproces, 
                 p.description as proces_description, 
@@ -81,7 +81,7 @@ class Exam
                 join proces as p on e.idexam =  p.idexam
                 join assignment as ass on p.idproces = ass.idproces
                 join aspect as a on ass.idassignment = a.idassignment
-                where e.idexam = :idexam order by score ASC";
+                where e.idexam = :idexam order by idproces, ass.idassignment, score ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $idexam, PDO::PARAM_INT);
         $stmt->execute();

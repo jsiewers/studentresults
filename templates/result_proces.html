@@ -1,16 +1,24 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1>Student</h1>
-<table>
+<h3>Beoordeling</h3>
+<table style="width:100%;">
     <tr>
-        <td>{{ student.idstudent }} {{ student.fullName() }}</td>
+        <td colspan ="4"><b>{{ exam.idexam }} {{ exam.description }}</b></td>
+    </tr>
+    <tr>
+        <td>Naam student:</td>
+        <td>{{ student.fullName() }}</td>
+        <td>Studentnummer:</td>
+        <td>{{ student.idstudent }}</td>
+    </tr>
+    <tr>
+        <td>Plaats:</td>
+        <td>Almere</td>
+        <td>Datum:</td>
+        <td>{{ result.exam_date |date("d/m/Y") }}</td>
     </tr>
 </table>
-<h1>Exam</h1>
-<h3>{{ exam.description }}</h3>
-
-<p>Datum:&nbsp;{{ result.exam_date |date("d/m/Y") }}</p>
 <table style="width:100%;">
 
 {% for proces in results %}

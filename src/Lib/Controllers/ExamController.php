@@ -51,6 +51,7 @@ class ExamController
         $exam = new Exam($this->db);
         $exam->idexam = ($request->getParsedBodyParam('idexam'));
         $exam->description = ($request->getParsedBodyParam('description'));
+        $exam->caesura = ($request->getParsedBodyParam('caesura'));
         $exam->save();
 
         $exams = $exam->read();

@@ -14,7 +14,7 @@ class Result
 {
     protected $pdo;
     protected $fields;
-    public $exam_date, $idstudent, $idexam, $exam_description, $idproces, $p_description, $idassignment, $assignement_description, $idaspect, $aspect_description, $exam_score;
+    public $exam_date, $idstudent, $idexam, $exam_description, $idproces, $p_description, $idassignment, $assignement_description, $idaspect, $aspect_description, $exam_score, $exam_grade;
 
     public function __construct($db)
     {
@@ -36,7 +36,7 @@ class Result
 
     public function resultsByExam() {
         $sql = "select 
-                r.exam_date, 
+                r.exam_date,
                 p.idproces, 
                 p.description as proces_description, 
                 ass.idassignment, 
@@ -114,7 +114,7 @@ class Result
                 join assignment as ass on a.idassignment = ass.idassignment
                 join proces as p on ass.idproces = p.idproces
                 join exam as e on p.idexam = e.idexam
-                where r.idstudent = '584999'
+                where r.idstudent = :idstudent
                 group by e.idexam, r.exam_date";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);

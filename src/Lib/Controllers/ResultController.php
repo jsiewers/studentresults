@@ -57,16 +57,21 @@ class ResultController
         }
         $student = new Student($this->db);
         $exam = new Exam($this->db);
+        $exam->readById($request->getAttribute('idexam'));
+
         $result = new Result($this->db);
         $result->exam_date = $request->getAttribute("exam_date");
         $result->idstudent = $request->getAttribute("idstudent");
         $result->idexam = $request->getAttribute("idexam");
         $examresults = $result->resultsByExam();
         $result->exam_score = $examresults['exam_score'];
+        $caesura = explode(" ",$exam->caesura);
+        $result->exam_grade = $caesura[$result->exam_score];
+
 
         $this->view->render($response, $template, [
             'student' => $student->readById($request->getAttribute('idstudent')),
-            'exam' => $exam->readById($request->getAttribute('idexam')),
+            'exam' => $exam,
             'results' => $examresults['result'],
             'result' => $result
         ]);

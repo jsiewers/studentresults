@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3>Aanwezigheid en resultaten Examen / Proces verbaal</h3>
+<table style="width:100%;">
+    <tr>
+        <td>Examencode</td>
+        <td>{{ result | first.idexam }}</td>
+    </tr>
+    <tr>
+        <td>Examennaam</td>
+        <td>{{ result | first.exam_description }}</td>
+    </tr>
+    <tr>
+        <td>Onderwijsproduct</td>
+        <td>{{ result | first.idexam }} {{ result | first.exam_description }}</td>
+    </tr>
+    <tr>
+        <td>Cohort</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Datum</td>
+        <td>{{ result | first.exam_date | date('d-m-Y') }}</td>
+    </tr>
+</table>
+
+<table style="width:100%;">
+    <tr>
+        <td>Studentnummer</td>
+        <td>Naam</td>
+        <td>Score</td>
+        <td>Cijfer</td>
+        <td>O/V/G</td>
+    </tr>
+    {% for student in result %}
+     <tr>
+         <td>{{ student.student_idstudent }}</td>
+         <td>{{ student.fullname }}</td>
+         <td>{{ student.total_score }}</td>
+         <td>{{ student.grade }}</td>
+         <td>{%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<table class="noborder" style="width:70%;">
+    <tr>
+        <td>Handtekening beoordelaar 1</td>
+        <td>Handtekening beoordelaar 2</td>
+    </tr>
+    <tr>
+        <td>
+            <img class="handtekening" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png">
+        </td>
+        <td>
+            <img class="handtekening"  src="{{ base_url() }}/assets/img/handtekening_piet.png">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Jan Jaap Siewers
+        </td>
+        <td>
+            Piet de Vries
+        </td>
+    </tr>
+</table>
+<p class="pagebreak" p>
+{% endblock %}

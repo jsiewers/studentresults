@@ -49,6 +49,18 @@ class ResultController
         $this->results( $request,  $response, $args = []);
     }
 
+    public function studentResults(Request $request, Response $response, array $args = []) {
+        $result = new Result($this->db);
+        $result->idexam = ($request->getAttribute('idexam'));
+        $result->exam_date = ($request->getAttribute('exam_date'));
+        $result = $result->resultsByExamStudents();
+
+        $this->view->render($response, 'results_exam.html', [
+            'result' => $result
+        ]);
+
+    }
+
     public function detail(Request $request, Response $response, array $args = []) {
         if($request->getAttribute('template') == 'detail') {
             $template = 'result_detail.html';

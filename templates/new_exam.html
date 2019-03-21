@@ -13,10 +13,14 @@
     <input type="submit" name="submit">
 </form>
 <table>
-{% for exam in exams %}
+{% for key, exam in exams %}
 <tr>
-    <td>{{ exam.idexam }}</td>
-    <td><a href="/proces/{{ exam.idexam }}/new">{{ exam.description }}</a></td>
+    <td>{{ key }}</td>
+    <td><a href="/proces/{{ exam.examid }}/new">{{ exam.description }}</a></td>
+    {% for date in exam.dates %}
+    <td><a href="/result/{{ exam.examid }}/{{ date }}">{{ date }}</a></td>
+    {% endfor %}
+
 </tr>
 {% endfor %}
 </table>

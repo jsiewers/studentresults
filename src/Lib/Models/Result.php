@@ -49,7 +49,7 @@ class Result
                 join assignment as ass on a.idassignment = ass.idassignment
                 join proces as p on ass.idproces = p.idproces
                 join exam as e on p.idexam = e.idexam
-                where e.idexam = :idexam and r.idstudent = :idstudent and exam_date = :exam_date";
+                where e.idexam = :idexam and r.idstudent = :idstudent and e.active = 1 and exam_date = :exam_date";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $this->idstudent, PDO::PARAM_INT);
         $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
@@ -76,30 +76,39 @@ class Result
         return $examresult;
     }
 
-//    public function resultsByStudent($idstudent) {
-//        $sql = "select r.idstudent,
-//                r.exam_date,
-//                e.idexam,
-//                e.description as exam_description,
-//                p.idproces,
-//                p.description as proces_description,
-//                ass.idassignment,
-//                ass.description as assignment_description,
-//                a.idaspect,
-//                a.description as aspect_description
-//                from result as r
-//                join aspect as a on r.idaspect = a.idaspect
-//                join student as s on r.idstudent = s.idstudent
-//                join assignment as ass on a.idassignment = ass.idassignment
-//                join proces as p on ass.idproces = p.idproces
-//                join exam as e on p.idexam = e.idexam
-//                where r.idstudent = :idstudent;";
-//        $stmt = $this->pdo->prepare($sql);
-//        $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
-//        $stmt->execute();
-//        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Result::class, [$this->db]);
-//        return $stmt->fetchAll();
-//    }
+    public function resultsByExamStudents() {
+        $sql = "select 
+                e.idexam,
+                s.idstudent as student_idstudent,
+                IF(ISNULL(prefix), CONCAT(first_name, ' ', last_name), CONCAT(first_name, ' ', prefix, ' ', last_name )) AS fullname,
+                exam_date,
+                ANY_VALUE(s.idgroup) as student_idgroup,
+                ANY_VALUE(e.description) as exam_description,
+                ANY_VALUE(e.caesura) as caesura,
+                SUM(a.score) as total_score
+                from result as r
+                join aspect as a on r.idaspect = a.idaspect
+                join assignment as ass on a.idassignment = ass.idassignment
+                join proces as p on ass.idproces = p.idproces
+                join exam as e on p.idexam = e.idexam
+                join student as s on r.idstudent = s.idstudent
+                where e.idexam = :idexam and e.active = 1 and exam_date = :exam_date
+                group by student_idstudent";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
+        $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+        $caesura = explode(" ",$result[0]['caesura']);
+        foreach($result as $key => $value) {
+            $result[$key]['grade'] = $caesura[$result[$key]['total_score']];
+        }
+        //var_dump($result);
+        return $result;
+    }
+
+
 
     public function examResultsByStudent($idstudent) {
         $sql = "select 

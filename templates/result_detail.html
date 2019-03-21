@@ -3,19 +3,27 @@
 
 <table style="width:100%;">
     <tr>
-        <td colspan="4"><b>{{ exam.idexam }} {{ exam.description }}</b></td>
+        <td colspan="6"><b>{{ exam.idexam }} {{ exam.description }}</b></td>
     </tr>
     <tr>
-        <td>Naam student</td>
+        <td>Naam student:</td>
         <td>{{ student.fullName() }}</td>
-        <td>Studentnummer</td>
+        <td>Studentnummer:</td>
         <td>{{ student.idstudent }}</td>
+        <td>Groep:</td>
+        <td>{{ student.idgroup }}</td>
     </tr>
     <tr>
         <td>Plaats:</td>
-        <td>Almere</td>
+        <td colspan="3">Almere</td>
         <td>Datum:</td>
         <td>{{ result.exam_date |date("d/m/Y") }}</td>
+    </tr>
+    <tr>
+        <td>Beoordelaar 1:</td>
+        <td>Jan Jaap Siewers</td>
+        <td>Beoordelaar 2:</td>
+        <td>Piet de Vries</td>
     </tr>
 </table>
 

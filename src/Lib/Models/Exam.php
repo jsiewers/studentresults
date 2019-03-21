@@ -15,7 +15,7 @@ class Exam
 {
     protected $pdo;
     protected $fields;
-    public $idexam, $description, $caesura;
+    public $idexam, $description, $active, $caesura;
 
     public function __construct($db)
     {
@@ -24,11 +24,30 @@ class Exam
 
     public function read()
     {
-        $sql = "SELECT * FROM exam";
+        $sql = "select 
+                ANY_VALUE(e.idexam) as examid,
+                e.description,
+                r.exam_date
+                from result as r
+                join aspect as a on r.idaspect = a.idaspect
+                join assignment as ass on a.idassignment = ass.idassignment
+                join proces as p on ass.idproces = p.idproces
+                join exam as e on p.idexam = e.idexam
+                where e.active = 1
+                group by exam_date, e.description
+                order by e.description, r.exam_date;";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);
-        return $stmt->fetchAll();
+       //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        foreach($stmt->fetchAll() as $e) {
+            $exam[$e['examid']]['examid'] = $e['examid'];
+            $exam[$e['examid']]['description'] = $e['description'];
+            $exam[$e['examid']]['dates'][] = $e['exam_date'];
+        }
+
+        var_dump($exam);
+        return($exam);
     }
 
 
@@ -45,11 +64,12 @@ class Exam
     public function save()
     {
         try {
-            $sql = "INSERT INTO exam (idexam, description, active) VALUES (:idexam, :description, 1)";
+            $sql = "INSERT INTO exam (idexam, description, active, caesura) VALUES (:idexam, :description, 1, :caesura)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
+            $stmt->bindParam(':caesura', $this->caesura, PDO::PARAM_STR);
             $stmt->bindParam(':description', $this->description, PDO::PARAM_STR);
-            $stmt->execute();
+            $result = $stmt->execute();
         } catch (\PDOException $e) {
             $result = $e->getMessage();
         }
@@ -81,7 +101,7 @@ class Exam
                 join proces as p on e.idexam =  p.idexam
                 join assignment as ass on p.idproces = ass.idproces
                 join aspect as a on ass.idassignment = a.idassignment
-                where e.idexam = :idexam order by idproces, ass.idassignment, score ASC";
+                where e.idexam = :idexam and e.active = 1 order by idproces, ass.idassignment, score ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $idexam, PDO::PARAM_INT);
         $stmt->execute();

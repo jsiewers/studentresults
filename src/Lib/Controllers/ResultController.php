@@ -56,7 +56,8 @@ class ResultController
         $result = $result->resultsByExamStudents();
 
         $this->view->render($response, 'results_exam.html', [
-            'result' => $result
+            'result' => $result,
+            'attempts' => $attempts,
         ]);
 
     }

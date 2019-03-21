@@ -63,18 +63,11 @@
 <table style="width:100%;">
     <tr>
         <td style="text-align:right;">
-            Eindcijfer:
+            Eindbeoordeling:
         </td>
         <td style="text-align:center; font-size:2em">
-            <b>{{ result.exam_grade }}</b>
+            <b>{{ result.exam_grade }} ({% if result.exam_grade >= 8 %}G{% elseif result.exam_grade >= 5.5 %}V{% else %}O{% endif %})</b>
         </td>
-        <td style="text-align:right;">
-            O/V/G:
-        </td>
-        <td style="text-align:center; font-size:2em">
-            <b>{% if result.exam_grade >= 8 %}G{% elseif result.exam_grade >= 5.5 %}V{% else %}O{% endif %}</b>
-        </td>
-    </tr>
 </table>
 <table class="noborder" style="width:70%;">
     <tr>

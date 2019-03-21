@@ -80,6 +80,7 @@ class Result
         $sql = "select 
                 e.idexam,
                 s.idstudent as student_idstudent,
+                s.idgroup,
                 IF(ISNULL(prefix), CONCAT(first_name, ' ', last_name), CONCAT(first_name, ' ', prefix, ' ', last_name )) AS fullname,
                 exam_date,
                 ANY_VALUE(s.idgroup) as student_idgroup,
@@ -93,21 +94,52 @@ class Result
                 join exam as e on p.idexam = e.idexam
                 join student as s on r.idstudent = s.idstudent
                 where e.idexam = :idexam and e.active = 1 and exam_date = :exam_date
-                group by student_idstudent";
+                group by student_idstudent order by idgroup, s.last_name";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
         $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_INT);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
+        $attempts = $this->getOccurencesUntilDate();
         $caesura = explode(" ",$result[0]['caesura']);
         foreach($result as $key => $value) {
             $result[$key]['grade'] = $caesura[$result[$key]['total_score']];
+            $result[$key]['attempt'] = $attempts[$result[$key]['student_idstudent']];
         }
         //var_dump($result);
         return $result;
     }
 
+    public function getOccurencesUntilDate() {
+        $sql ="select 
+                e. idexam, 
+                r.exam_date,
+                idstudent
+                from result  as r
+                join aspect as a on r.idaspect = a.idaspect
+                join assignment as ass on a.idassignment = ass.idassignment
+                join proces as p on ass.idproces = p.idproces
+                join exam as e on p.idexam = e.idexam
+                where e.idexam = :idexam and exam_date <= :exam_date
+                group by r.exam_date, r.idstudent  order by r.idstudent, exam_date;";
+      try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
+            $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_STR);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+        $attempts = [];
+        foreach($result as $s) {
+            $attempts[$s['idstudent']]['count'] += 1;
+        }
+        //var_dump($attempts);
+        return $attempts;
+    }
 
 
     public function examResultsByStudent($idstudent) {

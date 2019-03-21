@@ -46,7 +46,7 @@ class Exam
             $exam[$e['examid']]['dates'][] = $e['exam_date'];
         }
 
-        var_dump($exam);
+        //var_dump($exam);
         return($exam);
     }
 

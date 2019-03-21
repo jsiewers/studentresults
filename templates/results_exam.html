@@ -15,8 +15,8 @@
         <td>{{ result | first.idexam }} {{ result | first.exam_description }}</td>
     </tr>
     <tr>
-        <td>Cohort</td>
-        <td></td>
+        <td>Crebo</td>
+        <td>25187</td>
     </tr>
     <tr>
         <td>Datum</td>
@@ -28,17 +28,24 @@
     <tr>
         <td>Studentnummer</td>
         <td>Naam</td>
-        <td>Score</td>
-        <td>Cijfer</td>
-        <td>O/V/G</td>
+        <td>Groep</td>
+        <td>Opleidingscode</td>
+        <td>Poging 1</td>
+        <td>Poging 2</td>
+        <td>Poging 3</td>
+
+        <!--<td>O/V/G</td>-->
     </tr>
     {% for student in result %}
      <tr>
          <td>{{ student.student_idstudent }}</td>
          <td>{{ student.fullname }}</td>
-         <td>{{ student.total_score }}</td>
-         <td>{{ student.grade }}</td>
-         <td>{%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}</td>
+         <td>{{ student.idgroup }}</td>
+         <td>25187</td>
+         <td>{% if student.attempt.count == 1 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
+         <td>{% if student.attempt.count == 2 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
+         <td>{% if student.attempt.count == 3 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
+         <!--<td>{%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}</td>-->
     </tr>
     {% endfor %}
 </table>

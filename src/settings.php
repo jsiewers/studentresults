@@ -21,6 +21,9 @@ return [
             'user' => 'web',
             'pass' => '230mod',
             'dbname' => 'results'
+        ],
+        'uploads' => [
+            'uploads_path' => __DIR__ . '/../uploads/',
         ]
     ],
 ];

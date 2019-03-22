@@ -33,6 +33,10 @@ $container['db'] = function ($c) {
     return $pdo;
 };
 
+$container['uploads'] = function ($c) {
+    return $c['settings']['uploads']['uploads_path'];
+};
+
 $container['view'] = function ($c) {
     $view = new \Slim\Views\Twig('templates', [
         'cache' => 'logs',
@@ -69,7 +73,7 @@ $container['ResultController'] = function ($c) {
 };
 
 $container['StudentController'] = function ($c) {
-    return new StudentController($c->get('db'), $c->get('view'));
+    return new StudentController($c->get('db'), $c->get('view'), $c->get('uploads'));
 };
 
 $container['ExamController'] = function ($c) {

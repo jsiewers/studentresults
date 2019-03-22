@@ -30,9 +30,10 @@
         <td>Naam</td>
         <td>Groep</td>
         <td>Opleidingscode</td>
-        <td>Poging 1</td>
-        <td>Poging 2</td>
-        <td>Poging 3</td>
+        <td>Aanwezig</td>
+        <td>1e beoordeling</td>
+        <td>2e beoordeling</td>
+        <td>3e beoordeling</td>
 
         <!--<td>O/V/G</td>-->
     </tr>
@@ -42,6 +43,7 @@
          <td>{{ student.fullname }}</td>
          <td>{{ student.idgroup }}</td>
          <td>25187</td>
+         <td></td>
          <td>{% if student.attempt.count == 1 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
          <td>{% if student.attempt.count == 2 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
          <td>{% if student.attempt.count == 3 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
@@ -49,7 +51,40 @@
     </tr>
     {% endfor %}
 </table>
+Opmerkingen n.a.v. examensessie
+<table style="width:100%;">
+    <tr>
+        <td><p style="padding:20px;"></p></td>
+    </tr>
+</table>
+<p>Naam surveillanten ...............................</p>
+<p>Paraaf surveillanten ...............................</p>
 
+Opmerkingen n.a.v. correctie
+<table style="width:100%;">
+    <tr>
+        <td><p style="padding:20px;"></p></td>
+    </tr>
+</table>
+<p>Datum:...............................</p>
+<p>Naam correctoren ...............................</p>
+<p>Paraaf surveillanten ...............................</p>
+
+<table style="width:100%;">
+    <tr>
+        <td>Vastgesteld door TEC</td>
+        <td>
+            <p>Datum ....................</p>
+            <p>Naam  ....................</p>
+        </td>
+        <td>Invoer in Eduarte</td>
+        <td>
+            <p>Datum ....................</p>
+            <p>Naam  ....................</p>
+        </td>
+    </tr>
+</table>
+</table>
 <table class="noborder" style="width:70%;">
     <tr>
         <td>Handtekening beoordelaar 1</td>

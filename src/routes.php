@@ -18,6 +18,7 @@ $app->get('/results/{idstudent}', 'ResultController:results');
 $app->get('/result/{idstudent}/{idexam}/{exam_date}/{template}', 'ResultController:detail');
 $app->get('/result/{idexam}/{exam_date}', 'ResultController:studentResults');
 $app->get('/students', 'StudentController:show');
+$app->get('/students/import', 'StudentController:import');
 $app->get('/attempt/{idstudent}/{idexam}', 'ExamController:attempt');
 $app->post('/attempt/{idstudent}/{idexam}', 'ResultController:save');
 

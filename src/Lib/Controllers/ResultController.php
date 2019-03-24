@@ -35,6 +35,16 @@ class ResultController
         ]);
     }
 
+    public function deleteResult(Request $request, Response $response, array $args = []) {
+        $result = new Result($this->db);
+        $result->idexam = ($request->getAttribute('idexam'));
+        $result->exam_date = ($request->getAttribute('exam_date'));
+        $result->idstudent = ($request->getAttribute('idstudent'));
+        $result->delete();
+
+        $this->studentResults($request, $response, $args = []);
+    }
+
     public function save(Request $request, Response $response, array $args = []) {
         foreach($request->getParsedBody() as $key => $value) {
             if(substr($key, 0,1) == "_") {
@@ -55,9 +65,25 @@ class ResultController
         $result->exam_date = ($request->getAttribute('exam_date'));
         $result = $result->resultsByExamStudents();
 
-        $this->view->render($response, 'results_exam.html', [
+        $this->view->render($response, 'results_exam_date.html', [
             'result' => $result,
-            'attempts' => $attempts,
+        ]);
+
+    }
+
+    public function studentResultsAll(Request $request, Response $response, array $args = []) {
+        $result = new Result($this->db);
+        $result->idexam = ($request->getAttribute('idexam'));
+        $dates = $result->getExamDates();
+        foreach($dates as $date) {
+            $result->exam_date = $date['exam_date'];
+            $results[] = $result->resultsByExamStudents();
+            }
+
+        //var_dump($results);
+
+        $this->view->render($response, 'results_exam.html', [
+            'results' => $results,
         ]);
 
     }

@@ -5,15 +5,19 @@
 <table>
     {% for student in students %}
     <tr>
-        <td>{{ student.idstudent }} {{ student.fullName() }}</td>
+        <td>{{ student.idstudent }}</td>
+        <td> {{ student.fullName() }}</td>
+        <td>{{ student.idgroup }}</td>
+        <td><a href="mailto:{{ student.email }}">{{ student.email }}</a></td>
         <td><a href="results/{{ student.idstudent }}">results</a></td>
     </tr>
     {% endfor %}
 </table>
+<p>Format of csv-file: ovnummer;first_name;prefix;last_name;email;idgroup</p>
 <form action="/students/import" method="post" enctype="multipart/form-data">
     Select csv file:
     <input type="file" name="fileToUpload" id="fileToUpload">
     <input type="submit" value="Upload Image" name="submit">
-</form>
 
+</form>
 {% endblock %}

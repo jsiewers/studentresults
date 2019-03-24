@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-{% for result in results %}
 <h3>Aanwezigheid en resultaten Examen / Proces verbaal</h3>
 <table style="width:100%;">
     <tr>
@@ -31,10 +30,10 @@
         <td>Naam</td>
         <td>Groep</td>
         <td>Opleidingscode</td>
-        <!--<td>Aanwezig</td>-->
-        <td>1e poging</td>
-        <td>2e poging</td>
-        <td>3e poging</td>
+        <td>Aanwezig</td>
+        <td>1e beoordeling</td>
+        <td>2e beoordeling</td>
+        <td>3e beoordeling</td>
 
         <!--<td>O/V/G</td>-->
     </tr>
@@ -44,7 +43,7 @@
          <td>{{ student.fullname }}</td>
          <td>{{ student.idgroup }}</td>
          <td>25187</td>
-         <!--<td></td>-->
+         <td></td>
          <td>{% if student.attempt.count == 1 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
          <td>{% if student.attempt.count == 2 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
          <td>{% if student.attempt.count == 3 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
@@ -58,8 +57,8 @@ Opmerkingen n.a.v. examensessie
         <td><p style="padding:20px;"></p></td>
     </tr>
 </table>
-<p>Naam surveillanten Piet de Vries, Jan Jaap Siewers</p>
-<p>Paraaf surveillanten: <img class="handtekening_klein" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png"><img class="handtekening_klein"  src="{{ base_url() }}/assets/img/handtekening_piet.png"></p>
+<p>Naam surveillanten ...............................</p>
+<p>Paraaf surveillanten ...............................</p>
 
 Opmerkingen n.a.v. correctie
 <table style="width:100%;">
@@ -67,9 +66,9 @@ Opmerkingen n.a.v. correctie
         <td><p style="padding:20px;"></p></td>
     </tr>
 </table>
-<p>Datum:{{ result | first.exam_date | date('d-m-Y') }}</p>
-<p>Naam correctoren Piet de Vries, Jan Jaap Siewers</p>
-<p>Paraaf corrector <img class="handtekening_klein" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png"><img class="handtekening_klein"  src="{{ base_url() }}/assets/img/handtekening_piet.png"></p>
+<p>Datum:...............................</p>
+<p>Naam correctoren ...............................</p>
+<p>Paraaf surveillanten ...............................</p>
 
 <table style="width:100%;">
     <tr>
@@ -86,7 +85,27 @@ Opmerkingen n.a.v. correctie
     </tr>
 </table>
 </table>
-
+<table class="noborder" style="width:70%;">
+    <tr>
+        <td>Handtekening beoordelaar 1</td>
+        <td>Handtekening beoordelaar 2</td>
+    </tr>
+    <tr>
+        <td>
+            <img class="handtekening" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png">
+        </td>
+        <td>
+            <img class="handtekening"  src="{{ base_url() }}/assets/img/handtekening_piet.png">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Jan Jaap Siewers
+        </td>
+        <td>
+            Piet de Vries
+        </td>
+    </tr>
+</table>
 <p class="pagebreak" p>
-    {% endfor %}
 {% endblock %}

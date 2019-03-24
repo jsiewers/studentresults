@@ -17,8 +17,10 @@ $app->post('/aspect/{idexam }/{idproces }/{idassignment}/{idaspect}/update', 'As
 $app->get('/results/{idstudent}', 'ResultController:results');
 $app->get('/result/{idstudent}/{idexam}/{exam_date}/{template}', 'ResultController:detail');
 $app->get('/result/{idexam}/{exam_date}', 'ResultController:studentResults');
+$app->get('/results/{idexam}/all', 'ResultController:studentResultsAll');
 $app->get('/students', 'StudentController:show');
-$app->get('/students/import', 'StudentController:import');
+$app->get('/students/{idstudent}/{idexam}/{exam_date}', 'StudentController:delete');
+$app->post('/students/import', 'StudentController:import');
 $app->get('/attempt/{idstudent}/{idexam}', 'ExamController:attempt');
 $app->post('/attempt/{idstudent}/{idexam}', 'ResultController:save');
 

@@ -49,7 +49,9 @@
             {{proces.proces_score }}
         </td>
     </tr>
-
+    {% set counter = (counter | default(0) ) %}
+    {% if counter == 3 %}<p class="pagebreak"></p>{% set counter = 0 %}{% endif %}
+    {% set counter = counter + 1 %}
 {% endfor %}
     <tr>
         <td style="text-align:right;">
@@ -91,5 +93,5 @@
         </td>
     </tr>
 </table>
-<p class="pagebreak" p>
+<p class="pagebreak"></p>
 {% endblock %}

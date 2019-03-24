@@ -14,18 +14,11 @@ use PDO;
 class Student
 {
     protected $pdo;
-    protected $fields;
-    public $idstudent, $first_name, $last_name, $prefix;
+    public $idstudent, $first_name, $last_name, $prefix, $email, $idgroup;
 
     public function __construct($db)
     {
-        $this->fields = [
-            ['label'=> 'OV-nummer', 'field' => 'idstudent'],
-            ['label'=> 'Voornaam', 'field' => 'first_name'],
-            ['label'=> 'Achternaam', 'field' => 'last_name'],
-            ['label'=> 'Tussenvoegsel', 'field' => 'prefix'],
-         ];
-        $this->pdo = $db;
+         $this->pdo = $db;
     }
 
    public function fullName() {
@@ -34,7 +27,7 @@ class Student
     }
 
     public function read() {
-        $sql = "SELECT * FROM student";
+        $sql = "SELECT * FROM student ORDER BY idgroup, last_name";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Student::class, [$this->db]);
@@ -70,6 +63,22 @@ class Student
 
         $stmt = $this->pdo->query($sql);
 
+    }
+
+    public function save() {
+        $sql = "REPLACE INTO student (idstudent, first_name, last_name, prefix, email, idgroup) VALUES (:idstudent, :first_name, :last_name, :prefix, :email, :idgroup);";
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':idstudent', $this->idstudent, PDO::PARAM_INT);
+            $stmt->bindParam(':first_name', $this->first_name, PDO::PARAM_STR);
+            $stmt->bindParam(':last_name', $this->last_name, PDO::PARAM_STR);
+            $stmt->bindParam(':prefix', $this->prefix, PDO::PARAM_STR);
+            $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
+            $stmt->bindParam(':idgroup', $this->idgroup, PDO::PARAM_STR);
+            $stmt->execute();
+        } catch (\PDOException $e){
+            echo $e->getMessage();
+        }
     }
 
     public function dropTable() {

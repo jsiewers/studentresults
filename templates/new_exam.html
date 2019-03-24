@@ -16,9 +16,14 @@
 {% for key, exam in exams %}
 <tr>
     <td>{{ key }}</td>
-    <td><a href="/proces/{{ exam.examid }}/new">{{ exam.description }}</a></td>
+    <td><a href="/proces/{{ exam.examid }}/new">{{ exam.description }}</a></td><td><a href="/results/{{ exam.examid }}/all">All</a></td>
     {% for date in exam.dates %}
-    <td><a href="/result/{{ exam.examid }}/{{ date }}">{{ date }}</a></td>
+    {% set counter = (counter | default(0) ) %}
+    {% if counter == 8 %}</tr><tr><td colspan="2"></td>{% set counter = 0 %}{% endif %}
+    {% set counter = counter + 1 %}
+
+    <p></p>
+    <td><a href="/result/{{ exam.examid }}/{{ date }}">{{ date | date('d-m-Y') }}</a></td>
     {% endfor %}
 
 </tr>

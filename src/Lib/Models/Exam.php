@@ -51,6 +51,7 @@ class Exam
     }
 
 
+
     public function readById($idexam)
     {
         $sql = "SELECT * FROM exam WHERE idexam = :idexam";

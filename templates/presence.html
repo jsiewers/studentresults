@@ -1,0 +1,49 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<h1>Presentie</h1>
+
+<form action="/presence/store" method="post">
+    <label for="title">Titel</label>
+    <input id="title" name="title" value="">
+    <label for="startdatetime">Begindatum</label>
+    <input type="datetime-local" id="startdatetime" name="startdatetime">
+    <label for="enddatetime">Einddatum</label>
+    <input type="datetime-local" id="enddatetime" name="enddatetime">
+    <label for="idexam">Examen</label>
+    <select id="idexam" name="idexam">
+        {% for exam in exams %}
+        <option value="{{ exam.examid }}">{{ exam.description }}</option>
+        {% endfor %}
+    </select>
+    <label for="title">Students</label>
+    <textarea id="students" name="students" rows="10" cols="40"></textarea><br>
+    <input type="submit" name="btnsubmit">
+</form>
+<table>
+    <form action="/presence" method="post">
+        <select name="title">
+            {% for title in titles %}
+            <option>{{ title.title }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" name="btnsubmit">
+    </form>
+{% for all in students %}
+<tr>
+    <td>
+        {{ all.student.idstudent }}
+    </td>
+    <td>
+        {{ all.student.fullName() }}
+    </td>
+    <td>
+        <input type="datetime-local" name="_date_{{ all.student.idstudent }}" value="{{ all.presence.startdatetime | date('c')}}">{{ all.presence.startdatetime | date('c') }}
+    </td>
+    <td>
+        <input type="datetime-local" name="_date_{{ all.student.idstudent }}" value="{{ all.presence.enddatetime }}">
+    </td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

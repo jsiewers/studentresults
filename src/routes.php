@@ -19,12 +19,14 @@ $app->get('/result/{idstudent}/{idexam}/{exam_date}/{template}', 'ResultControll
 $app->get('/result/{idexam}/{exam_date}', 'ResultController:studentResults');
 $app->get('/results/{idexam}/all', 'ResultController:studentResultsAll');
 $app->get('/students', 'StudentController:show');
+$app->post('/students', 'StudentController:show');
 $app->get('/students/{idstudent}/{idexam}/{exam_date}', 'StudentController:delete');
 $app->post('/students/import', 'StudentController:import');
 $app->get('/attempt/{idstudent}/{idexam}', 'ExamController:attempt');
 $app->post('/attempt/{idstudent}/{idexam}', 'ResultController:save');
-$app->get('/presentie', 'PresentieController:show');
-$app->post('/presentie', 'PresentieController:save');
+$app->get('/presence', 'PresenceController:show');
+$app->post('/presence/store', 'PresenceController:save');
+$app->post('/presence', 'PresenceController:show');
 
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {
     // Sample log message

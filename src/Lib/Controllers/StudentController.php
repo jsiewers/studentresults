@@ -26,9 +26,18 @@ class StudentController
     public function show(Request $request, Response $response, array $args = []) {
 
         $student = new Student($this->db);
-        $student->read();
+        $groups = $student->getGroups();
+        if(!$request->getParsedBodyParam('idgroup') ) {
+            $group = $groups[0]['idgroup'];
+        } else {
+            $group = $request->getParsedBodyParam('idgroup');
+        }
+        $student->idgroup = $group;
+
         $this->view->render($response, 'students.html', [
-            'students' => $student->read(),
+            'students' => $student->readByGroup(),
+            'groups' => $groups,
+            'selected_group' => $group,
         ]);
     }
 

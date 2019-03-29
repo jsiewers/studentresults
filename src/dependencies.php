@@ -7,7 +7,7 @@ use Lib\Controllers\ExamController;
 use Lib\Controllers\ProcesController;
 use Lib\Controllers\AssignmentController;
 use Lib\Controllers\AspectController;
-use Lib\Controllers\PresentieController;
+use Lib\Controllers\PresenceController;
 
 $container = $app->getContainer();
 
@@ -64,8 +64,8 @@ $container['Aspect'] = function ($c) {
     return new Aspect($c->get('db'));
 };
 
-$container['Presentie'] = function ($c) {
-    return new Presentie($c->get('db'));
+$container['Presence'] = function ($c) {
+    return new Presence($c->get('db'));
 };
 
 
@@ -96,8 +96,8 @@ $container['AspectController'] = function ($c) {
     return new AspectController($c->get('db'), $c->get('view'));
 };
 
-$container['PresentieController'] = function ($c) {
-    return new PresentieController($c->get('db'), $c->get('view'));
+$container['PresenceController'] = function ($c) {
+    return new PresenceController($c->get('db'), $c->get('view'));
 };
 
 $container['validator'] = function($c) {

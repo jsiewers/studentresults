@@ -23,6 +23,8 @@ $app->get('/students/{idstudent}/{idexam}/{exam_date}', 'StudentController:delet
 $app->post('/students/import', 'StudentController:import');
 $app->get('/attempt/{idstudent}/{idexam}', 'ExamController:attempt');
 $app->post('/attempt/{idstudent}/{idexam}', 'ResultController:save');
+$app->get('/presentie', 'PresentieController:show');
+$app->post('/presentie', 'PresentieController:save');
 
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {
     // Sample log message

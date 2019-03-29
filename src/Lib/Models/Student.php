@@ -14,7 +14,7 @@ use PDO;
 class Student
 {
     protected $pdo;
-    public $idstudent, $first_name, $last_name, $prefix, $email, $idgroup;
+    public $idstudent, $first_name, $last_name, $prefix, $email, $idgroup, $stime;
 
     public function __construct($db)
     {

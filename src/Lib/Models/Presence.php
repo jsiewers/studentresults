@@ -13,7 +13,7 @@ use PDO;
 class Presence
 {
     protected $pdo;
-    public $title, $startdatetime, $enddatetime, $idexam, $idstudent;
+    public $title, $startdatetime, $enddatetime, $idexam, $idstudent, $daystart, $dayend;
 
     public function __construct($db)
     {
@@ -60,8 +60,11 @@ class Presence
             $student->first_name = $s['first_name'];
             $student->prefix = $s['prefix'];
             $student->last_name = $s['last_name'];
+            $s['startdatetime'] = date('Y-m-d\TH:m', strtotime($s['startdatetime']));
+            $s['enddatetime'] = date('Y-m-d\TH:m', strtotime($s['enddatetime']));
             $students[] = ['student' => $student, 'presence' => $s ];
         }
+        //var_dump($s);
         return $students;
     }
 }

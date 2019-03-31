@@ -2,14 +2,19 @@
 {% extends "layout.html" %}
 {% block content %}
 <h1>Presentie</h1>
-
+<ul>
+    <li>Starttijd: 09:00</li>
+    <li>Eindtijd: 16:00</li>
+</ul>
 <form action="/presence/store" method="post">
     <label for="title">Titel</label>
     <input id="title" name="title" value="">
+    <label for="exam_duration">Duur van het examen</label>
+    <input type="time" name="exam_duration" id="exam_duration" value="09:00">
     <label for="startdatetime">Begindatum</label>
-    <input type="datetime-local" id="startdatetime" name="startdatetime">
+    <input type="datetime-local" id="startdatetime" name="startdatetime" value="{{ presence.startdatetime }}">
     <label for="enddatetime">Einddatum</label>
-    <input type="datetime-local" id="enddatetime" name="enddatetime">
+    <input type="datetime-local" id="enddatetime" name="enddatetime" value="{{ presence.startdatetime }}">
     <label for="idexam">Examen</label>
     <select id="idexam" name="idexam">
         {% for exam in exams %}
@@ -20,7 +25,6 @@
     <textarea id="students" name="students" rows="10" cols="40"></textarea><br>
     <input type="submit" name="btnsubmit">
 </form>
-<table>
     <form action="/presence" method="post">
         <select name="title">
             {% for title in titles %}
@@ -29,6 +33,27 @@
         </select>
         <input type="submit" name="btnsubmit">
     </form>
+<table>
+<tr>
+    <th>
+        OV Nummer
+    </th>
+    <th>
+        Naam
+    </th>
+    <th>
+        Start
+    </th>
+    <th>
+        Einde
+    </th>
+    <th>
+        Paraaf Start
+    </th>
+    <th>
+        Paraaf Eind
+    </th>
+</tr>
 {% for all in students %}
 <tr>
     <td>
@@ -38,12 +63,32 @@
         {{ all.student.fullName() }}
     </td>
     <td>
-        <input type="datetime-local" name="_date_{{ all.student.idstudent }}" value="{{ all.presence.startdatetime | date('c')}}">{{ all.presence.startdatetime | date('c') }}
+        <input type="datetime-local" name="_date_{{ all.student.idstudent }}" value="{{ all.presence.startdatetime }}">
     </td>
     <td>
         <input type="datetime-local" name="_date_{{ all.student.idstudent }}" value="{{ all.presence.enddatetime }}">
     </td>
+    <td>
+
+    </td>
+    <td>
+
+    </td>
 </tr>
 {% endfor %}
 </table>
+<script>
+    let exam_duration = document.getElementById('exam_duration').value.split(':');
+    let exam_minutes = (parseInt(exam_duration[0]) * 60) + parseInt(exam_duration[1]);
+    let start_date = new Date({{ presence.startdatetimejs }});
+    let end_date = new Date(start_date.getFullYear(),start_date.getMonth(),start_date.getDate(), start_date.getHours(), start_date.getMinutes());
+    end_date.setMinutes(start_date.getMinutes() + exam_minutes);
+    //let start_date = new Date(2019,3,3);
+    console.log("start_date: " + start_date);
+    console.log("exam_minutes: " + exam_duration[0] + " : " + exam_duration[1]);
+    console.log("exam_minutes: " + exam_minutes);
+    console.log("start_date: " + start_date.getFullYear() + "-" +start_date.getMonth() + "-" +start_date.getDate() + "-" + start_date.getHours() + "-" + start_date.getMinutes());
+    console.log("end_date: " + end_date.getFullYear() + " - " + end_date.getMonth() + " - " + end_date.getDate()+ " - " + end_date.getHours()+ " - " + end_date.getMinutes());
+
+</script>
 {% endblock %}

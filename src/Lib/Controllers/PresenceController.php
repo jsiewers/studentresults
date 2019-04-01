@@ -25,11 +25,9 @@ class PresenceController
     }
 
     public function show(Request $request, Response $response, array $args = []) {
-        $exam = new Exam($this->db);
+        //$exam = new Exam($this->db);
         $presence = new Presence($this->db);
-        $presence->startdatetime = date('Y-m-d\TH:i', mktime(8, 30, 0, date('m'),date('d'),date('Y')));
-        $presence->startdatetimejs = date('Y,n,j,G,i,s', mktime(8, 30, 0, (date('m')-1),date('d'),date('Y')));
-        //$presence->dayend = mktime(16, 28, 0, date('m'),date('d'),date('Y'));
+        //$presence->startdatetime = date('Y-m-d\TH:i', mktime(8, 30, 0, date('m'),date('d'),date('Y')));
         $students = [];
 
         if($request->getParsedBodyParam('title')) {
@@ -38,10 +36,10 @@ class PresenceController
         }
 
         $this->view->render($response, 'presence.html', [
-            'exams' => $exam->read(),
+           // 'exams' => $exam->read(),
             'titles' => $presence->readTitles(),
             'students' => $students,
-            'presence' => $presence,
+          //  'presence' => $presence,
         ]);
     }
 

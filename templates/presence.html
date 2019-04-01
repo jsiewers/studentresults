@@ -10,7 +10,7 @@
     <label for="title">Titel</label>
     <input id="title" name="title" value="">
     <label for="exam_duration">Duur van het examen</label>
-    <input type="time" name="exam_duration" id="exam_duration" value="09:00">
+    <input type="time" name="exam_duration" id="exam_duration" value="09:00" onchange="calculateEndDate()">
     <label for="startdatetime">Begindatum</label>
     <input type="datetime-local" id="startdatetime" name="startdatetime" value="{{ presence.startdatetime }}">
     <label for="enddatetime">Einddatum</label>
@@ -78,17 +78,19 @@
 {% endfor %}
 </table>
 <script>
-    let exam_duration = document.getElementById('exam_duration').value.split(':');
-    let exam_minutes = (parseInt(exam_duration[0]) * 60) + parseInt(exam_duration[1]);
-    let start_date = new Date({{ presence.startdatetimejs }});
-    let end_date = new Date(start_date.getFullYear(),start_date.getMonth(),start_date.getDate(), start_date.getHours(), start_date.getMinutes());
-    end_date.setMinutes(start_date.getMinutes() + exam_minutes);
-    //let start_date = new Date(2019,3,3);
-    console.log("start_date: " + start_date);
-    console.log("exam_minutes: " + exam_duration[0] + " : " + exam_duration[1]);
-    console.log("exam_minutes: " + exam_minutes);
-    console.log("start_date: " + start_date.getFullYear() + "-" +start_date.getMonth() + "-" +start_date.getDate() + "-" + start_date.getHours() + "-" + start_date.getMinutes());
-    console.log("end_date: " + end_date.getFullYear() + " - " + end_date.getMonth() + " - " + end_date.getDate()+ " - " + end_date.getHours()+ " - " + end_date.getMinutes());
+    function calculateEndDate() {
+        let exam_duration = document.getElementById('exam_duration').value.split(':');
+        let exam_minutes = (parseInt(exam_duration[0]) * 60) + parseInt(exam_duration[1]);
 
+
+        let start_date = new Date("{{presence.startdatetime}}");
+        start_date.setMinutes(start_date.getMinutes() + exam_minutes);
+
+
+        //Set enddatetime field
+        let e = document.getElementById('enddatetime');
+        e.value = start_date.toISOString().substr(0, 16);
+
+    }
 </script>
 {% endblock %}

@@ -1,0 +1,64 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<h1>Presentie</h1>
+<!DOCTYPE html>
+<html>
+<body>
+<form id="date_form">
+    <input type="datetime-local" name="start_date" id="start_date" value="">
+    <input type="datetime-local" name="end_date" id="end_date" value="">
+</form>
+
+
+<script>
+    let today = new Date();
+    today.setHours(8);
+    today.setMinutes(30);
+    console.log(today.toISOString().substr(0, 16));
+    console.log(today.getTimezoneOffset());
+
+    start_date = new Date(2019,4,1,8,30);
+    start_date_s = start_date.toISOString().substr(0, 16);
+
+    let day_time = 6.5*60*60*1000;
+    let exam_time =14*60*60*1000;
+
+    let num_of_days = Math.ceil(exam_time / day_time);
+    for(let i = 0; i < num_of_days; i++) {
+        start_date.setMinutes
+    }
+    console.log("aantal dagen: " + num_of_days);
+
+
+
+    end_date_ms = Date.parse(start_date.toString()) + exam_time;
+    end_date = new Date(end_date_ms).toISOString().substr(0, 16);
+    console.log(end_date);
+
+    document.getElementById('start_date').value = new Date().toISOString().substr(0, 16);
+
+    function calculateEndDate() {
+        let exam_duration = document.getElementById('exam_duration').value.split(':');
+        let exam_minutes = (parseInt(exam_duration[0]) * 60) + parseInt(exam_duration[1]);
+
+
+        let start_date = new Date("{{presence.startdatetime}}");
+        start_date.setMinutes(start_date.getMinutes() + exam_minutes);
+
+
+        //Set enddatetime field
+        let e = document.getElementById('enddatetime');
+        e.value = start_date.toISOString().substr(0, 16);
+
+    }
+
+    getEndtimeforDay()
+
+
+</script>
+
+
+
+
+{% endblock %}

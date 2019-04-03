@@ -168,7 +168,7 @@ class Result
 
 
     public function getExamDates() {
-        $sql = "select 
+        $sql = "select distinct 
                 r.exam_date
                 from result as r
                 join aspect as a on r.idaspect = a.idaspect
@@ -212,7 +212,7 @@ class Result
         foreach($result as $s) {
             $attempts[$s['idstudent']]['count'] += 1;
         }
-        //var_dump($attempts);
+        var_dump($attempts);
         return $attempts;
     }
 
@@ -233,6 +233,54 @@ class Result
                 join exam as e on p.idexam = e.idexam
                 where r.idstudent = :idstudent
                 group by e.idexam, r.exam_date";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
+        $stmt->execute();
+        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Result::class, [$this->db]);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        foreach($stmt->fetchAll() as $r) {
+            $caesura = explode(" ", $r['caesura']);
+            $exams[$r['idexam']]['description'] = $r['exam_description'];
+            $exams[$r['idexam']]['attempt'][$r['exam_date']]['idaspect'] = $r['idaspect'];
+            $exams[$r['idexam']]['attempt'][$r['exam_date']]['score'] = $r['score'];
+            $exams[$r['idexam']]['attempt'][$r['exam_date']]['grade'] = $caesura[$r['score']];
+        }
+        return $exams;
+    }
+
+    public function getStudentExams($idstudent) {
+        $sql = "select distinct
+                e.idexam,
+                r.exam_date
+                from result as r
+                join aspect as a on r.idaspect = a.idaspect
+                join student as s on r.idstudent = s.idstudent
+                join assignment as ass on a.idassignment = ass.idassignment
+                join proces as p on ass.idproces = p.idproces
+                join exam as e on p.idexam = e.idexam
+                where r.idstudent = :idstudent";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
+
+    }
+
+    public function examResultsDetailByStudent($idstudent) {
+        $sql = "select 
+                ANY_VALUE(e.description) as exam_description,
+                ANY_VALUE(a.idaspect) as idaspect,
+                ANY_VALUE(e.caesura) as caesura,
+                r.exam_date, 
+                e.idexam,
+                SUM(a.score) as score 
+                from result as r
+                join aspect as a on r.idaspect = a.idaspect
+                join student as s on r.idstudent = s.idstudent
+                join assignment as ass on a.idassignment = ass.idassignment
+                join proces as p on ass.idproces = p.idproces
+                join exam as e on p.idexam = e.idexam
+                where r.idstudent = :idstudent";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
         $stmt->execute();

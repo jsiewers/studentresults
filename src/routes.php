@@ -19,6 +19,7 @@ $app->get('/result/{idstudent}/{idexam}/{exam_date}/{template}', 'ResultControll
 $app->get('/result/{idstudent}/{idexam}/{exam_date}/{template}/delete', 'ResultController:deleteResult');
 $app->get('/result/{idexam}/{exam_date}', 'ResultController:studentResults');
 $app->get('/results/{idexam}/all', 'ResultController:studentResultsAll');
+$app->get('/studentresults/{idstudent}/all', 'ResultController:detail');
 $app->get('/students', 'StudentController:show');
 $app->post('/students', 'StudentController:show');
 $app->get('/students/{idstudent}/{idexam}/{exam_date}', 'StudentController:delete');

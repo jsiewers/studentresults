@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
-<a href="/result/{{ student.idstudent }}/{{result.idexam}}/{{ result.exam_date }}/detail/delete">delete result</a>
+{% for result in results %}
 <table style="width:100%;">
     <tr>
-        <td colspan="6"><b>{{ exam.description }}</b></td>
+        <td colspan="6"><b>{{ result.exam.description }}</b></td>
     </tr>
     <tr>
         <td>Naam student:</td>
@@ -17,7 +17,7 @@
         <td>Plaats:</td>
         <td colspan="3">Almere</td>
         <td>Datum:</td>
-        <td>{{ result.exam_date |date("d/m/Y") }}</td>
+        <td>{{ result.result.exam_date |date("d/m/Y") }}</td>
     </tr>
     <tr>
         <td>Beoordelaar 1:</td>
@@ -27,7 +27,7 @@
     </tr>
 </table>
 
-{% for proces in results %}
+{% for proces in result.examresults.result %}
 <table style="width:100%;">
     <tr>
         <td colspan="2"><b>{{ proces.description }}</b></td>
@@ -58,7 +58,7 @@
             Totaal score examen:
         </td>
         <td style="text-align:right;">
-            {{ result.exam_score }}
+            {{ result.result.exam_score }}
         </td>
     </tr>
 </table>
@@ -68,7 +68,7 @@
             Eindbeoordeling:
         </td>
         <td style="text-align:center; font-size:2em">
-            <b>{{ result.exam_grade }} ({% if result.exam_grade >= 8 %}G{% elseif result.exam_grade >= 5.5 %}V{% else %}O{% endif %})</b>
+            <b>{{ result.result.exam_grade }} ({% if result.result.exam_grade >= 8 %}G{% elseif result.result.exam_grade >= 5.5 %}V{% else %}O{% endif %})</b>
         </td>
 </table>
 <table class="noborder" style="width:70%;">
@@ -94,4 +94,5 @@
     </tr>
 </table>
 <p class="pagebreak"></p>
+{% endfor %}
 {% endblock %}

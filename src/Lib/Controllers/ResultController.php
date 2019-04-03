@@ -27,6 +27,7 @@ class ResultController
         $student = new Student($this->db);
         $exam = new Exam($this->db);
         $result = new Result($this->db);
+        $result->getStudentExams($request->getAttribute('idstudent'));
 
         $this->view->render($response, 'results.html', [
             'student' => $student->readById($request->getAttribute('idstudent')),
@@ -89,31 +90,73 @@ class ResultController
     }
 
     public function detail(Request $request, Response $response, array $args = []) {
+        $student = new Student($this->db);
+        $student = $student->readById($request->getAttribute("idstudent"));
+        $exam = new Exam($this->db);
+        $result = new Result($this->db);
+        $result->idstudent = $request->getAttribute("idstudent");
+        //$result->idexam = $request->getAttribute("idexam");
+        $exams[0]['idexam'] = $request->getAttribute('idexam');
+        $exams[0]['exam_date'] = $request->getAttribute('exam_date');
+
         if($request->getAttribute('template') == 'detail') {
             $template = 'result_detail.html';
-        } else {
+        } elseif($request->getAttribute('template') == 'proces') {
             $template = 'result_proces.html';
+        } else {
+            $template = 'results_detail_all.html';
+            $exams = $result->getStudentExams($request->getAttribute("idstudent"));
         }
-        $student = new Student($this->db);
-        $exam = new Exam($this->db);
-        $exam = $exam->readById($request->getAttribute('idexam'));
-
-        $result = new Result($this->db);
-        $result->exam_date = $request->getAttribute("exam_date");
-        $result->idstudent = $request->getAttribute("idstudent");
-        $result->idexam = $request->getAttribute("idexam");
-        $examresults = $result->resultsByExam();
-        $result->exam_score = $examresults['exam_score'];
-        $caesura = explode(" ",$exam->caesura);
-        $result->exam_grade = $caesura[$result->exam_score];
 
 
+        foreach($exams as $e) {
+            $result = new Result($this->db);
+            $result->idstudent = $request->getAttribute("idstudent");
+            $ex = $exam->readById($e['idexam']);
+            $result->idexam = $e['idexam'];
+            $result->exam_date = $e['exam_date'];
+            $examresults = $result->resultsByExam();
+            $result->exam_score = $examresults['exam_score'];
+            $caesura = explode(" ", $ex->caesura);
+            $result->exam_grade = $caesura[$result->exam_score];
+            $results[] = ['exam' => $ex, 'examresults' => $examresults, 'result' => $result];
+        }
+
+        if($template != 'results_detail_all.html') {
+            $arr = [
+                'student' => $student,
+                'exam' => $results[0]['exam'],
+                'results' => $results[0]['examresults']['result'],
+                'result' => $results[0]['result']
+            ];
+        } else {
+            $arr = [
+                'student' => $student,
+                'results' => $results
+            ];
+       }
+
+        var_dump($results['exam']);
+        $this->view->render($response, $template, $arr);
+
+
+
+//        $this->detailView($student->readById($result->idstudent),
+//            $results['exam'],
+//            $results['examresults']['result'],
+//            $results['result'],
+//            $template
+//            );
+
+
+    }
+
+    public function detailView($student, $exam, $results, $result, $template) {
         $this->view->render($response, $template, [
-            'student' => $student->readById($request->getAttribute('idstudent')),
+            'student' => $student,
             'exam' => $exam,
-            'results' => $examresults['result'],
+            'results' => $results,
             'result' => $result
         ]);
-
     }
 }

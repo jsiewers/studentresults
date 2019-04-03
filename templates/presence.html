@@ -2,6 +2,8 @@
 {% extends "layout.html" %}
 {% block content %}
 <h1>Presentie</h1>
+<p>
+</p>
 <ul>
     <li>Starttijd: 09:00</li>
     <li>Eindtijd: 16:00</li>
@@ -54,19 +56,19 @@
         Paraaf Eind
     </th>
 </tr>
-{% for all in students %}
+{% for student in students %}
 <tr>
     <td>
-        {{ all.student.idstudent }}
+        {{ student.idstudent }}
     </td>
     <td>
-        {{ all.student.fullName() }}
+        {{ student.fullname }}
     </td>
     <td>
-        <input type="datetime-local" name="_date_{{ all.student.idstudent }}" value="{{ all.presence.startdatetime }}">
+        <input type="datetime-local" name="_date_{{ student.idstudent }}" value="{{ student.startdatetime }}">
     </td>
     <td>
-        <input type="datetime-local" name="_date_{{ all.student.idstudent }}" value="{{ all.presence.enddatetime }}">
+        <input type="datetime-local" name="_date_{{ student.idstudent }}" value="{{ student.enddatetime }}">
     </td>
     <td>
 
@@ -78,6 +80,28 @@
 {% endfor %}
 </table>
 <script>
+    let objects = {{ students | json_encode | raw }};
+    console.log(objects);
+    let table = document.createElement("table");
+    table.style.width = "100%";
+
+    let row;
+    let cell;
+    for(let i = 0; i<objects.length; i++) {
+        console.log(objects[i]);
+        row = document.createElement("tr");
+        cell = document.createElement("td");
+        cell.innerText = objects[i].idstudent;
+        row.appendChild(cell);
+        cell = document.createElement("td");
+        cell.innerText = objects[i].idexam;
+        row.appendChild(cell);
+        table.appendChild(row);
+    }
+
+    document.body.appendChild(table);
+
+
     function calculateEndDate() {
         let exam_duration = document.getElementById('exam_duration').value.split(':');
         let exam_minutes = (parseInt(exam_duration[0]) * 60) + parseInt(exam_duration[1]);

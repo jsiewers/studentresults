@@ -60,9 +60,10 @@ class Presence
             $student->first_name = $s['first_name'];
             $student->prefix = $s['prefix'];
             $student->last_name = $s['last_name'];
+            $s['fullname'] = $student->fullName();
             $s['startdatetime'] = date('Y-m-d\TH:m', strtotime($s['startdatetime']));
             $s['enddatetime'] = date('Y-m-d\TH:m', strtotime($s['enddatetime']));
-            $students[] = ['student' => $student, 'presence' => $s ];
+            $students[] = $s;
         }
         //var_dump($s);
         return $students;

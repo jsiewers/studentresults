@@ -7,9 +7,9 @@
 <table>
     {% for exam in exams %}
     <tr>
-        <td>{{ exam.examid }}</td>
+        <td>{{ exam.examcode }}</td>
         <td>{{ exam.description }}</td>
-        <td><a href="/attempt/{{ student.idstudent }}/{{ exam.examid }}">New Attempt</a></td>
+        <td><a href="/attempt/{{ student.idstudent }}/{{ exam.idexam }}">New Attempt</a></td>
     </tr>
     {% endfor %}
 </table>

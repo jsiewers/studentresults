@@ -30,7 +30,7 @@ class ResultController
 
         $this->view->render($response, 'results.html', [
             'student' => $student->readById($request->getAttribute('idstudent')),
-            'exams' => $exam->read(),
+            'exams' => $exam->readAll(),
             'examresults' => $result->examResultsByStudent($request->getAttribute('idstudent')),
         ]);
     }

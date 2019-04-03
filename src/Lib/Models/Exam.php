@@ -22,10 +22,20 @@ class Exam
         $this->pdo = $db;
     }
 
+    public function readAll() {
+        $sql = "select * from exam where active = 1 order by description";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
+
+    }
+
     public function read()
     {
         $sql = "select 
                 ANY_VALUE(e.idexam) as examid,
+                ANY_VALUE(e.examcode) as examcode,
                 e.description,
                 r.exam_date
                 from result as r
@@ -42,11 +52,12 @@ class Exam
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         foreach($stmt->fetchAll() as $e) {
             $exam[$e['examid']]['examid'] = $e['examid'];
+            $exam[$e['examid']]['examcode'] = $e['examcode'];
             $exam[$e['examid']]['description'] = $e['description'];
             $exam[$e['examid']]['dates'][] = $e['exam_date'];
         }
 
-        //var_dump($exam);
+         //var_dump($exam);
         return($exam);
     }
 
@@ -65,11 +76,12 @@ class Exam
     public function save()
     {
         try {
-            $sql = "INSERT INTO exam (idexam, description, active, caesura) VALUES (:idexam, :description, 1, :caesura)";
+            $sql = "INSERT INTO exam (idexam, description, active, caesura, examcode) VALUES (:idexam, :description, 1, :caesura, :examcode)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
             $stmt->bindParam(':caesura', $this->caesura, PDO::PARAM_STR);
             $stmt->bindParam(':description', $this->description, PDO::PARAM_STR);
+            $stmt->bindParam(':examcode', $this->examcode, PDO::PARAM_STR);
             $result = $stmt->execute();
         } catch (\PDOException $e) {
             $result = $e->getMessage();
@@ -91,6 +103,7 @@ class Exam
         $sql = "select 
                 e.idexam,
                 e.description as exam_description, 
+                e.examcode as examcode, 
                 p.idproces, 
                 p.description as proces_description, 
                 ass.idassignment, 
@@ -112,6 +125,7 @@ class Exam
         foreach ($resultset as $p) {
             $exam['description'] = $p['exam_description'];
             $exam['idexam'] = $p['idexam'];
+            $exam['examcode'] = $p['examcode'];
             $exam['processes'][$p['idproces']]['description'] = $p['proces_description'];
             $exam['processes'][$p['idproces']]['idproces'] = $p['idproces'];
             $exam['processes'][$p['idproces']]['assignments'] [$p['idassignment']]['description'] = $p['assignment_description'];

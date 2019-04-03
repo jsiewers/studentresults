@@ -42,8 +42,10 @@ class ExamController
     public function new_form(Request $request, Response $response, array $args = []) {
         $exam = new Exam($this->db);
         $exams = $exam->read();
+        $new_exams = $exam->readAll();
         $this->view->render($response, 'new_exam.html', [
             'exams' => $exams,
+            'new_exams' => $new_exams,
         ]);
     }
 
@@ -52,6 +54,7 @@ class ExamController
         $exam->idexam = ($request->getParsedBodyParam('idexam'));
         $exam->description = ($request->getParsedBodyParam('description'));
         $exam->caesura = ($request->getParsedBodyParam('caesura'));
+        $exam->examcode = ($request->getParsedBodyParam('examcode'));
         $exam->save();
 
         $exams = $exam->read();

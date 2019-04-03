@@ -4,6 +4,8 @@
 <form action="/exam/new" method="post">
     <label for="idexam">Exam Id</label>
     <input type="text" id="idexam" name="idexam">
+    <label for="examcode">Examcode</label>
+    <input type="text" id="examcode" name="examcode">
     <label for="description">Description</label>
     <input type="text" id="description" name="description">
     <label for="description">Caesura</label>
@@ -12,6 +14,16 @@
 
     <input type="submit" name="submit">
 </form>
+<table>
+    {% for e in new_exams %}
+    <tr>
+        <td><a href="/proces/{{ e.idexam }}/new">{{ e.description }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h1>Results</h1>
+
 <table>
 {% for key, exam in exams %}
 <tr>
@@ -29,4 +41,5 @@
 </tr>
 {% endfor %}
 </table>
+
 {% endblock %}

@@ -16,6 +16,7 @@ $app->post('/aspect/{idexam }/{idproces }/{idassignment}/new', 'AspectController
 $app->post('/aspect/{idexam }/{idproces }/{idassignment}/{idaspect}/update', 'AspectController:update');
 $app->get('/results/{idstudent}', 'ResultController:results');
 $app->get('/result/{idstudent}/{idexam}/{exam_date}/{template}', 'ResultController:detail');
+$app->get('/result/{idstudent}/{idexam}/{exam_date}/{template}/delete', 'ResultController:deleteResult');
 $app->get('/result/{idexam}/{exam_date}', 'ResultController:studentResults');
 $app->get('/results/{idexam}/all', 'ResultController:studentResultsAll');
 $app->get('/students', 'StudentController:show');

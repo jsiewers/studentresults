@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
-
+<a href="/result/{{ student.idstudent }}/{{result.idexam}}/{{ result.exam_date }}/detail/delete">delete result</a>
 <table style="width:100%;">
     <tr>
-        <td colspan="6"><b>{{ exam.idexam }} {{ exam.description }}</b></td>
+        <td colspan="6"><b>{{ exam.description }}</b></td>
     </tr>
     <tr>
         <td>Naam student:</td>

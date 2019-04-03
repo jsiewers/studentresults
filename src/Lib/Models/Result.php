@@ -46,6 +46,7 @@ class Result
             $stmt->bindParam(":idstudent", $this->idstudent, PDO::PARAM_INT);
             $stmt->bindParam(":idexam", $this->idexam, PDO::PARAM_INT);
             $stmt->bindParam(":exam_date", $this->exam_date, PDO::PARAM_INT);
+            $stmt->execute();
         } catch(\PDOException  $e) {
             echo $e->getMessage();
         }
@@ -97,6 +98,7 @@ class Result
     public function resultsByExamStudents() {
         $sql = "select 
                 e.idexam,
+                e.examcode,
                 s.idstudent as student_idstudent,
                 s.idgroup,
                 IF(ISNULL(prefix), CONCAT(first_name, ' ', last_name), CONCAT(first_name, ' ', prefix, ' ', last_name )) AS fullname,
@@ -132,6 +134,7 @@ class Result
     public function resultsByExamAll() {
         $sql = "select 
                 e.idexam,
+                se.examcode,
                 s.idstudent as student_idstudent,
                 s.idgroup,
                 IF(ISNULL(prefix), CONCAT(first_name, ' ', last_name), CONCAT(first_name, ' ', prefix, ' ', last_name )) AS fullname,

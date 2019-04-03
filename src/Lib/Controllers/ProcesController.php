@@ -27,7 +27,7 @@ class ProcesController
     public function new_form(Request $request, Response $response, array $args = []) {
         $idexam = $request->getAttribute('idexam');
         $exam = new Exam($this->db);
-        $exams = $exam->read();
+        $exams = $exam->readAll();
 
         $proces = new Proces($this->db);
         $processes = $proces->readByExam($idexam);
@@ -49,7 +49,7 @@ class ProcesController
         }
 
         $exam = new Exam($this->db);
-        $exams = $exam->read();
+        $exams = $exam->readAll();
 
         $processes = $proces->readByExam($proces->idexam);
 

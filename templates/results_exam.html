@@ -5,17 +5,13 @@
 <table style="width:100%;">
     <tr>
         <td>Examencode</td>
-        <td>{{ result | first.idexam }}</td>
+        <td>{{ result | first.examcode }}</td>
     </tr>
     <tr>
         <td>Examennaam</td>
         <td>{{ result | first.exam_description }}</td>
     </tr>
-    <tr>
-        <td>Onderwijsproduct</td>
-        <td>{{ result | first.idexam }} {{ result | first.exam_description }}</td>
-    </tr>
-    <tr>
+     <tr>
         <td>Crebo</td>
         <td>25187</td>
     </tr>

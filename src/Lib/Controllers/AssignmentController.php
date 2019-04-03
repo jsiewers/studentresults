@@ -80,4 +80,38 @@ class AssignmentController
             'processes' => $processes,
         ]);
     }
+
+    public function update(Request $request, Response $response, array $args = []) {
+
+        $idexam = $request->getAttribute('idexam');
+        $idproces = $request->getAttribute('idproces');
+        $idassignment = $request->getAttribute('idassignment');
+
+        $exam = new Exam($this->db);
+        $exam = $exam->readById($idexam);
+
+        $proces = new Proces($this->db);
+        $processes = $proces->readByExam($idexam);
+        $proces = $proces->readById($idproces);
+
+        $assignment = new Assignment($this->db);
+        $assignment->idassignment = $idassignment;
+        $assignment->idproces = $idproces;
+        $assignment->description = $request->getParsedBodyParam('description');
+
+        if (!empty($assignment->description)) {
+            $assignment->update();
+        }
+        $assignments = $assignment->readByProces($idproces);
+
+        $this->view->render($response, 'new_assignment.html', [
+            'exam' => $exam,
+            'proces' => $proces,
+            'idproces' => $idproces,
+            'processes' => $processes,
+            'assignments' => $assignments,
+            'processes' => $processes,
+        ]);
+    }
+
 }

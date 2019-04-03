@@ -59,6 +59,23 @@ class Assignment
         return $result;
     }
 
+    public function update() {
+        try {
+            $sql = "update assignment set 
+                      idproces = :idproces, 
+                      description = :description 
+                      WHERE idassignment = :idassignment;";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':idassignment', $this->idassignment, PDO::PARAM_INT);
+            $stmt->bindParam(':idproces', $this->idproces, PDO::PARAM_INT);
+            $stmt->bindParam(':description', $this->description, PDO::PARAM_STR);
+            $result = $stmt->execute();
+        } catch (\PDOException $e) {
+            $result =  $e->getMessage();
+        }
+        return $result;
+    }
+
     public function createTable()
     {
         $sql = "CREATE TABLE IF NOT EXISTS `results`.`assignment` (

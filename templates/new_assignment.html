@@ -15,12 +15,18 @@
 
     <input type="submit" name="btnsubmit">
 </form>
+
 <table>
     {% for assignment in assignments %}
-    <tr>
+    <form action="/assignment/{{ exam.idexam }}/{{ proces.idproces }}/{{ assignment.idassignment }}/update" method="post">
+        <tr>
         <td>{{ assignment.idassignment }}</td>
-        <td><a href="/aspect/{{ exam.idexam }}/{{ proces.idproces }}/{{ assignment.idassignment }}/new">{{ assignment.description }}</a></td>
-    </tr>
+        <td><a href="/aspect/{{ exam.idexam }}/{{ proces.idproces }}/{{ assignment.idassignment }}/new">Aspects</a></td>
+        <td><textarea style="width:400px;" id="description" name="description">{{ assignment.description }}</textarea></td>
+        <td><input type="submit" name="btnsubmit"></td>
+        </tr>
+    </form>
     {% endfor %}
+
 </table>
 {% endblock %}

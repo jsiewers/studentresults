@@ -10,6 +10,7 @@ $app->post('/exam/new', 'ExamController:save');
 $app->get('/proces/{idexam}/new', 'ProcesController:new_form');
 $app->post('/proces/{idexam}/new', 'ProcesController:save');
 $app->get('/assignment/{idexam}/{idproces}/new', 'AssignmentController:new_form');
+$app->post('/assignment/{idexam}/{idproces}/{idassignment}/update', 'AssignmentController:update');
 $app->post('/assignment/{idexam}/{idproces}/new', 'AssignmentController:save');
 $app->get('/aspect/{idexam }/{idproces }/{idassignment}/new', 'AspectController:new_form');
 $app->post('/aspect/{idexam }/{idproces }/{idassignment}/new', 'AspectController:save');

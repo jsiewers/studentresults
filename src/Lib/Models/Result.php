@@ -162,7 +162,7 @@ class Result
             $result[$key]['grade'] = $caesura[$result[$key]['total_score']];
             $result[$key]['attempt'] = $attempts[$result[$key]['student_idstudent']];
         }
-        var_dump($result);
+        //var_dump($result);
         return $result;
     }
 
@@ -177,7 +177,7 @@ class Result
                 join exam as e on p.idexam = e.idexam
                 where e.active = 1 and e.idexam = :idexam
                 group by exam_date, e.description
-                order by e.description, r.exam_date;";
+                order by r.exam_date;";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
         $stmt->execute();
@@ -212,7 +212,7 @@ class Result
         foreach($result as $s) {
             $attempts[$s['idstudent']]['count'] += 1;
         }
-        var_dump($attempts);
+        //var_dump($attempts);
         return $attempts;
     }
 

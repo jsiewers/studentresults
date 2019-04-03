@@ -43,7 +43,8 @@ class ResultController
         $result->idstudent = ($request->getAttribute('idstudent'));
         $result->delete();
 
-        $this->studentResults($request, $response, $args = []);
+        //$this->studentResults($request, $response, $args = []);
+        $this->results($request, $response, $args = []);
     }
 
     public function save(Request $request, Response $response, array $args = []) {
@@ -123,40 +124,21 @@ class ResultController
         }
 
         if($template != 'results_detail_all.html') {
-            $arr = [
+            $args = [
                 'student' => $student,
                 'exam' => $results[0]['exam'],
                 'results' => $results[0]['examresults']['result'],
                 'result' => $results[0]['result']
             ];
         } else {
-            $arr = [
+            $args = [
                 'student' => $student,
                 'results' => $results
             ];
        }
 
-        var_dump($results['exam']);
-        $this->view->render($response, $template, $arr);
+        $this->view->render($response, $template, $args);
 
 
-
-//        $this->detailView($student->readById($result->idstudent),
-//            $results['exam'],
-//            $results['examresults']['result'],
-//            $results['result'],
-//            $template
-//            );
-
-
-    }
-
-    public function detailView($student, $exam, $results, $result, $template) {
-        $this->view->render($response, $template, [
-            'student' => $student,
-            'exam' => $exam,
-            'results' => $results,
-            'result' => $result
-        ]);
     }
 }

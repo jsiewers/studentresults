@@ -119,7 +119,7 @@ class ResultController
             $examresults = $result->resultsByExam();
             $result->exam_score = $examresults['exam_score'];
             $caesura = explode(" ", $ex->caesura);
-            $result->exam_grade = $caesura[$result->exam_score];
+            $result->exam_grade = str_replace(",",".", $caesura[$result->exam_score]);
             $results[] = ['exam' => $ex, 'examresults' => $examresults, 'result' => $result];
         }
 

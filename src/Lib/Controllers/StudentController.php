@@ -49,7 +49,7 @@ class StudentController
         $uploadedFile = $uploadedFiles['fileToUpload'];
         if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
             $filename = $this->moveUploadedFile($directory, $uploadedFile);
-            $response->write('uploaded ' . $filename . '<br/>');
+            //$response->write('uploaded ' . $filename . '<br/>');
         }
         $this->readFile($filename);
 

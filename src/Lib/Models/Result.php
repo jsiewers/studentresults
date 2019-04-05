@@ -124,7 +124,7 @@ class Result
         $attempts = $this->getOccurencesUntilDate();
         $caesura = explode(" ",$result[0]['caesura']);
         foreach($result as $key => $value) {
-            $result[$key]['grade'] = $caesura[$result[$key]['total_score']];
+            $result[$key]['grade'] = str_replace(",", ".", $caesura[$result[$key]['total_score']]);
             $result[$key]['attempt'] = $attempts[$result[$key]['student_idstudent']];
         }
         //var_dump($result);

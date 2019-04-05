@@ -2,8 +2,7 @@
 
 namespace Lib\Controllers\Auth;
 
-use App\Models\User;
-use App\Controllers\Controller;
+use Lib\Models\User;
 use Respect\Validation\Validator as v;
 
 /**
@@ -15,13 +14,13 @@ use Respect\Validation\Validator as v;
 
 class AuthController
 {
-    protected $db, $view;
-    protected $exam, $proces, $assignments;
+    protected $db, $view, $validator;
 
-    public function __construct($db, $view)
+    public function __construct($db, $view, $validator)
     {
         $this->db = $db;
         $this->view = $view;
+        $this->validator = $validator;
 
     }
 
@@ -60,7 +59,7 @@ class AuthController
 	{
 
 		$validation = $this->validator->validate($request, [
-			'email' => v::noWhitespace()->notEmpty()->email()->emailAvailable(),
+			'email' => v::noWhitespace()->notEmpty()->email(),
 			'name' => v::noWhitespace()->notEmpty()->alpha(),
 			'password' => v::noWhitespace()->notEmpty(),
 		]);

@@ -6,7 +6,7 @@
  * Time: 12:02
  */
 
-namespace Examresults\Validators;
+namespace Lib\Validators;
 use Respect\Validation\Validator as Respect;
 use Respect\Validation\Exceptions\NestedValidationException;
 

@@ -2,6 +2,8 @@
 
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Lib\Middleware\GuestMiddleware;
+use Lib\Middleware\AuthMiddleware;
 
 
 //$app->get('/seed', 'SeedController:seed');
@@ -55,4 +57,4 @@ $app->get('/[{name}]', function (Request $request, Response $response, array $ar
 
     // Render index view
     return $this->renderer->render($response, 'auth/signin.html', $args);
-});
+})->setName('home');

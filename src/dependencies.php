@@ -12,6 +12,7 @@ use Lib\Auth\Auth;
 use Lib\Controllers\Auth\AuthController;
 use Lib\Controllers\Auth\PasswordController;
 use Lib\Middleware\GuestMiddleware;
+use Lib\Validators\Validator;
 
 $container = $app->getContainer();
 
@@ -37,7 +38,9 @@ $container['db'] = function ($c) {
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     return $pdo;
 };
-
+$container['validator'] = function($c) {
+    return new Validator();
+};
 $container['uploads'] = function ($c) {
     return $c['settings']['uploads']['uploads_path'];
 };
@@ -67,7 +70,7 @@ $container['auth'] = function($c) {
     return new Auth($c->get('db'));
 };
 $container['AuthController'] = function($c) {
-    return new AuthController($c);
+    return new AuthController($c->db, $c->view, $c->validator);
 };
 
 $container['PasswordController'] = function($c) {
@@ -129,7 +132,5 @@ $container['PresenceController'] = function ($c) {
     return new PresenceController($c->get('db'), $c->get('view'));
 };
 
-$container['validator'] = function($c) {
-    return new \Lib\Validators\Validator;
-};
+
 

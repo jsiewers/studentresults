@@ -8,6 +8,10 @@ use Lib\Controllers\ProcesController;
 use Lib\Controllers\AssignmentController;
 use Lib\Controllers\AspectController;
 use Lib\Controllers\PresenceController;
+use Lib\Auth\Auth;
+use Lib\Controllers\Auth\AuthController;
+use Lib\Controllers\Auth\PasswordController;
+use Lib\Middleware\GuestMiddleware;
 
 $container = $app->getContainer();
 
@@ -49,8 +53,33 @@ $container['view'] = function ($c) {
     $uri = \Slim\Http\Uri::createFromEnvironment(new \Slim\Http\Environment($_SERVER));
     $view->addExtension(new \Slim\Views\TwigExtension($router, $uri));
 
+    $view->getEnvironment()->addGlobal('auth', [
+        'check' => $c->auth->check(),
+        'user' => $c->auth->user()
+    ]);
+
     return $view;
 };
+
+//Authentication
+
+$container['auth'] = function($c) {
+    return new Auth($c->get('db'));
+};
+$container['AuthController'] = function($c) {
+    return new AuthController($c);
+};
+
+$container['PasswordController'] = function($c) {
+    return new PasswordController($c);
+};
+
+$container['csrf'] = function($c) {
+    return new \Slim\Csrf\Guard;
+};
+
+
+//==================
 
 $container['Student'] = function ($c) {
     return new Student($c->get('db'));
@@ -103,3 +132,4 @@ $container['PresenceController'] = function ($c) {
 $container['validator'] = function($c) {
     return new \Lib\Validators\Validator;
 };
+

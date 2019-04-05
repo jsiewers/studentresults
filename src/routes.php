@@ -4,7 +4,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 
 
-$app->get('/seed', 'SeedController:seed');
+//$app->get('/seed', 'SeedController:seed');
 $app->get('/exam/new', 'ExamController:new_form');
 $app->post('/exam/new', 'ExamController:save');
 $app->get('/proces/{idexam}/new', 'ProcesController:new_form');
@@ -31,10 +31,28 @@ $app->get('/presence', 'PresenceController:show');
 $app->post('/presence/store', 'PresenceController:save');
 $app->post('/presence', 'PresenceController:show');
 
+
+//Authentication
+$app->group('', function () {
+    $this->get('/auth/signup', 'AuthController:getSignUp')->setName('auth.signup');
+    $this->post('/auth/signup', 'AuthController:postSignUp');
+    $this->get('/auth/signin', 'AuthController:getSignIn')->setName('auth.signin');
+    $this->post('/auth/signin', 'AuthController:postSignIn');
+})->add(new GuestMiddleware($container));
+
+
+
+$app->group('', function () {
+    $this->get('/auth/signout', 'AuthController:getSignOut')->setName('auth.signout');
+    $this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
+    $this->post('/auth/password/change', 'PasswordController:postChangePassword');
+})->add(new AuthMiddleware($container));
+
+
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {
     // Sample log message
     //$this->logger->info("Slim-Skeleton '/' route");
 
     // Render index view
-    return $this->renderer->render($response, 'index.phtml', $args);
+    return $this->renderer->render($response, 'auth/signin.html', $args);
 });

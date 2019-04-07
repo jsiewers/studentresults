@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.14, for macos10.14 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.11, for macos10.13 (x86_64)
 --
 -- Host: localhost    Database: results
 -- ------------------------------------------------------
--- Server version	8.0.14
+-- Server version	8.0.11
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -241,6 +241,33 @@ LOCK TABLES `student` WRITE;
 INSERT INTO `student` VALUES (203349,'Wesley','Sneijder',NULL,'MMVAOO6A',NULL),(276343,'Abigail','Akhile Oijiangbe','','MMVAOO7A','abigail.akhileoijiangbe@student.rocvf.nl'),(551337,'Xavier','Landveld','','MMVAOO6C','xavier.landveld@student.rocvf.nl'),(556133,'Liam','Jansen','','MMVAOO7A','liam.jansen@student.rocvf.nl'),(556585,'Joey','Clazing','','MMVAOO7A','joey.clazing@student.rocvf.nl'),(562370,'Dave','Stolze','','MMVAOO6A','dave.stolze@student.rocvf.nl'),(584999,'Jan Jaap','Siewers',NULL,'MMVAOO6A',NULL),(654332,'Klaas','Bruggeman',NULL,'MMVAOO6A',NULL),(788765,'Piet','Vries','de','MMVAOO6A',NULL),(2001122,'Narges','Jafari','','MMVAOO8B','narges.jafari@student.rocvf.nl'),(2002108,'Yad','Rostem','','MMVAOO7B','yad.rostem@student.rocvf.nl'),(2002861,'Thom','Kok','','MMVAOO6A','thom.kok@student.rocvf.nl'),(2003255,'Harjit','Lal','','MMVAOO6A','harjit.lal@student.rocvf.nl'),(2003490,'Rico','Stolker','','MMVAOO6A','rico.stolker@student.rocvf.nl'),(2003500,'Anwar','Ammor','','MMVAOO6A','anwar.ammor@student.rocvf.nl'),(2003556,'Elton','Irokromo','','MMVAOO6C','elton.irokromo@student.rocvf.nl'),(2004940,'Igmar','Houtsnee','','MMVAOO7B','igmar.houtsnee@student.rocvf.nl'),(2022702,'Neal','Vos','','MMVAOO6C','neal.vos@student.rocvf.nl'),(2025954,'Kevin','Mijwaart','','MMVAOO7B','kevin.mijwaart@student.rocvf.nl'),(2026809,'Timothy','Keulen','van','MMVAOO7A','timothy.vankeulen@student.rocvf.nl'),(2034124,'Robin','Kogel','de','MMVAOO7A','robin.dekogel@student.rocvf.nl'),(2034604,'Baris','Bekdemir','','MMVAOO6A','baris.bekdemir@student.rocvf.nl'),(2038538,'Jordy','Olie','','MMVAOO6C','jordy.olie@student.rocvf.nl'),(2039535,'Barry','Willems','','MMVAOO6A','barry.willems@student.rocvf.nl'),(2040377,'Patrick','Veen','de','MMVAOO6C','patrick.deveen@student.rocvf.nl'),(2041115,'Rohit','Kashyap','','MMVAOO6C','rohit.kashyap@student.rocvf.nl'),(2041698,'Mo','Idbid','','MMVAOO7A','mo.idbid@student.rocvf.nl'),(2043253,'DJ','Tjong-A-Hung','','MMVAOO7B','dj.tjongahung@student.rocvf.nl'),(2043820,'Renas','Khalil','','MMVAOO6C','renas.khalil@student.rocvf.nl'),(2045338,'Okan','Dagli','','MMVAOO6C','okan.dagli@student.rocvf.nl'),(2045645,'Mike','Bulte','','MMVAOO6C','mike.bulte@student.rocvf.nl'),(2045827,'Dennis','Nguyen','','MMVAOO6C','dennis.nguyen@student.rocvf.nl'),(2046462,'Dilion','Martha','','MMVAOO6A','dilion.martha@student.rocvf.nl'),(2046765,'Nabil','Mzaita','','MMVAOO6C','nabil.mzaita@student.rocvf.nl'),(2046997,'Dennis','Koppen','','MMVAOO6A','dennis.koppen@student.rocvf.nl'),(2047287,'Hensley','Troenoredjo','','MMVAOO6C','hensley.troenoredjo@student.rocvf.nl'),(2047478,'Thomas','Ponzo','','MMVAOO6C','thomas.ponzo@student.rocvf.nl'),(2048955,'Bjorni','Agard','','MMVAOO6C','bjorni.agard@student.rocvf.nl'),(2055468,'Mark','Haastert','van','MMVAOO7A','mark.vanhaastert@student.rocvf.nl'),(2055470,'Peyman','Mahmoudi','','MMVAOO7B','peyman.mahmoudi@student.rocvf.nl'),(2058122,'Wessel','Feenstra','','MMVAOO7A','wessel.feenstra@student.rocvf.nl'),(2058943,'Safouane','Messaoudi','','MMVAOO7B','safouane.messaoudi@student.rocvf.nl'),(2059048,'Aaron','Veltman','','MMVAOO7B','aaron.veltman@student.rocvf.nl'),(2059445,'Lukas','Leeflang','','MMVAOO7A','lukas.leeflang@student.rocvf.nl'),(2059927,'Jabir','Mazraoui','','MMVAOO7A','jabir.mazraoui@student.rocvf.nl'),(2059930,'Kevin','Assink','','MMVAOO7A','kevin.assink@student.rocvf.nl'),(2059934,'fayaaz','nabie',NULL,'MMVAOO7B',NULL),(2060065,'Maud','Haas','de','MMVAOO7A','maud.dehaas@student.rocvf.nl'),(2062740,'Samir','Mokiem','','MMVAOO7A','samir.mokiem@student.rocvf.nl'),(2062753,'Najdère','Terlien','','MMVAOO7B','najdere.terlien@student.rocvf.nl'),(2063737,'Tim','Rijsenbrij','','MMVAOO7B','tim.rijsenbrij@student.rocvf.nl'),(2064105,'Dennis','Kloosterman','','MMVAOO7A','dennis.kloosterman@student.rocvf.nl'),(2065657,'Max','Krul','','MMVAOO7A','max.krul@student.rocvf.nl'),(2065696,'Björn','Terpstra','','MMVAOO7B','bjorn.terpstra@student.rocvf.nl'),(2067731,'Justin','Zonneveld','','MMVAOO7B','justin.zonneveld@student.rocvf.nl'),(2067738,'Leon','Loncaric','','MMVAOO7B','leon.loncaric@student.rocvf.nl'),(2068003,'Veeru','Kalloe','','MMVAOO7A','veeru.kalloe@student.rocvf.nl'),(2069013,'Mischa','Prudon','','MMVAOO7B','mischa.prudon@student.rocvf.nl'),(2070521,'Carlijn','Hartog','den','MMVAOO7A','carlijn.denhartog@student.rocvf.nl'),(2071908,'Gerano','Beks','','MMVAOO7A','gerano.beks@student.rocvf.nl'),(2073984,'Mandy','Leegwater','','MMVAOO7A','mandy.leegwater@student.rocvf.nl'),(2075402,'Dev (Dave)','Duits','','MMVAOO7A','devdave.duits@student.rocvf.nl'),(2075921,'Mohamad','Hammoush','','MMVAOO7B','mohamad.hammoush@student.rocvf.nl'),(2080398,'Marc','Dalen','van','MMVAOO7B','marc.vandalen@student.rocvf.nl'),(2085648,'Maksim','Hofker','','MMVAOO8B','maksim.hofker@student.rocvf.nl');
 /*!40000 ALTER TABLE `student` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `user` (
+  `iduser` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(256) NOT NULL,
+  PRIMARY KEY (`iduser`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'Jan','Siewers','janjaap@siewers.org','$2y$10$SbQuALglfN5p4dUDQ03rJuukhLY1g0IrCcLj7mSQYE4LK3XYR5RaS');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -251,4 +278,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-05  8:22:32
+-- Dump completed on 2019-04-07 20:45:40

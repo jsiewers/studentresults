@@ -35,20 +35,26 @@ class Auth
 
 	public function attempt($email, $password)
 	{
+	    try{
 		//$user = User::where('email', $email)->first();
         $sql = "select * from user where email = :email";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':iduser', $email, PDO::PARAM_STR);
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, [$this->db]);
         $stmt->execute();
         $user = $stmt->fetch();
+	    } catch(\PDOException $e) {
+	        var_dump($e->getMessage());
+        }
+
+        var_dump($user);
 
 		if (! $user) {
 			return false;
 		}
 
 		if (password_verify($password, $user->password)) {
-			$_SESSION['user'] = $user->id;
+			$_SESSION['user'] = $user->iduser;
 			return true;
 		}
 

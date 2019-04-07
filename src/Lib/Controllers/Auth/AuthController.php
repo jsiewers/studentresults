@@ -14,20 +14,21 @@ use Respect\Validation\Validator as v;
 
 class AuthController
 {
-    protected $db, $view, $validator;
+    protected $auth, $db, $view, $validator;
 
-    public function __construct($db, $view, $validator)
+    public function __construct($c)
     {
-        $this->db = $db;
-        $this->view = $view;
-        $this->validator = $validator;
+        $this->db = $c->get('db');
+        $this->view = $c->get('view');
+        $this->validator = $c->get('validator');
+        $this->auth = $c->get('auth');
 
     }
 
     public function getSignOut($request, $response)
 	{
 		$this->auth->logout();
-		return $response->withRedirect($this->router->pathFor('home'));
+		return $response->withRedirect('/');
 	}
 
 	public function getSignIn($request, $response)
@@ -37,17 +38,17 @@ class AuthController
 
 	public function postSignIn($request, $response)
 	{
-		$auth = $this->auth->attempt(
-			$request->getParam('email'),
-			$request->getParam('password')
-		);
+	    echo "je;;;elej";
+//		$auth = $this->auth->attempt(
+//			$request->getParam('email'),
+//			$request->getParam('password')
+//		);
+//
+//		if (! $auth) {
+//			//return $response->withRedirect('/auth/signin');
+//		}
 
-		if (! $auth) {
-			$this->flash->addMessage('error', 'Could not sign you in with those details');
-			return $response->withRedirect($this->router->pathFor('auth.signin'));
-		}
-
-		return $response->withRedirect($this->router->pathFor('home'));
+		//return $response->withRedirect('/');
 	}
 
 	public function getSignUp($request, $response)
@@ -60,24 +61,24 @@ class AuthController
 
 		$validation = $this->validator->validate($request, [
 			'email' => v::noWhitespace()->notEmpty()->email(),
-			'name' => v::noWhitespace()->notEmpty()->alpha(),
+            'first_name' => v::noWhitespace()->notEmpty()->alpha(),
+            'last_name' => v::noWhitespace()->notEmpty()->alpha(),
 			'password' => v::noWhitespace()->notEmpty(),
 		]);
 
 		if ($validation->failed()) {
-			return $response->withRedirect($this->router->pathFor('auth.signup'));
+			return $response->withRedirect('/auth/signup');
 		}
 
-		$user = User::create([
-			'email' => $request->getParam('email'),
-			'name' => $request->getParam('name'),
-			'password' => password_hash($request->getParam('password'), PASSWORD_DEFAULT),
-		]);
-
-		$this->flash->addMessage('info', 'You have been signed up');
+		$user = new User($this->db);
+		$user->email = $request->getParam('email');
+        $user->first_name = $request->getParam('first_name');
+        $user->last_name = $request->getParam('last_name');
+		$user->password = password_hash($request->getParam('password'), PASSWORD_DEFAULT);
+		$user->save();
 
 		$this->auth->attempt($user->email,$request->getParam('password'));
 
-		return $response->withRedirect($this->router->pathFor('home'));
+		return $response->withRedirect('/');
 	}
 }

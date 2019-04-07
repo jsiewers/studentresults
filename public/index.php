@@ -26,7 +26,6 @@ $app = new \Slim\App($settings);
 $container = $app->getContainer();
 
 
-
 $app->add(new \Lib\Middleware\ValidationErrors($container));
 // Set up dependencies
 require __DIR__ . '/../src/dependencies.php';

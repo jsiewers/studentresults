@@ -19,6 +19,17 @@ class User
 
 	public $email;
 
+	public $password;
+
+	protected $pdo;
+
+
+	public function __construct($db)
+    {
+        $this->pdo = $db;
+    }
+
+
 
 	public function setPassword($password)
 	{
@@ -27,35 +38,21 @@ class User
 		]);
 	}
 
-	public function setFirstName($firstName)
-	{
-		$this->first_name = trim($firstName);
-	}
-
-	public function getFirstName()
-	{
-		return $this->first_name;
-	}
-
-	public function setLastName($lastName)
-	{
-		$this->last_name = trim($lastName);
-	}
-
-	public function getLastName()
-	{
-		return $this->last_name;
-	}
-
-	public function setEmail($email)
-	{
-		$this->email = $email;
-	}
-
-	public function getEmail()
-	{
-		return $this->email;
-	}
+	public function save() {
+        try {
+            $sql = "INSERT INTO user (email, password, first_name, last_name) 
+                    VALUES (:email, :password, :first_name, :last_name)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $this->password, PDO::PARAM_STR);
+            $stmt->bindParam(':first_name', $this->first_name, PDO::PARAM_STR);
+            $stmt->bindParam(':last_name', $this->last_name, PDO::PARAM_STR);
+            $stmt->execute();
+        } catch (\PDOException $e) {
+            var_dump($result = $e->getMessage());
+        }
+        return $result;
+    }
 
 	public function getFullName()
 	{

@@ -56,5 +56,5 @@ $app->get('/[{name}]', function (Request $request, Response $response, array $ar
     //$this->logger->info("Slim-Skeleton '/' route");
 
     // Render index view
-    return $this->renderer->render($response, 'auth/signin.html', $args);
+    return $this->view->render($response, 'auth/signin.html', $args);
 })->setName('home');

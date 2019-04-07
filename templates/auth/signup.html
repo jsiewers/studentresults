@@ -1,4 +1,4 @@
-{% extends 'app.twig' %}
+{% extends 'app.html' %}
 
 {% block content %}
     <div class="row">
@@ -15,13 +15,20 @@
                             {% endif %}
     					</div>
 
-    					<div class="form-group{{ errors.name ? ' has-error' : '' }}">
-    						<label for="name">Name</label>
-    						<input type="text" name="name" id="name" class="form-control" value="{{ old.name }}" >
-                            {% if errors.name %}
-                            <span class="hel-block">{{ errors.name | first }}</span>
-                            {% endif %}
-    					</div>
+						<div class="form-group{{ errors.name ? ' has-error' : '' }}">
+							<label for="first_name">First Name</label>
+							<input type="text" name="first_name" id="first_name" class="form-control" value="{{ old.first_name }}" >
+							{% if errors.name %}
+							<span class="hel-block">{{ errors.first_name | first }}</span>
+							{% endif %}
+						</div>
+						<div class="form-group{{ errors.name ? ' has-error' : '' }}">
+							<label for="last_name">Last Name</label>
+							<input type="text" name="last_name" id="last_name" class="form-control" value="{{ old.last_name }}" >
+							{% if errors.last_name %}
+							<span class="hel-block">{{ errors.last_name | first }}</span>
+							{% endif %}
+						</div>
 
     					<div class="form-group{{ errors.password ? ' has-error' : '' }}">
     						<label for="password">Password</label>

@@ -2,6 +2,7 @@
 {% block content %}
 <h1>New Exam</h1>
 <form action="/exam/new" method="post">
+    {{ csrf.field | raw }}
     <label for="idexam">Exam Id</label>
     <input type="text" id="idexam" name="idexam">
     <label for="examcode">Examcode</label>

@@ -1,6 +1,8 @@
 <?php
 
 namespace Lib\Middleware;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 /**
  * GuestMiddleware
@@ -13,7 +15,9 @@ class GuestMiddleware extends Middleware
 
 	public function __invoke($request, $response, $next)
 	{
-		if($this->container->auth->check()) {
+	    //var_dump("in middleware ".get_class($this));
+
+        if(!$this->container->auth->check()) {
 			return $response->withRedirect($this->container->router->pathFor('home'));
 		}
 

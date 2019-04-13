@@ -12,6 +12,7 @@ use Lib\Auth\Auth;
 use Lib\Controllers\Auth\AuthController;
 use Lib\Controllers\Auth\PasswordController;
 use Lib\Middleware\GuestMiddleware;
+use Lib\Middleware\CsrfViewMiddleware;
 use Lib\Validators\Validator;
 use Slim\Csrf\Guard;
 
@@ -59,7 +60,7 @@ $container['view'] = function ($c) {
 
     $view->getEnvironment()->addGlobal('auth', [
         'check' => $c->auth->check(),
-        'user' => $c->auth->user()
+        'user' => $c->auth->user(),
     ]);
 
     return $view;
@@ -81,6 +82,10 @@ $container['PasswordController'] = function($c) {
 $container['csrf'] = function($c) {
     return new Guard;
 };
+
+//$app->add($container->get('csrf'));
+$app->add(new CsrfViewMiddleware($container));
+$app->add($container->csrf);
 
 
 //==================

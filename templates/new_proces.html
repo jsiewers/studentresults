@@ -2,6 +2,7 @@
 {% block content %}
 <h1>New Proces</h1>
 <form id="procesform" action="/proces/{{ idexam }}{% if not idexam %}0{% endif %}/new" method="post">
+    {{ csrf.field | raw }}
     <label for="idexam">Exam Id</label>
     <select id="idexam" name="idexam" onchange="procesform.submit()">
         {% for exam in exams %}

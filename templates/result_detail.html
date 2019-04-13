@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<a style="float:right;color:red;margin-bottom:10px;"href="/result/{{ student.idstudent }}/{{result.idexam}}/{{ result.exam_date }}/detail/delete"><b>!!! DELETE !!!</b></a>
+<a class="hide" style="float:right;color:red;margin-bottom:10px;"href="/result/{{ student.idstudent }}/{{result.idexam}}/{{ result.exam_date }}/detail/delete"><b>!!! DELETE !!!</b></a>
 <table style="width:100%;">
     <tr>
         <td colspan="6"><b>{{ exam.description }}</b></td>

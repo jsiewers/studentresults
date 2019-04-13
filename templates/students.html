@@ -3,6 +3,7 @@
 {% block content %}
 <h1>Students</h1>
 <form id="groupform" action="/students" method="post" onchange="this.submit()">
+    {{ csrf.field | raw }}
     <select name="idgroup">
         {% for group in groups %}
         <option {% if selected_group == group.idgroup%}selected{% endif %}>{{ group.idgroup }}</option>
@@ -22,6 +23,7 @@
 </table>
 <p>Format of csv-file: ovnummer;first_name;prefix;last_name;email;idgroup</p>
 <form action="/students/import" method="post" enctype="multipart/form-data">
+    {{ csrf.field | raw }}
     Select csv file:
     <input type="file" name="fileToUpload" id="fileToUpload">
     <input type="submit" value="Upload Image" name="submit">

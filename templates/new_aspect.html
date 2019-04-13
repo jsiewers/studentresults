@@ -23,6 +23,7 @@
 <table>
     {% for aspect in aspects %}
     <form action="/aspect/{{ exam.idexam }}/{{ proces.idproces }}/{{ idassignment }}/{{ aspect.idaspect }}/update" method="post">
+        {{ csrf.field | raw }}
         <tr>
         <td>
             <textarea style="width:400px;" id="description" name="description">{{ aspect.description }}</textarea>

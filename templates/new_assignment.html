@@ -19,6 +19,7 @@
 <table>
     {% for assignment in assignments %}
     <form action="/assignment/{{ exam.idexam }}/{{ proces.idproces }}/{{ assignment.idassignment }}/update" method="post">
+        {{ csrf.field | raw }}
         <tr>
         <td>{{ assignment.idassignment }}</td>
         <td><a href="/aspect/{{ exam.idexam }}/{{ proces.idproces }}/{{ assignment.idassignment }}/new">Aspects</a></td>

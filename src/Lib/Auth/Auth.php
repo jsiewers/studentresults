@@ -20,6 +20,7 @@ class Auth
 
 	public function user()
 	{
+	    //var_dump("in function user(); van ". get_class($this));
 	    $sql = "select * from user where iduser = :iduser";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':iduser', $_SESSION['user'], PDO::PARAM_INT);
@@ -30,13 +31,17 @@ class Auth
 
 	public function check()
 	{
+//        var_dump("in function check() van ". get_class($this));
+//        var_dump("session user = " .$_SESSION['user']);
+//        var_dump(session_id());
+//        var_dump($_SESSION);
 		return isset($_SESSION['user']);
 	}
 
 	public function attempt($email, $password)
 	{
 	    try{
-		//$user = User::where('email', $email)->first();
+//       var_dump("in function attempt van ". get_class($this));
         $sql = "select * from user where email = :email";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -44,16 +49,15 @@ class Auth
         $stmt->execute();
         $user = $stmt->fetch();
 	    } catch(\PDOException $e) {
-	        var_dump($e->getMessage());
+	        //var_dump($e->getMessage());
         }
-
-        var_dump($user);
 
 		if (! $user) {
 			return false;
 		}
 
 		if (password_verify($password, $user->password)) {
+            //session_regenerate_id();
 			$_SESSION['user'] = $user->iduser;
 			return true;
 		}
@@ -63,6 +67,9 @@ class Auth
 
 	public function logout()
 	{
-		unset($_SESSION['user']);
+        unset($_SESSION['user']);
+        //unset($_SESSION['csrf']);
+        session_destroy();
+        //echo "sdlfkjsdflksdfj ";
 	}
 }

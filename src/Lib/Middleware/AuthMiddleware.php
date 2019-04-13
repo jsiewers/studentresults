@@ -13,13 +13,11 @@ class AuthMiddleware extends Middleware
 
 	public function __invoke($request, $response, $next)
 	{
-	    echo "in middleware";
 		if(! $this->container->auth->check()) {
-			//$this->container->flash->addMessage('error', 'Please sign in before doing that');
-			//return $response->withRedirect('auth/signin');
+			return $response->withRedirect('/signin');
 		}
 
 		$response = $next($request, $response);
-		//return $response;
+		return $response;
 	}
 }

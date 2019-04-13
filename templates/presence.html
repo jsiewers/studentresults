@@ -28,6 +28,7 @@
     <input type="submit" name="btnsubmit">
 </form>
     <form action="/presence" method="post">
+        {{ csrf.field | raw }}
         <select name="title">
             {% for title in titles %}
             <option>{{ title.title }}</option>

@@ -1,4 +1,4 @@
-{% extends 'app.html' %}
+{% extends 'layout.html' %}
 
 {% block content %}
     <div class="row">
@@ -6,8 +6,9 @@
     		<div class="panel panel-default">
     			<div class="panel-heading">Sign In</div>
     			<div class="panel-body">
-    				<form action="{{ path_for('auth.signin') }}" method="post">
-    					<div class="form-group{{ errors.email ? ' has-error' : '' }}">
+    				<form action="/signin" method="post">
+						{{ csrf.field | raw }}
+						<div class="form-group{{ errors.email ? ' has-error' : '' }}">
     						<label for="email">Email</label>
     						<input type="email" name="email" id="email" placeholder="you@domain.com" class="form-control" value="{{ old.email }}">
                             {% if errors.email %}
@@ -24,7 +25,6 @@
     					</div>
 						<button type="submit" class="btn btn-default">Sign In</button>
 
-                        {{ csrf.field | raw }}
     				</form>
     			</div>
     		</div>

@@ -22,38 +22,40 @@ class AuthController
         $this->view = $c->get('view');
         $this->validator = $c->get('validator');
         $this->auth = $c->get('auth');
-
     }
 
     public function getSignOut($request, $response)
 	{
 		$this->auth->logout();
-		return $response->withRedirect('/');
+		return $response->withRedirect('/signin');
 	}
 
 	public function getSignIn($request, $response)
 	{
-		return $this->view->render($response, 'auth/signin.html');
-	}
+        return $this->view->render($response, 'signin.html');
+
+    }
 
 	public function postSignIn($request, $response)
 	{
-	    echo "je;;;elej";
-//		$auth = $this->auth->attempt(
-//			$request->getParam('email'),
-//			$request->getParam('password')
-//		);
-//
-//		if (! $auth) {
-//			//return $response->withRedirect('/auth/signin');
-//		}
 
-		//return $response->withRedirect('/');
+	    $auth = $this->auth->attempt(
+			$request->getParsedBodyParam('email'),
+			$request->getParsedBodyParam('password')
+		);
+
+		if (! $auth) {
+            return $this->view->render($response, 'signin.html');
+		} else {
+            return $response->withRedirect('/students');
+        }
+
+
 	}
 
 	public function getSignUp($request, $response)
 	{
-		return $this->view->render($response, 'auth/signup.html');
+		return $this->view->render($response, 'signup.html');
 	}
 
 	public function postSignUp($request, $response)
@@ -67,7 +69,7 @@ class AuthController
 		]);
 
 		if ($validation->failed()) {
-			return $response->withRedirect('/auth/signup');
+			return $response->withRedirect('/signup');
 		}
 
 		$user = new User($this->db);

@@ -1,0 +1,119 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+}
+
+@media print {
+    body {
+        font-size: 11px;
+    }
+    .hide {
+        display:none;
+    }
+}
+div.wrapper {
+    width:80%;
+    margin:auto;
+    margin-top:2em;
+}
+
+
+
+nav ul {
+    background-color:black;
+    padding:10px;
+    list-style-type: none;
+}
+nav ul li {
+    color:white;
+    display:inline-block;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    text-decoration:none;
+    font-weight:700;
+    color:white;
+}
+
+@media print {
+    nav {
+        display: none;
+    }
+}
+
+
+form.exam_create {
+    border:1px solid black;
+    min-width:350px;
+    width:25%;
+    padding:10px;
+    margin-top:20px;
+}
+input[type=text] {
+    width:40%;
+}
+
+label {
+    display:block;
+}
+
+.forminput {
+    margin:10px;
+}
+
+.clearfix {
+    clear:both;
+}
+table {
+    border-collapse: collapse;
+    min-width:370px;
+    margin-bottom: 20px;
+}
+
+table, tr, td, th {
+    border:black solid 1px;
+    padding:5px;
+}
+table.noborder, table.noborder td, table.noborder tr {
+    border:none;
+}
+
+
+ul.list {
+    border:black solid 1px;
+    padding:5px;
+    list-style-type: none;
+}
+
+.handtekening {
+    max-width: 200px;
+    max-height: 100px;
+}
+
+.handtekening_klein {
+    max-width: 150px;
+    max-height: 40px;
+    margin-right:20px;
+}
+
+
+p.pagebreak {
+    font-size: 0px;
+}
+
+@media print {
+    p.pagebreak {page-break-after: always;}
+}
+
+@page {
+    size: A4;
+}
+
+@page :left {
+    margin-left: 0cm;
+}
+
+@page :right {
+    margin-left: 0cm;
+}

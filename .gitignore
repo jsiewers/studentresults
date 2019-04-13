@@ -1,4 +1,5 @@
 /vendor/
 /.idea/
 /logs/*
+/src/settings/*
 !/logs/README.md

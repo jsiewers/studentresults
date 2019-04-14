@@ -18,7 +18,7 @@ return [
         //Database settings (JJ)
         'db' => [
             'host'=> '127.0.0.1',
-            'user' => 'web',
+            'user' => '***',
             'pass' => '230mod',
             'dbname' => 'results'
         ],

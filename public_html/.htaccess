@@ -1,5 +1,12 @@
 <IfModule mod_rewrite.c>
    RewriteEngine on
+   RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
+   RewriteRule ^(.*) - [E=BASE:%1]
+
    RewriteRule ^$ public_html/     [L]
    RewriteRule (.*) public_html/$1 [L]
+
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteRule ^ index.php [QSA,L]
+
 </IfModule>

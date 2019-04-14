@@ -69,7 +69,7 @@ class Exam
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $idexam, PDO::PARAM_INT);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->pdo]);
         return $stmt->fetch();
     }
 
@@ -86,6 +86,7 @@ class Exam
         } catch (\PDOException $e) {
             $result = $e->getMessage();
         }
+
         return $result;
     }
 

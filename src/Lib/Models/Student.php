@@ -30,16 +30,16 @@ class Student
         $sql = "SELECT * FROM student ORDER BY idgroup, last_name LIMIT 50";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Student::class, [$this->db]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Student::class, [$this->pdo]);
         return $stmt->fetchAll();
     }
 
     public function readByGroup() {
         $sql = "SELECT * FROM student WHERE idgroup = :idgroup ORDER BY last_name LIMIT 50";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':idgroup', $this->idgroup, PDO::PARAM_INT);
+        $stmt->bindParam(':idgroup', $this->idgroup, PDO::PARAM_STR);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Student::class, [$this->db]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Student::class, [$this->pdo]);
         return $stmt->fetchAll();
     }
 
@@ -56,7 +56,7 @@ class Student
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Student::class, [$this->db]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Student::class, [$this->pdo]);
         return $stmt->fetch();
     }
 

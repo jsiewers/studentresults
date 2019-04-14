@@ -33,7 +33,6 @@ class StudentController
             $group = $request->getParsedBodyParam('idgroup');
         }
         $student->idgroup = $group;
-
         $this->view->render($response, 'students.html', [
             'students' => $student->readByGroup(),
             'groups' => $groups,

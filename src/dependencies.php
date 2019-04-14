@@ -48,7 +48,7 @@ $container['uploads'] = function ($c) {
 };
 
 $container['view'] = function ($c) {
-    $view = new \Slim\Views\Twig('templates', [
+    $view = new \Slim\Views\Twig($c->get('settings')['renderer']['template_path'], [
         'cache' => 'logs',
         'debug' => true
     ]);

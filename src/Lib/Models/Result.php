@@ -72,9 +72,10 @@ class Result
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $this->idstudent, PDO::PARAM_INT);
         $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
-        $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_INT);
+        $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_STR);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = [];
         $exam_score = 0;
         $exam_date = '';
         foreach($stmt->fetchAll() as $p) {
@@ -82,6 +83,9 @@ class Result
             $result[$p["idproces"]]["assignments"][$p["idassignment"]]["description"] = $p["assignment_description"];
             $result[$p["idproces"]]["assignments"][$p["idassignment"]]["aspect_description"] = $p["aspect_description"];
             $result[$p["idproces"]]["assignments"][$p["idassignment"]]["aspect_score"] = $p["score"];
+            if(!isset($result[$p["idproces"]]["proces_score"])) {
+                $result[$p["idproces"]]["proces_score"] = 0;
+            }
             $result[$p["idproces"]]["proces_score"] += $p["score"];
             $exam_score += $p["score"];
             $exam_date = $p["exam_date"];
@@ -117,7 +121,7 @@ class Result
                 group by student_idstudent order by idgroup, s.last_name";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
-        $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_INT);
+        $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_STR);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
@@ -210,6 +214,9 @@ class Result
         }
         $attempts = [];
         foreach($result as $s) {
+            if(!isset($attempts[$s['idstudent']]['count'])) {
+                $attempts[$s['idstudent']]['count'] = 0;
+            }
             $attempts[$s['idstudent']]['count'] += 1;
         }
         //var_dump($attempts);

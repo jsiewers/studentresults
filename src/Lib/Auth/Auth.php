@@ -24,7 +24,7 @@ class Auth
 	    $sql = "select * from user where iduser = :iduser";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':iduser', $_SESSION['user'], PDO::PARAM_INT);
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->pdo]);
         $stmt->execute();
         return $stmt->fetch();
 	}
@@ -45,7 +45,7 @@ class Auth
         $sql = "select * from user where email = :email";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, [$this->db]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, [$this->pdo]);
         $stmt->execute();
         $user = $stmt->fetch();
 	    } catch(\PDOException $e) {

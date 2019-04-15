@@ -44,8 +44,8 @@ class Exam
                 join proces as p on ass.idproces = p.idproces
                 join exam as e on p.idexam = e.idexam
                 where e.active = 1
-                group by exam_date, e.description
-                order by examid, examcode, e.description, r.exam_date;";
+                group by examid, exam_date, e.description, examcode
+                order by r.exam_date;";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);

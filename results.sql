@@ -1,4 +1,3 @@
--- MySQL dump 10.13  Distrib 8.0.11, for macos10.13 (x86_64)
 --
 -- Host: localhost    Database: results
 -- ------------------------------------------------------
@@ -7,7 +6,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
- SET NAMES utf8mb4 ;
+ SET NAMES utf8 ;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,7 +20,7 @@
 
 DROP TABLE IF EXISTS `aspect`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+SET character_set_client = utf8 ;
 CREATE TABLE `aspect` (
   `idaspect` int(11) NOT NULL AUTO_INCREMENT,
   `idassignment` int(11) NOT NULL,
@@ -32,7 +31,7 @@ CREATE TABLE `aspect` (
   PRIMARY KEY (`idaspect`),
   KEY `fk_aspect_assignment1_idx` (`idassignment`),
   CONSTRAINT `fk_aspect_assignment1` FOREIGN KEY (`idassignment`) REFERENCES `assignment` (`idassignment`)
-) ENGINE=InnoDB AUTO_INCREMENT=458 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=458 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,7 +50,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `assignment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+SET character_set_client = utf8 ;
 CREATE TABLE `assignment` (
   `idassignment` int(11) NOT NULL AUTO_INCREMENT,
   `idproces` int(11) NOT NULL,
@@ -60,7 +59,7 @@ CREATE TABLE `assignment` (
   PRIMARY KEY (`idassignment`),
   KEY `fk_assignment_proces1_idx` (`idproces`),
   CONSTRAINT `fk_assignment_proces1` FOREIGN KEY (`idproces`) REFERENCES `proces` (`idproces`)
-) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=142 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,7 +78,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `basegroup`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `basegroup` (
   `idgroup` varchar(45) NOT NULL,
   PRIMARY KEY (`idgroup`)
@@ -102,7 +101,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `exam`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `exam` (
   `idexam` int(11) NOT NULL,
   `description` varchar(254) DEFAULT NULL,
@@ -112,7 +111,7 @@ CREATE TABLE `exam` (
   `caesura` varchar(2048) DEFAULT NULL,
   `examcode` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`idexam`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +130,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `presence`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `presence` (
   `idexam` int(11) NOT NULL,
   `idstudent` int(11) NOT NULL,
@@ -162,7 +161,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `proces`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `proces` (
   `idproces` int(11) NOT NULL AUTO_INCREMENT,
   `idexam` int(11) NOT NULL,
@@ -171,7 +170,7 @@ CREATE TABLE `proces` (
   PRIMARY KEY (`idproces`),
   KEY `fk_assignment_exam_idx` (`idexam`),
   CONSTRAINT `fk_assignment_exam` FOREIGN KEY (`idexam`) REFERENCES `exam` (`idexam`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,7 +189,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `result`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `result` (
   `idstudent` int(11) NOT NULL,
   `idaspect` int(11) NOT NULL,
@@ -199,7 +198,7 @@ CREATE TABLE `result` (
   KEY `fk_result_aspect1_idx` (`idaspect`),
   CONSTRAINT `fk_result_aspect1` FOREIGN KEY (`idaspect`) REFERENCES `aspect` (`idaspect`),
   CONSTRAINT `fk_result_student1` FOREIGN KEY (`idstudent`) REFERENCES `student` (`idstudent`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -218,7 +217,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `student`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `student` (
   `idstudent` int(11) NOT NULL,
   `first_name` varchar(45) NOT NULL,
@@ -248,7 +247,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `user` (
   `iduser` int(11) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(255) NOT NULL,
@@ -256,7 +255,7 @@ CREATE TABLE `user` (
   `email` varchar(255) NOT NULL,
   `password` varchar(256) NOT NULL,
   PRIMARY KEY (`iduser`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -1,5 +1,5 @@
 /vendor/
 /.idea/
 /logs/*
-/src/settings/*
+/src/settings.php
 !/logs/README.md

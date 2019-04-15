@@ -34,8 +34,8 @@ class Exam
     public function read()
     {
         $sql = "select 
-                ANY_VALUE(e.idexam) as examid,
-                ANY_VALUE(e.examcode) as examcode,
+                e.idexam as examid,
+                e.examcode as examcode,
                 e.description,
                 r.exam_date
                 from result as r
@@ -45,7 +45,7 @@ class Exam
                 join exam as e on p.idexam = e.idexam
                 where e.active = 1
                 group by exam_date, e.description
-                order by e.description, r.exam_date;";
+                order by examid, examcode, e.description, r.exam_date;";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->db]);

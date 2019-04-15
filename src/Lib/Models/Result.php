@@ -107,9 +107,8 @@ class Result
                 s.idgroup,
                 IF(ISNULL(prefix), CONCAT(first_name, ' ', last_name), CONCAT(first_name, ' ', prefix, ' ', last_name )) AS fullname,
                 exam_date,
-                ANY_VALUE(s.idgroup) as student_idgroup,
-                ANY_VALUE(e.description) as exam_description,
-                ANY_VALUE(e.caesura) as caesura,
+                e.description as exam_description,
+                e.caesura as caesura,
                 SUM(a.score) as total_score
                 from result as r
                 join aspect as a on r.idaspect = a.idaspect
@@ -118,7 +117,7 @@ class Result
                 join exam as e on p.idexam = e.idexam
                 join student as s on r.idstudent = s.idstudent
                 where e.idexam = :idexam and e.active = 1 and exam_date = :exam_date
-                group by student_idstudent order by idgroup, s.last_name";
+                group by student_idstudent order by idgroup, exam_description, caesura, s.last_name";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
         $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_STR);
@@ -135,40 +134,40 @@ class Result
         return $result;
     }
 
-    public function resultsByExamAll() {
-        $sql = "select 
-                e.idexam,
-                se.examcode,
-                s.idstudent as student_idstudent,
-                s.idgroup,
-                IF(ISNULL(prefix), CONCAT(first_name, ' ', last_name), CONCAT(first_name, ' ', prefix, ' ', last_name )) AS fullname,
-                exam_date,
-                ANY_VALUE(s.idgroup) as student_idgroup,
-                ANY_VALUE(e.description) as exam_description,
-                ANY_VALUE(e.caesura) as caesura,
-                SUM(a.score) as total_score
-                from result as r
-                join aspect as a on r.idaspect = a.idaspect
-                join assignment as ass on a.idassignment = ass.idassignment
-                join proces as p on ass.idproces = p.idproces
-                join exam as e on p.idexam = e.idexam
-                join student as s on r.idstudent = s.idstudent
-                where e.idexam = :idexam and e.active = 1
-                group by student_idstudent order by idgroup, s.last_name";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
-        $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
-        $attempts = $this->getOccurencesUntilDate();
-        $caesura = explode(" ",$result[0]['caesura']);
-        foreach($result as $key => $value) {
-            $result[$key]['grade'] = $caesura[$result[$key]['total_score']];
-            $result[$key]['attempt'] = $attempts[$result[$key]['student_idstudent']];
-        }
-        //var_dump($result);
-        return $result;
-    }
+//    public function resultsByExamAll() {
+//        $sql = "select
+//                e.idexam,
+//                se.examcode,
+//                s.idstudent as student_idstudent,
+//                s.idgroup,
+//                IF(ISNULL(prefix), CONCAT(first_name, ' ', last_name), CONCAT(first_name, ' ', prefix, ' ', last_name )) AS fullname,
+//                exam_date,
+//                ANY_VALUE(s.idgroup) as student_idgroup,
+//                ANY_VALUE(e.description) as exam_description,
+//                ANY_VALUE(e.caesura) as caesura,
+//                SUM(a.score) as total_score
+//                from result as r
+//                join aspect as a on r.idaspect = a.idaspect
+//                join assignment as ass on a.idassignment = ass.idassignment
+//                join proces as p on ass.idproces = p.idproces
+//                join exam as e on p.idexam = e.idexam
+//                join student as s on r.idstudent = s.idstudent
+//                where e.idexam = :idexam and e.active = 1
+//                group by student_idstudent order by idgroup, s.last_name";
+//        $stmt = $this->pdo->prepare($sql);
+//        $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
+//        $stmt->execute();
+//        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+//        $result = $stmt->fetchAll();
+//        $attempts = $this->getOccurencesUntilDate();
+//        $caesura = explode(" ",$result[0]['caesura']);
+//        foreach($result as $key => $value) {
+//            $result[$key]['grade'] = $caesura[$result[$key]['total_score']];
+//            $result[$key]['attempt'] = $attempts[$result[$key]['student_idstudent']];
+//        }
+//        //var_dump($result);
+//        return $result;
+//    }
 
 
     public function getExamDates() {
@@ -226,9 +225,8 @@ class Result
 
     public function examResultsByStudent($idstudent) {
         $sql = "select 
-                ANY_VALUE(e.description) as exam_description,
-                ANY_VALUE(a.idaspect) as idaspect,
-                ANY_VALUE(e.caesura) as caesura,
+                e.description as exam_description,
+                e.caesura as caesura,
                 r.exam_date, 
                 e.idexam,
                 SUM(a.score) as score 
@@ -239,7 +237,7 @@ class Result
                 join proces as p on ass.idproces = p.idproces
                 join exam as e on p.idexam = e.idexam
                 where r.idstudent = :idstudent
-                group by e.idexam, r.exam_date";
+                group by e.idexam, exam_description, caesura, r.exam_date";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
         $stmt->execute();
@@ -248,7 +246,7 @@ class Result
         foreach($stmt->fetchAll() as $r) {
             $caesura = explode(" ", $r['caesura']);
             $exams[$r['idexam']]['description'] = $r['exam_description'];
-            $exams[$r['idexam']]['attempt'][$r['exam_date']]['idaspect'] = $r['idaspect'];
+            //$exams[$r['idexam']]['attempt'][$r['exam_date']]['idaspect'] = $r['idaspect'];
             $exams[$r['idexam']]['attempt'][$r['exam_date']]['score'] = $r['score'];
             $exams[$r['idexam']]['attempt'][$r['exam_date']]['grade'] = $caesura[$r['score']];
         }
@@ -273,35 +271,35 @@ class Result
 
     }
 
-    public function examResultsDetailByStudent($idstudent) {
-        $sql = "select 
-                ANY_VALUE(e.description) as exam_description,
-                ANY_VALUE(a.idaspect) as idaspect,
-                ANY_VALUE(e.caesura) as caesura,
-                r.exam_date, 
-                e.idexam,
-                SUM(a.score) as score 
-                from result as r
-                join aspect as a on r.idaspect = a.idaspect
-                join student as s on r.idstudent = s.idstudent
-                join assignment as ass on a.idassignment = ass.idassignment
-                join proces as p on ass.idproces = p.idproces
-                join exam as e on p.idexam = e.idexam
-                where r.idstudent = :idstudent";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
-        $stmt->execute();
-        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Result::class, [$this->db]);
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        foreach($stmt->fetchAll() as $r) {
-            $caesura = explode(" ", $r['caesura']);
-            $exams[$r['idexam']]['description'] = $r['exam_description'];
-            $exams[$r['idexam']]['attempt'][$r['exam_date']]['idaspect'] = $r['idaspect'];
-            $exams[$r['idexam']]['attempt'][$r['exam_date']]['score'] = $r['score'];
-            $exams[$r['idexam']]['attempt'][$r['exam_date']]['grade'] = $caesura[$r['score']];
-        }
-        return $exams;
-    }
+//    public function examResultsDetailByStudent($idstudent) {
+//        $sql = "select
+//                ANY_VALUE(e.description) as exam_description,
+//                ANY_VALUE(a.idaspect) as idaspect,
+//                ANY_VALUE(e.caesura) as caesura,
+//                r.exam_date,
+//                e.idexam,
+//                SUM(a.score) as score
+//                from result as r
+//                join aspect as a on r.idaspect = a.idaspect
+//                join student as s on r.idstudent = s.idstudent
+//                join assignment as ass on a.idassignment = ass.idassignment
+//                join proces as p on ass.idproces = p.idproces
+//                join exam as e on p.idexam = e.idexam
+//                where r.idstudent = :idstudent";
+//        $stmt = $this->pdo->prepare($sql);
+//        $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
+//        $stmt->execute();
+//        //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Result::class, [$this->db]);
+//        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+//        foreach($stmt->fetchAll() as $r) {
+//            $caesura = explode(" ", $r['caesura']);
+//            $exams[$r['idexam']]['description'] = $r['exam_description'];
+//            $exams[$r['idexam']]['attempt'][$r['exam_date']]['idaspect'] = $r['idaspect'];
+//            $exams[$r['idexam']]['attempt'][$r['exam_date']]['score'] = $r['score'];
+//            $exams[$r['idexam']]['attempt'][$r['exam_date']]['grade'] = $caesura[$r['score']];
+//        }
+//        return $exams;
+//    }
 
     public function createTable()
     {

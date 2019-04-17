@@ -41,7 +41,7 @@ class Result_comment
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(":idstudent", $this->idstudent, PDO::PARAM_INT);
             $stmt->bindParam(":idexam", $this->idexam, PDO::PARAM_INT);
-            $stmt->bindParam(":exam_date", $this->exam_date, PDO::PARAM_INT);
+            $stmt->bindParam(":exam_date", $this->exam_date, PDO::PARAM_STR);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Result_comment::class, [$this->pdo]);
             return $stmt->fetch();
@@ -57,7 +57,7 @@ class Result_comment
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(":idstudent", $this->idstudent, PDO::PARAM_INT);
             $stmt->bindParam(":idexam", $this->idexam, PDO::PARAM_INT);
-            $stmt->bindParam(":exam_date", $this->exam_date, PDO::PARAM_INT);
+            $stmt->bindParam(":exam_date", $this->exam_date, PDO::PARAM_STR);
             $stmt->execute();
         } catch(\PDOException  $e) {
             echo $e->getMessage();

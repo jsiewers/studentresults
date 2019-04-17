@@ -20,6 +20,7 @@
 <h1>Exam</h1>
 <h3>{{ exam.description }}</h3>
 <form action="/attempt/{{ student.idstudent }}/{{ exam.idexam }}" method="post">
+    {{ csrf.field | raw }}
 
 <p>Datum:&nbsp; <input type="date" name="exam_date"></p>
 
@@ -43,6 +44,18 @@
         {% endfor %}
 </table>
     {% endfor %}
+    <table style="width:100%">
+        <tr>
+            <td>
+                Motivatie
+            </td>
+        </tr>
+        <tr>
+            <td>
+               <textarea name="comment" style="width:100%;height:200px;">Motivatie</textarea>
+            </td>
+        </tr>
+    </table>
     <input type="submit" name="btnsubmit">
 </form>
 

@@ -10,6 +10,7 @@ namespace Lib\Controllers;
 use Lib\Models\Student;
 use Lib\Models\Exam;
 use Lib\Models\Result;
+use Lib\Models\Result_comment;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -43,6 +44,13 @@ class ResultController
         $result->idstudent = ($request->getAttribute('idstudent'));
         $result->delete();
 
+        $result_comment = new Result_comment($this->db);
+        $result_comment->idexam = ($request->getAttribute('idexam'));
+        $result_comment->exam_date = ($request->getAttribute('exam_date'));
+        $result_comment->idstudent = ($request->getAttribute('idstudent'));
+        $result_comment->delete();
+
+
         //$this->studentResults($request, $response, $args = []);
         $this->results($request, $response, $args = []);
     }
@@ -56,8 +64,13 @@ class ResultController
                 $result->idaspect = $value;
                 $result->save();
             }
-
         }
+        $result_comment = new Result_comment($this->db);
+        $result_comment->comment = $request->getParsedBodyParam('comment');
+        $result_comment->exam_date = $request->getParsedBodyParam("exam_date");
+        $result_comment->idstudent = $request->getAttribute("idstudent");
+        $result_comment->idexam = $request->getAttribute('idexam');
+        $result_comment->save();
         $this->results( $request,  $response, $args = []);
     }
 
@@ -112,10 +125,20 @@ class ResultController
 
         foreach($exams as $e) {
             $result = new Result($this->db);
-            $result->idstudent = $request->getAttribute("idstudent");
+
             $ex = $exam->readById($e['idexam']);
+
+            $result_comment = new Result_comment($this->db);
+            $result_comment->idstudent = $request->getAttribute("idstudent");
+            $result_comment->idexam =  $e['idexam'];
+            $result_comment->exam_date = $e['exam_date'];
+
+            $result->idstudent = $request->getAttribute("idstudent");
             $result->idexam = $e['idexam'];
             $result->exam_date = $e['exam_date'];
+
+            $result_comment = $result_comment->read();
+
             $examresults = $result->resultsByExam();
             $result->exam_score = $examresults['exam_score'];
             $caesura = explode(" ", $ex->caesura);
@@ -123,17 +146,21 @@ class ResultController
             $results[] = ['exam' => $ex, 'examresults' => $examresults, 'result' => $result];
         }
 
+       // var_dump($result_comment->comment);
+
         if($template != 'results_detail_all.html') {
             $args = [
                 'student' => $student,
                 'exam' => $results[0]['exam'],
                 'results' => $results[0]['examresults']['result'],
-                'result' => $results[0]['result']
+                'result' => $results[0]['result'],
+                'comment' => $result_comment->comment
             ];
         } else {
             $args = [
                 'student' => $student,
-                'results' => $results
+                'results' => $results,
+                'comment' => $result_comment->comment
             ];
        }
 

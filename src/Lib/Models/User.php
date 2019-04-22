@@ -66,4 +66,23 @@ class User
 			'email' => $this->getEmail(),
 		];
 	}
+
+	public function readByRole($role) {
+        try {
+        $sql = "SELECT u.iduser, first_name, last_name, email, r.description 
+                FROM user as u 
+                JOIN user_has_role as ur ON ur.iduser = u.iduser
+                JOIN role as r ON r.idrole = ur.idrole 
+                WHERE r.idrole = :role 
+                ORDER BY last_name" ;
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':role', $role, PDO::PARAM_INT);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Role::class, [$this->pdo]);
+        return $stmt->fetchAll();
+        } catch (\PDOException $e) {
+            var_dump($result = $e->getMessage());
+        }
+
+    }
 }

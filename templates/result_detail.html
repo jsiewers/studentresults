@@ -70,7 +70,7 @@
         </td>
     </tr>
     <tr>
-        <td>{{ comment }}</td>
+        <td>{{ exam_result.comment }}</td>
     </tr>
 </table>
 <table style="width:100%;">
@@ -79,7 +79,7 @@
             Eindbeoordeling:
         </td>
         <td style="text-align:center; font-size:2em">
-            <b>{{ result.exam_grade }} ({% if result.exam_grade >= 8 %}G{% elseif result.exam_grade >= 5.5 %}V{% else %}O{% endif %})</b>
+            <b>{{ exam_result.grade }} ({% if exam_result.grade >= 8 %}G{% elseif exam_result.grade >= 5.5 %}V{% else %}O{% endif %})</b>
         </td>
 </table>
 <table class="noborder" style="width:70%;">
@@ -97,10 +97,10 @@
     </tr>
     <tr>
         <td>
-            Jan Jaap Siewers
+            {{ exam_result.assessor1_name }}
         </td>
         <td>
-            Piet de Vries
+            {{ exam_result.assessor2_name }}
         </td>
     </tr>
 </table>

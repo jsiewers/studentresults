@@ -28,6 +28,7 @@ class ExamController
         $student = new Student($this->db);
         $exam = new Exam($this->db);
         $attempt = $exam->readExamWithDeps($idexam);
+        //$assessors =
 
         $exam = $exam->readById($idexam);
 

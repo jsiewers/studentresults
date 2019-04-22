@@ -10,7 +10,7 @@ namespace Lib\Controllers;
 use Lib\Models\Student;
 use Lib\Models\Exam;
 use Lib\Models\Result;
-use Lib\Models\Result_comment;
+use Lib\Models\Exam_result;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -56,22 +56,26 @@ class ResultController
     }
 
     public function save(Request $request, Response $response, array $args = []) {
+        $er = new Exam_result($this->db);
+        $er->comment = $request->getParsedBodyParam('comment');
+        $er->exam_date = $request->getParsedBodyParam("exam_date");
+        $er->idstudent = $request->getAttribute("idstudent");
+        $er->idexam = $request->getAttribute('idexam');
+        $er->assessor1 = 1;
+        $er->assessor2 = 7;
+        $er->save();
+
         foreach($request->getParsedBody() as $key => $value) {
             if(substr($key, 0,1) == "_") {
                 $result = new Result($this->db);
                 $result->idstudent = $request->getAttribute("idstudent");
+                $result->idexam = $request->getAttribute('idexam');
                 $result->exam_date = $request->getParsedBodyParam("exam_date");
                 $result->idaspect = $value;
                 $result->save();
             }
         }
-        $result_comment = new Result_comment($this->db);
-        $result_comment->comment = $request->getParsedBodyParam('comment');
-        $result_comment->exam_date = $request->getParsedBodyParam("exam_date");
-        $result_comment->idstudent = $request->getAttribute("idstudent");
-        $result_comment->idexam = $request->getAttribute('idexam');
-        $result_comment->save();
-        $this->results( $request,  $response, $args = []);
+         $this->results( $request,  $response, $args = []);
     }
 
     public function studentResults(Request $request, Response $response, array $args = []) {
@@ -125,42 +129,36 @@ class ResultController
 
         foreach($exams as $e) {
             $result = new Result($this->db);
-
-            $ex = $exam->readById($e['idexam']);
-
-            $result_comment = new Result_comment($this->db);
-            $result_comment->idstudent = $request->getAttribute("idstudent");
-            $result_comment->idexam =  $e['idexam'];
-            $result_comment->exam_date = $e['exam_date'];
+            $exam = $exam->readById($e['idexam']);
+            $er = new Exam_result($this->db);
+            $er->idstudent = $request->getAttribute("idstudent");
+            $er->idexam =  $e['idexam'];
+            $er->exam_date = $e['exam_date'];
+            $exam_result = $er->read();
 
             $result->idstudent = $request->getAttribute("idstudent");
             $result->idexam = $e['idexam'];
             $result->exam_date = $e['exam_date'];
 
-            $result_comment = $result_comment->read();
-
-            $examresults = $result->resultsByExam();
-            $result->exam_score = $examresults['exam_score'];
-            $caesura = explode(" ", $ex->caesura);
-            $result->exam_grade = str_replace(",",".", $caesura[$result->exam_score]);
-            $results[] = ['exam' => $ex, 'examresults' => $examresults, 'result' => $result];
+            $results = $result->resultsByExam();
+            $exam_result->score = $results['exam_score'];
+            $caesura = explode(" ", $exam->caesura);
+            $exam_result->grade = str_replace(",",".", $caesura[$exam_result->score]);
+            $data[] = ['exam' => $exam, 'results' => $results, 'exam_result' => $exam_result];
         }
 
-       // var_dump($result_comment->comment);
 
         if($template != 'results_detail_all.html') {
             $args = [
                 'student' => $student,
-                'exam' => $results[0]['exam'],
-                'results' => $results[0]['examresults']['result'],
-                'result' => $results[0]['result'],
-                'comment' => $result_comment->comment
+                'exam' => $data[0]['exam'],
+                'results' => $data[0]['results']['result'],
+                'exam_result' => $data[0]['exam_result']
             ];
         } else {
             $args = [
                 'student' => $student,
-                'results' => $results,
-                'comment' => $result_comment->comment
+                'all' => $data
             ];
        }
 

@@ -7,6 +7,7 @@
  */
 
 namespace Lib\Models;
+use Lib\Models\Exam_result;
 use PDO;
 
 
@@ -14,7 +15,7 @@ class Result
 {
     protected $pdo;
     protected $fields;
-    public $exam_date, $idstudent, $idexam, $exam_description, $idproces, $p_description, $idassignment, $assignement_description, $idaspect, $aspect_description, $exam_score, $exam_grade;
+    public $exam_date, $idstudent, $idexam, $exam_description, $idproces, $p_description, $idassignment, $assignement_description, $idaspect, $aspect_description;
 
     public function __construct($db)
     {
@@ -23,37 +24,97 @@ class Result
 
     public function save() {
         try {
-            $sql = "insert into result (idstudent, idaspect, exam_date) values (:idstudent, :idaspect, :exam_date);";
+            $sql = "insert into result (exam_date, idstudent, idexam, idaspect) values (:exam_date, :idstudent, :idexam, :idaspect);";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(":idstudent", $this->idstudent, PDO::PARAM_INT);
-            $stmt->bindParam(":idaspect", $this->idaspect, PDO::PARAM_INT);
             $stmt->bindParam(":exam_date", $this->exam_date, PDO::PARAM_INT);
+            $stmt->bindParam(":idstudent", $this->idstudent, PDO::PARAM_INT);
+            $stmt->bindParam(":idexam", $this->idexam, PDO::PARAM_INT);
+            $stmt->bindParam(":idaspect", $this->idaspect, PDO::PARAM_INT);
             $stmt->execute();
         } catch (\PDOException $e) {
             echo $e->getMessage();
         }
     }
 
+//    public function delete() {
+//        try {
+//            $sql = "delete r from result as r
+//                join aspect as a on r.idaspect = a.idaspect
+//                join assignment as ass on a.idassignment = ass.idassignment
+//                join proces as p on ass.idproces = p.idproces
+//                join exam as e on p.idexam = e.idexam
+//                where e.active = 1 and idstudent = :idstudent AND e.idexam = :idexam AND r.exam_date = :exam_date";
+//            $stmt = $this->pdo->prepare($sql);
+//            $stmt->bindParam(":idstudent", $this->idstudent, PDO::PARAM_INT);
+//            $stmt->bindParam(":idexam", $this->idexam, PDO::PARAM_INT);
+//            $stmt->bindParam(":exam_date", $this->exam_date, PDO::PARAM_INT);
+//            $stmt->execute();
+//        } catch(\PDOException  $e) {
+//            echo $e->getMessage();
+//        }
+//
+//    }
+//
     public function delete() {
         try {
-            $sql = "delete r from result as r
+            $sql = "delete from exam_result as er
+                where idstudent = :idstudent AND e.idexam = :idexam AND r.exam_date = :exam_date";
+        } catch(PDOException  $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function resultsByExam() {
+
+        $sql = "select 
+                r.exam_date,
+                p.idproces, 
+                p.description as proces_description, 
+                ass.idassignment, 
+                ass.description as assignment_description,
+                a.idaspect,
+                a.description as aspect_description,
+                a.score,
+                er.comment,
+                er.assessor1,
+                er.assessor2
+                from exam_result as er
+                join result as r on er.idstudent = r.idstudent and er.exam_date = r.exam_date and er.idexam = r.idexam
                 join aspect as a on r.idaspect = a.idaspect
                 join assignment as ass on a.idassignment = ass.idassignment
                 join proces as p on ass.idproces = p.idproces
                 join exam as e on p.idexam = e.idexam
-                where e.active = 1 and idstudent = :idstudent AND e.idexam = :idexam AND r.exam_date = :exam_date";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(":idstudent", $this->idstudent, PDO::PARAM_INT);
-            $stmt->bindParam(":idexam", $this->idexam, PDO::PARAM_INT);
-            $stmt->bindParam(":exam_date", $this->exam_date, PDO::PARAM_INT);
-            $stmt->execute();
-        } catch(\PDOException  $e) {
-            echo $e->getMessage();
+                where er.idexam = :idexam and er.idstudent = :idstudent and e.active = 1 and er.exam_date = :exam_date";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':idstudent', $this->idstudent, PDO::PARAM_INT);
+        $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
+        $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_STR);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = [];
+        $exam_score = 0;
+        foreach($stmt->fetchAll() as $p) {
+            $result[$p["idproces"]]["description"] = $p["proces_description"];
+            $result[$p["idproces"]]["assignments"][$p["idassignment"]]["description"] = $p["assignment_description"];
+            $result[$p["idproces"]]["assignments"][$p["idassignment"]]["aspect_description"] = $p["aspect_description"];
+            $result[$p["idproces"]]["assignments"][$p["idassignment"]]["aspect_score"] = $p["score"];
+            if(!isset($result[$p["idproces"]]["proces_score"])) {
+                $result[$p["idproces"]]["proces_score"] = 0;
+            }
+            $result[$p["idproces"]]["proces_score"] += $p["score"];
+            $exam_score += $p["score"];
         }
 
-    }
 
-    public function resultsByExam() {
+        $examresult =  [
+            'exam_result' => $exam_result,
+            'result' => $result,
+            'exam_score' => $exam_score,
+        ];
+
+        return $examresult;
+    }
+    public function resultsByExam_old() {
         $sql = "select 
                 r.exam_date,
                 p.idproces, 
@@ -90,6 +151,7 @@ class Result
             $exam_score += $p["score"];
             $exam_date = $p["exam_date"];
         }
+
         $examresult =  [
             'result' => $result,
             'exam_score' => $exam_score,
@@ -101,22 +163,21 @@ class Result
 
     public function resultsByExamStudents() {
         $sql = "select 
-                e.idexam,
+                er.idexam,
                 e.examcode,
                 s.idstudent as student_idstudent,
                 s.idgroup,
                 IF(ISNULL(prefix), CONCAT(first_name, ' ', last_name), CONCAT(first_name, ' ', prefix, ' ', last_name )) AS fullname,
-                exam_date,
+                er.exam_date,
                 e.description as exam_description,
                 e.caesura as caesura,
                 SUM(a.score) as total_score
-                from result as r
-                join aspect as a on r.idaspect = a.idaspect
-                join assignment as ass on a.idassignment = ass.idassignment
-                join proces as p on ass.idproces = p.idproces
-                join exam as e on p.idexam = e.idexam
-                join student as s on r.idstudent = s.idstudent
-                where e.idexam = :idexam and e.active = 1 and exam_date = :exam_date
+                from exam_result as er
+                join exam as e on er.idexam = e.idexam
+                join student as s on er.idstudent = s.idstudent
+                join result as r on er.idstudent = r.idstudent and er.exam_date = r.exam_date and er.idexam = r.idexam
+                join aspect as a on a.idaspect = r.idaspect
+                where er.idexam = :idexam and e.active = 1 and er.exam_date = :exam_date
                 group by student_idstudent order by idgroup, exam_description, caesura, s.last_name";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
@@ -130,9 +191,43 @@ class Result
             $result[$key]['grade'] = str_replace(",", ".", $caesura[$result[$key]['total_score']]);
             $result[$key]['attempt'] = $attempts[$result[$key]['student_idstudent']];
         }
-        //var_dump($result);
         return $result;
     }
+
+//    public function resultsByExamStudents_old() {
+//        $sql = "select
+//                e.idexam,
+//                e.examcode,
+//                s.idstudent as student_idstudent,
+//                s.idgroup,
+//                IF(ISNULL(prefix), CONCAT(first_name, ' ', last_name), CONCAT(first_name, ' ', prefix, ' ', last_name )) AS fullname,
+//                exam_date,
+//                e.description as exam_description,
+//                e.caesura as caesura,
+//                SUM(a.score) as total_score
+//                from result as r
+//                join aspect as a on r.idaspect = a.idaspect
+//                join assignment as ass on a.idassignment = ass.idassignment
+//                join proces as p on ass.idproces = p.idproces
+//                join exam as e on p.idexam = e.idexam
+//                join student as s on r.idstudent = s.idstudent
+//                where e.idexam = :idexam and e.active = 1 and exam_date = :exam_date
+//                group by student_idstudent order by idgroup, exam_description, caesura, s.last_name";
+//        $stmt = $this->pdo->prepare($sql);
+//        $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
+//        $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_STR);
+//        $stmt->execute();
+//        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+//        $result = $stmt->fetchAll();
+//        $attempts = $this->getOccurencesUntilDate();
+//        $caesura = explode(" ",$result[0]['caesura']);
+//        foreach($result as $key => $value) {
+//            $result[$key]['grade'] = str_replace(",", ".", $caesura[$result[$key]['total_score']]);
+//            $result[$key]['attempt'] = $attempts[$result[$key]['student_idstudent']];
+//        }
+//        //var_dump($result);
+//        return $result;
+//    }
 
 //    public function resultsByExamAll() {
 //        $sql = "select
@@ -253,23 +348,41 @@ class Result
         return $exams;
     }
 
-    public function getStudentExams($idstudent) {
-        $sql = "select distinct
-                e.idexam,
-                r.exam_date
-                from result as r
-                join aspect as a on r.idaspect = a.idaspect
-                join student as s on r.idstudent = s.idstudent
-                join assignment as ass on a.idassignment = ass.idassignment
-                join proces as p on ass.idproces = p.idproces
-                join exam as e on p.idexam = e.idexam
-                where r.idstudent = :idstudent";
+//    public function getStudentExams_old($idstudent) {
+//        $sql = "select distinct
+//                e.idexam,
+//                r.exam_date
+//                from result as r
+//                join aspect as a on r.idaspect = a.idaspect
+//                join student as s on r.idstudent = s.idstudent
+//                join assignment as ass on a.idassignment = ass.idassignment
+//                join proces as p on ass.idproces = p.idproces
+//                join exam as e on p.idexam = e.idexam
+//                where r.idstudent = :idstudent";
+//        $stmt = $this->pdo->prepare($sql);
+//        $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
+//        $stmt->execute();
+//        return $stmt->fetchAll();
+//
+//    }
+    public function getStudentExams($idstudent)
+    {
+        $sql = "select 
+                er.idexam,
+                er.exam_date
+                from exam_result as er
+                where er.idstudent = :idstudent";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll();
-
     }
+//join result as r on er.idstudent = r.idstudent and er.exam_date = r.exam_date and er.idexam = r.idexam
+//join aspect as a on r.idaspect = a.idaspect
+//join student as s on r.idstudent = s.idstudent
+//join assignment as ass on a.idassignment = ass.idassignment
+//join proces as p on ass.idproces = p.idproces
+//join exam as e on p.idexam = e.idexam
 
 //    public function examResultsDetailByStudent($idstudent) {
 //        $sql = "select
@@ -300,32 +413,5 @@ class Result
 //        }
 //        return $exams;
 //    }
-
-    public function createTable()
-    {
-        $sql = "CREATE TABLE IF NOT EXISTS `results`.`result` (
-                  `exam_date` VARCHAR(45) NOT NULL,
-                  `idstudent` INT NOT NULL,
-                  `idaspect` INT NOT NULL,
-                  PRIMARY KEY (`exam_date`, `idstudent`, `idaspect`),
-                  INDEX `fk_assignment_result_student1_idx` (`idstudent` ASC) VISIBLE,
-                  INDEX `fk_assignment_result_aspect1_idx` (`idaspect` ASC) VISIBLE,
-                  CONSTRAINT `fk_assignment_result_student1`
-                    FOREIGN KEY (`idstudent`)
-                    REFERENCES `results`.`student` (`idstudent`)
-                    ON DELETE NO ACTION
-                    ON UPDATE NO ACTION,
-                  CONSTRAINT `fk_assignment_result_aspect1`
-                    FOREIGN KEY (`idaspect`)
-                    REFERENCES `results`.`aspect` (`idaspect`)
-                    ON DELETE NO ACTION
-                    ON UPDATE NO ACTION)
-                ENGINE = InnoDB;";
-
-        $stmt = $this->pdo->query($sql);
-
-    }
-
-
 
 }

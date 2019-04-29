@@ -4,6 +4,7 @@
 <p>Exam: {{ exam.description }}</p>
 <p>Proces: {{ proces.description }}</p>
 <form id="aspectform" action="/aspect/{{ exam.idexam }}/{{ proces.idproces }}/{{ idassignment }}/new" method="post">
+    {{ csrf.field | raw }}
     <label for="idassignment">Assignment</label>
     <select id="idassignment" name="idassignment" onchange="aspectform.submit()">
         {% for a in assignments %}

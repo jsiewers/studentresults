@@ -13,7 +13,7 @@ use PDO;
 class Exam_result
 {
     protected $pdo;
-    public $comment, $assessor1, $assessor1_name, $assessor2, $assessor2_name, $examscore, $grade;
+    public $comment, $assessor1, $assessor1_name, $assessor2, $assessor2_name, $score, $grade;
 
     public function __construct($db)
     {
@@ -40,7 +40,7 @@ class Exam_result
 
     public function read() {
         try {
-            $sql = "select *, CONCAT(u.first_name, ' ', u.last_name) as assessor1_name, CONCAT(u2.first_name, ' ', u2.last_name) as assessor2_name 
+            $sql = "select u.iduser, assessor1, assessor2, comment, CONCAT(u.first_name, ' ', u.last_name) as assessor1_name, CONCAT(u2.first_name, ' ', u2.last_name) as assessor2_name 
                     from exam_result as er
                     join user as u on u.iduser = er.assessor1
                     join user as u2 on u2.iduser = er.assessor2

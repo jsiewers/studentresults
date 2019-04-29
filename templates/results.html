@@ -20,10 +20,8 @@
         <td>{{ key }}</td>
         <td>{{ result.description }}</td>
         {% for date, attempt in result.attempt%}
-        <td>{{ date }}</td>
+        <td><a href="/result/{{ student.idstudent }}/{{ key }}/{{ date }}/detail">{{ date }}</a></td>
         <td><b>{{ attempt.grade }}</b></td>
-        <td><a href="/result/{{ student.idstudent }}/{{ key }}/{{ date }}/detail">v1</a></td>
-        <td><a href="/result/{{ student.idstudent }}/{{ key }}/{{ date }}/proces">v2</a></td>
         {% endfor %}
     </tr>
     {% endfor %}

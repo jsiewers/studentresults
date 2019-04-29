@@ -4,6 +4,7 @@
 <p>Exam: {{ exam.description }}</p>
 <p>Proces: {{ proces.description }}</p>
 <form id="assignmentform" action="/assignment/{{ exam.idexam }}{% if not exam.idexam %}0{% endif %}/{{ proces.idproces }}{% if not proces.idproces %}0{% endif %}/new" method="post">
+    {{ csrf.field | raw }}
     <label for="idproces">Proces</label>
     <select id="idproces" name="idproces" onchange="assignmentform.submit()">
         {% for p in processes %}

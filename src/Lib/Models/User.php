@@ -19,7 +19,7 @@ class User
 
 	public $email;
 
-	public $password;
+	private $password;
 
 	protected $pdo;
 

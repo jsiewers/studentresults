@@ -144,6 +144,7 @@ class ResultController
             $exam_result->score = $results['exam_score'];
             $caesura = explode(" ", $exam->caesura);
             $exam_result->grade = str_replace(",",".", $caesura[$exam_result->score]);
+            //var_dump($exam_result);
             $data[] = ['exam' => $exam, 'results' => $results, 'exam_result' => $exam_result];
         }
 

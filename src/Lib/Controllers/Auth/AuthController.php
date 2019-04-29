@@ -3,6 +3,7 @@
 namespace Lib\Controllers\Auth;
 
 use Lib\Models\User;
+use Lib\Models\Role;
 use Respect\Validation\Validator as v;
 
 /**
@@ -32,7 +33,8 @@ class AuthController
 
 	public function getSignIn($request, $response)
 	{
-        return $this->view->render($response, 'signin.html');
+        var_dump($_SESSION);
+	    return $this->view->render($response, 'signin.html');
 
     }
 
@@ -55,7 +57,14 @@ class AuthController
 
 	public function getSignUp($request, $response)
 	{
-		return $this->view->render($response, 'signup.html');
+        $user = new User($this->db);
+        $role = new Role($this->db);
+        $roles = $role->read();
+        $users = $user->read();
+		return $this->view->render($response, 'signup.html', [
+		    'users' => $users,
+            'roles' => $roles
+        ]);
 	}
 
 	public function postSignUp($request, $response)
@@ -66,6 +75,7 @@ class AuthController
             'first_name' => v::noWhitespace()->notEmpty()->alpha(),
             'last_name' => v::noWhitespace()->notEmpty()->alpha(),
 			'password' => v::noWhitespace()->notEmpty(),
+            'roles' => v::arrayType()->notEmpty()
 		]);
 
 		if ($validation->failed()) {
@@ -76,10 +86,11 @@ class AuthController
 		$user->email = $request->getParam('email');
         $user->first_name = $request->getParam('first_name');
         $user->last_name = $request->getParam('last_name');
-		$user->password = password_hash($request->getParam('password'), PASSWORD_DEFAULT);
+		$user->setPassword($request->getParam('password'));
+		$user->roles = $request->getParsedBodyParam('roles');
 		$user->save();
 
-		$this->auth->attempt($user->email,$request->getParam('password'));
+		//$this->auth->attempt($user->email,$request->getParam('password'));
 
 		return $response->withRedirect('/');
 	}

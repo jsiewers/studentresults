@@ -4,6 +4,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Lib\Middleware\GuestMiddleware;
 use Lib\Middleware\AuthMiddleware;
+use Lib\Middleware\AdminMiddleware;
 use Lib\Middleware\CsrfViewMiddleware;
 
 
@@ -19,7 +20,7 @@ $app->group('', function () {
     //$this->get('/auth/signup', 'AuthController:getSignUp')->setName('auth.signup');
     //$this->post('/signup', 'AuthController:postSignUp');
 //    $this->post('/signin', 'AuthController:postSignIn');
-//    $this->get('/signin', 'AuthController:getSignIn')->setName('auth.signin');
+     //$this->get('/signout', 'AuthController:getSignOut');
 })->add(new GuestMiddleware($container));
 
 
@@ -47,11 +48,15 @@ $app->group('', function () {
     //$app->get('/presence', 'PresenceController:show');
     //$app->post('/presence/store', 'PresenceController:save');
     //$app->post('/presence', 'PresenceController:show');
-    $this->get('/signup', 'AuthController:getSignUp')->setName('auth.signup');
-    $this->post('/signup', 'AuthController:postSignUp');
     $this->get('/students', 'StudentController:show');
     $this->post('/students', 'StudentController:show');
 })->add(new AuthMiddleware($container));
+
+$app->group('', function () {
+    $this->get('/signup', 'AuthController:getSignUp')->setName('auth.signup');
+    $this->post('/signup', 'AuthController:postSignUp');
+})->add(new AdminMiddleware($container));
+
 
 
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {
@@ -59,5 +64,6 @@ $app->get('/[{name}]', function (Request $request, Response $response, array $ar
     //$this->logger->info("Slim-Skeleton '/' route");
 
     // Render index view
+
     return $this->view->render($response, 'signin.html');
 })->setName('home');

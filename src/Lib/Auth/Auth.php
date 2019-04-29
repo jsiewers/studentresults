@@ -20,10 +20,9 @@ class Auth
 
 	public function user()
 	{
-	    //var_dump("in function user(); van ". get_class($this));
 	    $sql = "select * from user where iduser = :iduser";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':iduser', $_SESSION['user'], PDO::PARAM_INT);
+        $stmt->bindParam(':iduser', $_SESSION['user']['iduser'], PDO::PARAM_INT);
         $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Exam::class, [$this->pdo]);
         $stmt->execute();
         return $stmt->fetch();
@@ -31,45 +30,43 @@ class Auth
 
 	public function check()
 	{
-//        var_dump("in function check() van ". get_class($this));
-//        var_dump("session user = " .$_SESSION['user']);
-//        var_dump(session_id());
-//        var_dump($_SESSION);
-		return isset($_SESSION['user']);
+		return isset($_SESSION['user']['iduser']);
 	}
 
-	public function attempt($email, $password)
-	{
-	    try{
-//       var_dump("in function attempt van ". get_class($this));
-        $sql = "select * from user where email = :email";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, User::class, [$this->pdo]);
-        $stmt->execute();
-        $user = $stmt->fetch();
-	    } catch(\PDOException $e) {
-	        //var_dump($e->getMessage());
+	public function checkAdmin() {
+        if(isset($_SESSION['user']['iduser']) AND in_array(1,$_SESSION['user']['roles'])) {
+            return true;
+        } else {
+            return false;
         }
+    }
 
-		if (! $user) {
-			return false;
-		}
+    public function checkAssessor() {
+        if(isset($_SESSION['user']['iduser']) AND in_array(2,$_SESSION['user']['roles'])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-		if (password_verify($password, $user->password)) {
-            //session_regenerate_id();
-			$_SESSION['user'] = $user->iduser;
-			return true;
-		}
-
-		return false;
-	}
+    public function attempt($email, $password) {
+        $user = new User($this->pdo);
+        $authenticated_user = $user->readByEmailAndPassword($email, $password);
+        var_dump($authenticated_user);
+        //$authenticated_user->pdo = null;
+        if(!$authenticated_user) {
+            return false;
+        } else {
+            $_SESSION['user']['iduser'] = $authenticated_user->iduser;
+            $_SESSION['user']['fullname'] = $authenticated_user->getFullName();
+            $_SESSION['user']['roles'] = $authenticated_user->roles;
+            return true;
+        }
+    }
 
 	public function logout()
 	{
         unset($_SESSION['user']);
-        //unset($_SESSION['csrf']);
         session_destroy();
-        //echo "sdlfkjsdflksdfj ";
 	}
 }

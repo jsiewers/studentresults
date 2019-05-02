@@ -112,6 +112,28 @@ class User
         }
         return $users;
     }
+    public function readByIds($ids) {
+        $users = [];
+        try {
+            $sql = "SELECT u.iduser, first_name, last_name, email, r.description 
+                FROM user as u 
+                JOIN user_has_role as ur ON ur.iduser = u.iduser
+                JOIN role as r ON r.idrole = ur.idrole 
+                ORDER BY last_name" ;
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($ids);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+        } catch (\PDOException $e) {
+            var_dump($result = $e->getMessage());
+        }
+        foreach($result as $row) {
+            $users[$row['iduser']]['fullname'] = $row['first_name']. " " . $row['last_name'];
+            $users[$row['iduser']]['email'] = $row['email'];
+            $users[$row['iduser']]['roles'][] = $row['description'];
+        }
+        return $users;
+    }
 
     public function readByEmailAndPassword($email, $password) {
         try {

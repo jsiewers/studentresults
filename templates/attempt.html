@@ -23,7 +23,20 @@
     {{ csrf.field | raw }}
 
 <p>Datum:&nbsp; <input type="date" name="exam_date"></p>
-
+    <p>Assessor 1
+        <select name="assessor1">
+            {% for assessor in assessors %}
+            <option value="{{ assessor.iduser }}">{{ assessor.getFullName() }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>Assessor 2
+        <select name="assessor2">
+            {% for assessor in assessors %}
+            <option value="{{ assessor.iduser }}">{{ assessor.getFullName() }}</option>
+            {% endfor %}
+        </select>
+    </p>
     {% for processes in attempt %}
         {% for proces in processes %}
 <table id="proces_{{ proces.idproces }}">

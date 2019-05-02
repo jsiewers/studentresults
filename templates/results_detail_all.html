@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>test_template</h1>
 {% for data in all %}
 <table style="width:100%;">
     <tr>
@@ -22,9 +21,9 @@
     </tr>
     <tr>
         <td>Beoordelaar 1:</td>
-        <td>Jan Jaap Siewers</td>
+        <td>{{ data.exam_result.assessor1_name }}</td>
         <td>Beoordelaar 2:</td>
-        <td>Piet de Vries</td>
+        <td>{{ data.exam_result.assessor2_name }}</td>
     </tr>
 </table>
 {% for proces in data.results.result %}

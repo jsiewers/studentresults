@@ -57,7 +57,7 @@ Opmerkingen n.a.v. examensessie
         <td><p style="padding:20px;"></p></td>
     </tr>
 </table>
-<p>Naam surveillanten ...............................</p>
+<p>Naam surveillanten .................................</p>
 <p>Paraaf surveillanten ...............................</p>
 
 Opmerkingen n.a.v. correctie
@@ -67,8 +67,8 @@ Opmerkingen n.a.v. correctie
     </tr>
 </table>
 <p>Datum:...............................</p>
-<p>Naam correctoren ...............................</p>
-<p>Paraaf surveillanten ...............................</p>
+<p>Naam correctoren: {%for assessor in assessors %} {{ assessor.fullname }}{% if not loop.last %},{% endif %}{% endfor %}</p>
+<p>Paraaf correctoren: ...............................</p>
 
 <table style="width:100%;">
     <tr>
@@ -85,25 +85,19 @@ Opmerkingen n.a.v. correctie
     </tr>
 </table>
 </table>
-<table class="noborder" style="width:70%;">
+<table class="noborder" style="width:100%;">
     <tr>
-        <td>Handtekening beoordelaar 1</td>
-        <td>Handtekening beoordelaar 2</td>
+        {%for assessor in assessors %} <td style="height: 80px;vertical-align: top;">Handtekening beoordelaar {{ loop.index }}</td>{% endfor %}
+    </tr>
+    <tr>
+        {%for assessor in assessors %} <td>{{ assessor.fullname }}</td>{% endfor %}
     </tr>
     <tr>
         <td>
-            <img class="handtekening" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png">
+            <!--<img class="handtekening" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png">-->
         </td>
         <td>
-            <img class="handtekening"  src="{{ base_url() }}/assets/img/handtekening_piet.png">
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Jan Jaap Siewers
-        </td>
-        <td>
-            Piet de Vries
+            <!--<img class="handtekening"  src="{{ base_url() }}/assets/img/handtekening_piet.png">-->
         </td>
     </tr>
 </table>

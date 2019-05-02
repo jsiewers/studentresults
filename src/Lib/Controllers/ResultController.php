@@ -61,8 +61,8 @@ class ResultController
         $er->exam_date = $request->getParsedBodyParam("exam_date");
         $er->idstudent = $request->getAttribute("idstudent");
         $er->idexam = $request->getAttribute('idexam');
-        $er->assessor1 = 1;
-        $er->assessor2 = 7;
+        $er->assessor1 = $request->getParsedBodyParam("assessor1");
+        $er->assessor2 = $request->getParsedBodyParam("assessor2");;
         $er->save();
 
         foreach($request->getParsedBody() as $key => $value) {
@@ -80,12 +80,17 @@ class ResultController
 
     public function studentResults(Request $request, Response $response, array $args = []) {
         $result = new Result($this->db);
-        $result->idexam = ($request->getAttribute('idexam'));
-        $result->exam_date = ($request->getAttribute('exam_date'));
+        $result->idexam = $request->getAttribute('idexam');
+        $result->exam_date = $request->getAttribute('exam_date');
+        $assessors = $result->getAssessorsByExamByDate();
         $result = $result->resultsByExamStudents();
+//        $er = new Exam_result($this->db);
+//        $er->idexam = $request->getAttribute('idexam');
+//        $er->exam_date = $request->getAttribute('exam_date');
 
         $this->view->render($response, 'results_exam_date.html', [
             'result' => $result,
+            'assessors' => $assessors
         ]);
 
     }
@@ -93,16 +98,18 @@ class ResultController
     public function studentResultsAll(Request $request, Response $response, array $args = []) {
         $result = new Result($this->db);
         $result->idexam = ($request->getAttribute('idexam'));
+
         $dates = $result->getExamDates();
         foreach($dates as $date) {
             $result->exam_date = $date['exam_date'];
             $results[] = $result->resultsByExamStudents();
-            }
+        }
 
         //var_dump($results);
 
         $this->view->render($response, 'results_exam.html', [
             'results' => $results,
+            'assessorteams' => $assessorteams
         ]);
 
     }
@@ -132,7 +139,7 @@ class ResultController
             $exam = $exam->readById($e['idexam']);
             $er = new Exam_result($this->db);
             $er->idstudent = $request->getAttribute("idstudent");
-            $er->idexam =  $e['idexam'];
+            $er->idexam = $e['idexam'];
             $er->exam_date = $e['exam_date'];
             $exam_result = $er->read();
 
@@ -143,8 +150,13 @@ class ResultController
             $results = $result->resultsByExam();
             $exam_result->score = $results['exam_score'];
             $caesura = explode(" ", $exam->caesura);
-            $exam_result->grade = str_replace(",",".", $caesura[$exam_result->score]);
-            //var_dump($exam_result);
+            if ($results['grade'] == -1) {
+                $exam_result->grade = str_replace(",", ".", $caesura[$exam_result->score]);
+            } else {
+                $exam_result->grade = $results['grade'];
+            }
+            var_dump($exam_result);
+
             $data[] = ['exam' => $exam, 'results' => $results, 'exam_result' => $exam_result];
         }
 

@@ -11,6 +11,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Lib\Models\Exam;
 use Lib\Models\Student;
+use Lib\Models\User;
 
 class ExamController
 
@@ -28,14 +29,16 @@ class ExamController
         $student = new Student($this->db);
         $exam = new Exam($this->db);
         $attempt = $exam->readExamWithDeps($idexam);
-        //$assessors =
-
+        $user = new User($this->db);
+        $assessors = $user->readByRole(2); //get accessors
         $exam = $exam->readById($idexam);
+
 
          $this->view->render($response, 'attempt.html', [
              'student' =>  $student->readById($request->getAttribute('idstudent')),
              'attempt' => $attempt,
              'exam' => $exam,
+             'assessors' => $assessors,
 
         ]);
     }

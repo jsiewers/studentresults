@@ -38,17 +38,11 @@ class ResultController
     }
 
     public function deleteResult(Request $request, Response $response, array $args = []) {
-        $result = new Result($this->db);
-        $result->idexam = ($request->getAttribute('idexam'));
-        $result->exam_date = ($request->getAttribute('exam_date'));
-        $result->idstudent = ($request->getAttribute('idstudent'));
-        $result->delete();
-
-        $result_comment = new Result_comment($this->db);
-        $result_comment->idexam = ($request->getAttribute('idexam'));
-        $result_comment->exam_date = ($request->getAttribute('exam_date'));
-        $result_comment->idstudent = ($request->getAttribute('idstudent'));
-        $result_comment->delete();
+        $er = new Exam_result($this->db);
+        $er->idexam = ($request->getAttribute('idexam'));
+        $er->exam_date = ($request->getAttribute('exam_date'));
+        $er->idstudent = ($request->getAttribute('idstudent'));
+        $er->delete();
 
 
         //$this->studentResults($request, $response, $args = []);
@@ -155,7 +149,6 @@ class ResultController
             } else {
                 $exam_result->grade = $results['grade'];
             }
-            var_dump($exam_result);
 
             $data[] = ['exam' => $exam, 'results' => $results, 'exam_result' => $exam_result];
         }

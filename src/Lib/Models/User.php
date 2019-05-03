@@ -113,15 +113,15 @@ class User
         return $users;
     }
     public function readByIds($ids) {
+	    $sids = implode(",", $ids);
+	    //var_dump($sids);
         $users = [];
         try {
-            $sql = "SELECT u.iduser, first_name, last_name, email, r.description 
+            $sql = "SELECT u.iduser, first_name, last_name, email 
                 FROM user as u 
-                JOIN user_has_role as ur ON ur.iduser = u.iduser
-                JOIN role as r ON r.idrole = ur.idrole 
-                ORDER BY last_name" ;
+                WHERE u.iduser in (".$sids.")";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($ids);
+            $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
         } catch (\PDOException $e) {

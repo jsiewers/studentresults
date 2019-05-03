@@ -30,7 +30,6 @@
         <td>Naam</td>
         <td>Groep</td>
         <td>Opleidingscode</td>
-        <td>Aanwezig</td>
         <td>1e beoordeling</td>
         <td>2e beoordeling</td>
         <td>3e beoordeling</td>
@@ -43,7 +42,6 @@
          <td>{{ student.fullname }}</td>
          <td>{{ student.idgroup }}</td>
          <td>25187</td>
-         <td></td>
          <td>{% if student.attempt.count == 1 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
          <td>{% if student.attempt.count == 2 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
          <td>{% if student.attempt.count == 3 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
@@ -66,7 +64,7 @@ Opmerkingen n.a.v. correctie
         <td><p style="padding:20px;"></p></td>
     </tr>
 </table>
-<p>Datum:...............................</p>
+<p>Datum: {{ result | first.exam_date | date_modify("+10 days") | date('d-m-Y') }}</p>
 <p>Naam correctoren: {%for assessor in assessors %} {{ assessor.fullname }}{% if not loop.last %},{% endif %}{% endfor %}</p>
 <p>Paraaf correctoren: ...............................</p>
 
@@ -81,23 +79,6 @@ Opmerkingen n.a.v. correctie
         <td>
             <p>Datum ....................</p>
             <p>Naam  ....................</p>
-        </td>
-    </tr>
-</table>
-</table>
-<table class="noborder" style="width:100%;">
-    <tr>
-        {%for assessor in assessors %} <td style="height: 80px;vertical-align: top;">Handtekening beoordelaar {{ loop.index }}</td>{% endfor %}
-    </tr>
-    <tr>
-        {%for assessor in assessors %} <td>{{ assessor.fullname }}</td>{% endfor %}
-    </tr>
-    <tr>
-        <td>
-            <!--<img class="handtekening" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png">-->
-        </td>
-        <td>
-            <!--<img class="handtekening"  src="{{ base_url() }}/assets/img/handtekening_piet.png">-->
         </td>
     </tr>
 </table>

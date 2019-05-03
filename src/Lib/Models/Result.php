@@ -59,14 +59,7 @@ class Result
 //
 //    }
 //
-    public function delete() {
-        try {
-            $sql = "delete from exam_result as er
-                where idstudent = :idstudent AND e.idexam = :idexam AND r.exam_date = :exam_date";
-        } catch(PDOException  $e) {
-            echo $e->getMessage();
-        }
-    }
+
 
     public function resultsByExam() {
 

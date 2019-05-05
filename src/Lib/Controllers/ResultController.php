@@ -14,15 +14,18 @@ use Lib\Models\Result;
 use Lib\Models\Exam_result;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Respect\Validation\Validator as v;
 
 class ResultController
 {
-    protected $db;
+    protected $db, $validator;
 
-    public function __construct($db, $view)
+    public function __construct($db, $view, $validator)
     {
         $this->db = $db;
         $this->view = $view;
+        $this->validator = $validator;
+
     }
 
     public function newresult(Request $request, Response $response, array $args = []) {
@@ -73,14 +76,27 @@ class ResultController
     }
 
     public function save(Request $request, Response $response, array $args = []) {
+
+        $validation = $this->validator->validate($request, [
+            'comment' => v::notEmpty(),
+            'exam_date' => v::notEmpty(),
+            'assessor1' => v::notEmpty(),
+            'assessor2' => v::not(v::equals($request->getParsedBodyParam("assessor1"))),
+        ]);
+
+        if ($validation->failed()) {
+            return $response->withRedirect('/results/'.$request->getAttribute("idstudent"));
+        }
         $er = new Exam_result($this->db);
         $er->comment = $request->getParsedBodyParam('comment');
         $er->exam_date = $request->getParsedBodyParam("exam_date");
         $er->idstudent = $request->getAttribute("idstudent");
         $er->idexam = $request->getAttribute('idexam');
         $er->assessor1 = $request->getParsedBodyParam("assessor1");
-        $er->assessor2 = $request->getParsedBodyParam("assessor2");;
+        $er->assessor2 = $request->getParsedBodyParam("assessor2");
         $er->save();
+
+
 
         foreach($request->getParsedBody() as $key => $value) {
             if(substr($key, 0,1) == "_") {
@@ -92,6 +108,8 @@ class ResultController
                 $result->save();
             }
         }
+
+
          $this->results( $request,  $response, $args = []);
     }
 

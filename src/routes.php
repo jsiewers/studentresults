@@ -38,7 +38,7 @@ $app->group('', function () {
     $this->get('/aspect/{idexam }/{idproces }/{idassignment}/new', 'AspectController:new_form');
     $this->post('/aspect/{idexam }/{idproces }/{idassignment}/new', 'AspectController:save');
     $this->post('/aspect/{idexam }/{idproces }/{idassignment}/{idaspect}/update', 'AspectController:update');
-    $this->get('/results/{idstudent}', 'ResultController:results');
+    $this->get('/results/{idstudent}', 'ResultController:results')->setName('student.results');
     $this->get('/newresult/{idstudent}/{idexam}/{exam_date}', 'ResultController:newresult');
     $this->get('/result/{idstudent}/{idexam}/{exam_date}/{template}', 'ResultController:detail');
     $this->get('/result/{idstudent}/{idexam}/{exam_date}/{template}/delete', 'ResultController:deleteResult');

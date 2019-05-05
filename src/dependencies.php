@@ -112,7 +112,7 @@ $container['SeedController'] = function ($c) {
 };
 
 $container['ResultController'] = function ($c) {
-    return new ResultController($c->get('db'), $c->get('view'));
+    return new ResultController($c->get('db'), $c->get('view'), $c->get('validator'));
 };
 
 $container['StudentController'] = function ($c) {

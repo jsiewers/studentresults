@@ -1,0 +1,145 @@
+{% extends "layoutv2.html" %}
+{% block content %}
+<title>{{ student.idstudent }}-{{ student.fullName() }}-[{{exam.examcode}}]</title>
+
+</head>
+<body>
+<div class="wrapper">
+    <nav>
+        <ul>
+            <li><a href="/exam/new">Examens</a></li>
+            <li><a href="/students">Studenten</a></li>
+            <li><a href="/signout">Uitloggen</a></li>
+            <li><a href="/signup">Gebruiker toevoegen</a></li>
+        </ul>
+    </nav>
+    <div id="content">
+<a class="hide" style="float:right;color:red;margin-bottom:10px;"href="/result/{{ student.idstudent }}/{{ exam.idexam }}/{{ exam_result.exam_date | date('Y-m-d') }}/detail/delete"><b>!!! DELETE !!!</b></a>
+<table style="width:100%;">
+    <tr>
+        <td colspan="6"><b>{{ exam.description }}</b></td>
+    </tr>
+    <tr>
+        <td>Naam student:</td>
+        <td>{{ student.fullName() }}</td>
+        <td>Studentnummer:</td>
+        <td>{{ student.idstudent }}</td>
+        <td>Groep:</td>
+        <td>{{ student.idgroup }}</td>
+    </tr>
+    <tr>
+        <td>Plaats:</td>
+        <td colspan="3">Almere</td>
+        <td>Datum:</td>
+        <td>{{ results.exam_date | date('d/m/Y') }}</td>
+    </tr>
+    <tr>
+        {% for assessor in assessors %}
+        <td>Beoordelaar {{ loop.index }}:</td>
+        <td>{{ assessor.fullname }}</td>
+        {% endfor %}
+    </tr>
+</table>
+
+<table style="width:100%;">
+    {% for proces in results.processes %}
+    <tr>
+        <td colspan="5"><b>{{ proces.proces_description }}</b></td>
+    </tr>
+    {% for assignment in proces.assignments %}
+    <tr>
+        <td colspan="5"> <i>{{ assignment.assignment_description }}</i></td>
+    </tr>
+    <tr>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>resultaat</td>
+    </tr>
+    <tr>
+        {% for aspect in assignment.aspects %}
+        <td style="vertical-align: top; width:22%;{% if aspect.result != -1 %}font-weight:700;{% endif %}">{{ aspect.aspect_description }}</td>
+        {% endfor %}
+        {% if assignment.aspectcount < 4 %}
+        {% for i in range(4,(assignment.aspectcount+1)) %}
+        <td></td>
+        {% endfor %}
+        {%  endif %}
+        {% for aspect in assignment.aspects %}
+        {% if aspect.result  != -1 %}
+        <td style="vertical-align: top; width:5%;">{{ aspect.result }}</td>
+        {% endif %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
+    {% if proces.proces_score %}
+    <tr>
+        <td colspan="4" style="text-align: right;">
+            Score voor dit proces:
+        </td>
+        <td style="text-align: right;">
+            {{proces.proces_score }}
+        </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    <tr>
+        <td colspan="4" style="text-align:right;">
+            Totaal score examen:
+        </td>
+        <td style="text-align:right;">
+            {{ results.total_score }}
+        </td>
+    </tr>
+</table>
+<table style="width:100%;">
+    <tr>
+        <td>
+            Motivatie
+        </td>
+    </tr>
+    <tr>
+        <td>{{ results.comment }}</td>
+    </tr>
+</table>
+<table style="width:100%;">
+    <tr>
+        <td style="text-align:right;width:80%;">
+            Eindbeoordeling:
+        </td>
+        <td style="text-align:center; font-size:2em">
+            <b>{{ results.grade }} ({% if results.grade >= 8 %}G{% elseif results.grade >= 5.5 %}V{% else %}O{% endif %})</b>
+        </td>
+</table>
+<table>
+    <tr>
+        <td colspan="{{ results.caesura | length }}">Cesuur</td>
+    </tr>
+    <tr>
+        {% for key,grade in results.caesura %}
+        <td>{{key}}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for key,grade in results.caesura %}
+       <td>{{grade}}</td>
+        {% endfor %}
+    </tr>
+</table>
+<table class="noborder" style="width:70%;">
+    <tr>
+        {% for assessor in assessors %}
+        <td>Handtekening beoordelaar {{ loop.index }}:</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for assessor in assessors %}
+        <td>{{ assessor.fullname }}</td>
+        {% endfor %}
+    </tr>
+</table>
+<p class="pagebreak"></p>
+    </div>
+</div>
+{% endblock %}

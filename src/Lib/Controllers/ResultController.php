@@ -8,6 +8,7 @@
 
 namespace Lib\Controllers;
 use Lib\Models\Student;
+use Lib\Models\User;
 use Lib\Models\Exam;
 use Lib\Models\Result;
 use Lib\Models\Exam_result;
@@ -22,6 +23,28 @@ class ResultController
     {
         $this->db = $db;
         $this->view = $view;
+    }
+
+    public function newresult(Request $request, Response $response, array $args = []) {
+        $exam = new Exam($this->db);
+        $exam = $exam->readById($request->getAttribute('idexam'));
+        $student = new Student($this->db);
+        $student = $student->readById($request->getAttribute("idstudent"));
+        $r = new Result($this->db);
+        $r->idstudent = $request->getAttribute("idstudent");
+        $r->idexam = $request->getAttribute('idexam');
+        $r->exam_date = $request->getAttribute("exam_date");
+        $results = $r->resultsByExamStudentsWithAllAspects();
+        $user = new User($this->db);
+        $assessors = $user->readByIds([$results['assessor1'], $results['assessor2']]);
+
+        $this->view->render($response, 'result_detail_with_aspects.html', [
+            'results' => $results,
+            'student' => $student,
+            'exam' => $exam,
+            'assessors' => $assessors
+        ]);
+
     }
 
     public function results(Request $request, Response $response, array $args = []) {

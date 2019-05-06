@@ -30,7 +30,7 @@ class Result
         try {
             $sql = "insert into result (exam_date, idstudent, idexam, idaspect) values (:exam_date, :idstudent, :idexam, :idaspect);";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(":exam_date", $this->exam_date, PDO::PARAM_INT);
+            $stmt->bindParam(":exam_date", $this->exam_date, PDO::PARAM_STR);
             $stmt->bindParam(":idstudent", $this->idstudent, PDO::PARAM_INT);
             $stmt->bindParam(":idexam", $this->idexam, PDO::PARAM_INT);
             $stmt->bindParam(":idaspect", $this->idaspect, PDO::PARAM_INT);

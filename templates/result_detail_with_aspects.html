@@ -119,7 +119,7 @@
         <td colspan="2">Cruciaal criterium</td>
     </tr>
     </tr>
-    {% for key, ass in results.critical_assignments %}
+    {% for ass in results.critical_assignments %}
     <tr>
         <td>{{ ass.description }}</td>
         <td>{% if ass.passed != 1 %}Niet behaald{% else %}Behaald{% endif %}</td>

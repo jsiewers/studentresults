@@ -148,8 +148,8 @@ class Result
         $examresults['assessor1'] = $examdata[0]['assessor1'];
         $examresults['assessor2'] = $examdata[0]['assessor2'];
         $examresults['caesura'] = explode(" ",$examdata[0]['caesura']);
+        $examresults['criteria'] = 1;
         //var_dump($examresults);
-        $examresults['criteria'] = true;
         foreach($examdata as $r) {
             $proces[$r['idproces']]['proces_description'] = $r['proces_description'];
             $proces[$r['idproces']]['assignments'][$r['idassignment']]['assignment_description'] = $r['assignment_description'];

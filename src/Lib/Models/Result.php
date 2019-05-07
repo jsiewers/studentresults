@@ -149,7 +149,7 @@ class Result
         $examresults['assessor2'] = $examdata[0]['assessor2'];
         $examresults['caesura'] = explode(" ",$examdata[0]['caesura']);
         //var_dump($examresults);
-
+        $examresults['criteria'] = true;
         foreach($examdata as $r) {
             $proces[$r['idproces']]['proces_description'] = $r['proces_description'];
             $proces[$r['idproces']]['assignments'][$r['idassignment']]['assignment_description'] = $r['assignment_description'];
@@ -157,7 +157,12 @@ class Result
             $proces[$r['idproces']]['assignments'][$r['idassignment']]['aspects'][$r['idaspect']]['aspect_description'] = $r['aspect_description'];
             if(in_array($r['idaspect'], $results)) {
                 $proces[$r['idproces']]['assignments'][$r['idassignment']]['aspects'][$r['idaspect']]['result'] = $r['score'];
-                $proces[$r['idproces']]['proces_score'] += $r['score'];
+                if($r['score'] < $r['min_score']) {
+                    $examresults['criteria'] = false;
+
+                } else {
+                    $proces[$r['idproces']]['proces_score'] += $r['score'];
+                }
             } else {
                 $proces[$r['idproces']]['assignments'][$r['idassignment']]['aspects'][$r['idaspect']]['result'] = -1;
             }
@@ -168,8 +173,13 @@ class Result
         foreach($proces as $p) {
             $total_score += $p['proces_score'];
         }
-        $examresults['total_score'] = $total_score;
-        $examresults['grade']  = str_replace(",", ".", $examresults['caesura'][$total_score]);
+        if($examresults['criteria']) {
+            $examresults['total_score'] = 0;
+            $examresults['grade']  = 4;
+        } else {
+            $examresults['total_score'] = $total_score;
+            $examresults['grade']  = str_replace(",", ".", $examresults['caesura'][$total_score]);
+        }
         $examresults['processes'] = $proces;
         //var_dump($examresults);
         return $examresults;

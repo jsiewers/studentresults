@@ -33,7 +33,7 @@ class AuthController
 
 	public function getSignIn($request, $response)
 	{
-        var_dump($_SESSION);
+        //var_dump($_SESSION);
 	    return $this->view->render($response, 'signin.html');
 
     }

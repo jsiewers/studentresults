@@ -80,7 +80,7 @@ class Result
             $result[$p["idproces"]]["assignments"][$p["idassignment"]]["aspect_score"] = $p["score"];
             if($p['min_score'] > $p['score']) {
                 //gezakt voor dit onderdeel
-                $grade = 4;
+                $grade = "1,0";
             }
             if(!isset($result[$p["idproces"]]["proces_score"])) {
                 $result[$p["idproces"]]["proces_score"] = 0;
@@ -182,7 +182,7 @@ class Result
         }
         if($examresults['criteria'] == -1) {
             $examresults['total_score'] = 0;
-            $examresults['grade']  = 4;
+            $examresults['grade']  = "1,0";
         } else {
             $examresults['total_score'] = $total_score;
             $examresults['grade']  = str_replace(",", ".", $examresults['caesura'][$total_score]);
@@ -223,7 +223,7 @@ class Result
         $caesura = explode(" ",$result[0]['caesura']);
         foreach($result as $key => $value) {
             if($value['grade'] > 0) {
-                $result[$key]['grade'] = 4;
+                $result[$key]['grade'] = "1,0";
             } else {
                 $result[$key]['grade'] = str_replace(",", ".", $caesura[$result[$key]['total_score']]);
             }
@@ -315,7 +315,7 @@ class Result
             if($r['grade'] == 0) {
                 $exams[$r['idexam']]['attempt'][$r['exam_date']]['grade'] = $caesura[$r['score']];
             } else {
-                $exams[$r['idexam']]['attempt'][$r['exam_date']]['grade'] = 4;
+                $exams[$r['idexam']]['attempt'][$r['exam_date']]['grade'] = "1,0";
             }
         }
         return $exams;

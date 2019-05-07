@@ -154,12 +154,19 @@ class Result
             $proces[$r['idproces']]['proces_description'] = $r['proces_description'];
             $proces[$r['idproces']]['assignments'][$r['idassignment']]['assignment_description'] = $r['assignment_description'];
             $proces[$r['idproces']]['assignments'][$r['idassignment']]['min_score'] = $r['min_score'];
+            if($r['min_score'] > 0) {
+                $examresults['critical_assignments'][$r['idassignment']]['description'] = $r['assignment_description'];
+                if(!$examresults['critical_assignments'][$r['idassignment']]['passed']) {
+                    $examresults['critical_assignments'][$r['idassignment']]['passed'] = 1;
+                }
+            }
             $proces[$r['idproces']]['assignments'][$r['idassignment']]['aspects'][$r['idaspect']]['aspect_description'] = $r['aspect_description'];
             if(in_array($r['idaspect'], $results)) {
                 $proces[$r['idproces']]['assignments'][$r['idassignment']]['aspects'][$r['idaspect']]['result'] = $r['score'];
                 if($r['score'] < $r['min_score']) {
-                    $examresults['criteria'] = false;
-
+                    $examresults['criteria'] = -1;
+                    //$examresults['critical_assignments'][$r['idassignment']]['description'] = $r['assignment_description'];
+                    $examresults['critical_assignments'][$r['idassignment']]['passed'] = -1;
                 } else {
                     $proces[$r['idproces']]['proces_score'] += $r['score'];
                 }
@@ -173,7 +180,7 @@ class Result
         foreach($proces as $p) {
             $total_score += $p['proces_score'];
         }
-        if($examresults['criteria']) {
+        if($examresults['criteria'] == -1) {
             $examresults['total_score'] = 0;
             $examresults['grade']  = 4;
         } else {

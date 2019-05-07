@@ -113,6 +113,21 @@
 </table>
 <table>
     <tr>
+        <td colspan="2">Kritische criteria</td>
+    </tr>
+    <tr>
+        <td colspan="2">Cruciaal criterium</td>
+    </tr>
+    </tr>
+    {% for key, ass in results.critical_assignments %}
+    <tr>
+        <td>{{ ass.description }}</td>
+        <td>{% if ass.passed != 1 %}Niet behaald{% else %}Behaald{% endif %}</td>
+    </tr>
+    {% endfor %}
+</table>
+<table>
+    <tr>
         <td colspan="{{ results.caesura | length }}">Cesuur</td>
     </tr>
     <tr>

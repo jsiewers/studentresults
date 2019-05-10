@@ -227,11 +227,19 @@ class Result
             } else {
                 $result[$key]['grade'] = str_replace(",", ".", $caesura[$result[$key]['total_score']]);
             }
+            $result[$key]['cohort'] = $this->getCohort($value['idgroup']);
             $result[$key]['attempt'] = $attempts[$result[$key]['student_idstudent']];
             $result[$key]['assessors'] = $this->getAssessorsByExamByDate();
         }
         return $result;
     }
+
+    public function getCohort($idgroup) {
+        $start_cohort =  "201".substr($idgroup,-2,1);
+        $end_cohort = (int)$start_cohort + 1;
+        return $start_cohort." / ".$end_cohort;
+    }
+
 
     public function getExamDates() {
         $sql = "select distinct 

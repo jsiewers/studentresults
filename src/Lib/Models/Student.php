@@ -26,6 +26,14 @@ class Student
         return $this->first_name. $p . " " . $this->last_name;
     }
 
+    public function getCohort() {
+         //$start_cohort =  "201".substr($this->idgroup,-1,1);
+         //$end_cohort = (int)$start_cohort + 1;
+         //return $start_cohort. " / ".$end_cohort;
+        return "hallo";
+
+    }
+
     public function read() {
         $sql = "SELECT * FROM student ORDER BY idgroup, last_name LIMIT 50";
         $stmt = $this->pdo->prepare($sql);

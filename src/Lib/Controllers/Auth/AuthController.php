@@ -74,7 +74,7 @@ class AuthController
 			'email' => v::noWhitespace()->notEmpty()->email(),
             'first_name' => v::noWhitespace()->notEmpty()->alpha(),
             'last_name' => v::noWhitespace()->notEmpty()->alpha(),
-			'password' => v::noWhitespace()->notEmpty(),
+			'password' => v::notEmpty()->length(8, 254),
             'roles' => v::arrayType()->notEmpty()
 		]);
 

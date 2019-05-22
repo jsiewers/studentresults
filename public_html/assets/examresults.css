@@ -36,12 +36,6 @@ nav ul li a {
     color:white;
 }
 
-@media print {
-    nav {
-        display: none;
-    }
-}
-
 
 form.exam_create {
     border:1px solid black;
@@ -102,8 +96,19 @@ p.pagebreak {
     font-size: 0px;
 }
 
+
+
 @media print {
-    p.pagebreak {page-break-after: always;}
+    p.pagebreak {
+        page-break-after: always;
+    }
+    nav {
+        display: none;
+    }
+    .noprint {
+        display: none;
+    }
+
 }
 
 @page {
@@ -117,3 +122,4 @@ p.pagebreak {
 @page :right {
     margin-left: 0cm;
 }
+

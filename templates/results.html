@@ -1,10 +1,10 @@
 
 {% extends "layout.html" %}
 {% block content %}
-<h1>Results</h1>
-<h3>{{ student.fullName() }}</h3>
-<p>Beschikbare examens</p>
-<table>
+<h1 class="noprint">Results</h1>
+<h3>{{ student.idstudent }} {{ student.fullName() }} {{ student.idgroup }}</h3>
+<p class="noprint">Beschikbare examens</p>
+<table class="noprint">
     {% for exam in exams %}
     <tr>
         <td>{{ exam.examcode }}</td>
@@ -27,5 +27,5 @@
     </tr>
     {% endfor %}
 </table>
-<a href="/studentresults/{{student.idstudent}}/all">Alle resultaten voor deze student</a>
+<a class="noprint" href="/studentresults/{{student.idstudent}}/all">Alle resultaten voor deze student</a>
 {% endblock %}

@@ -59,15 +59,23 @@ class Student
         return $stmt->fetchAll();
     }
 
+//    public function readById($idstudent) {
+//        $sql = "SELECT * FROM student WHERE idstudent = :idstudent";
+//        $stmt = $this->pdo->prepare($sql);
+//        $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
+//        $stmt->execute();
+//        $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Student::class, [$this->pdo]);
+//        return $stmt->fetch();
+//    }
+
     public function readById($idstudent) {
-        $sql = "SELECT * FROM student WHERE idstudent = :idstudent";
+        $sql = "SELECT * FROM student, basegroup WHERE idstudent = :idstudent and student.idgroup = basegroup.idgroup";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Student::class, [$this->pdo]);
         return $stmt->fetch();
     }
-
 
     public function setup() {
         //$this->dropTable();

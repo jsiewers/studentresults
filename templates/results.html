@@ -1,6 +1,20 @@
 
-{% extends "layout.html" %}
+{% extends "layoutv2.html" %}
 {% block content %}
+<title>{{ student.idstudent }}-{{ student.fullName() }}-{{ student.idgroup }}</title>
+
+</head>
+<body>
+<div class="wrapper">
+    <nav>
+        <ul>
+            <li><a href="/exam/new">Examens</a></li>
+            <li><a href="/students">Studenten</a></li>
+            <li><a href="/signout">Uitloggen</a></li>
+            <li><a href="/signup">Gebruiker toevoegen</a></li>
+        </ul>
+    </nav>
+    <div id="content">
 <h1 class="noprint">Results</h1>
 <h3>{{ student.idstudent }} {{ student.fullName() }} {{ student.idgroup }}</h3>
 <p class="noprint">Beschikbare examens</p>

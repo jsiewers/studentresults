@@ -1,90 +1,106 @@
-{% extends "layout.html" %}
+{% extends "layoutv2.html" %}
 {% block content %}
-{% for result in results %}
-<h3>Aanwezigheid en resultaten Examen / Proces verbaal</h3>
-<table style="width:100%;">
-    <tr>
-        <td>Examencode</td>
-        <td>{{ result | first.examcode }}</td>
-    </tr>
-    <tr>
-        <td>Examennaam</td>
-        <td>{{ result | first.exam_description }}</td>
-    </tr>
-     <tr>
-        <td>Crebo</td>
-        <td>25187</td>
-    </tr>
-    <tr>
-        <td>Datum</td>
-        <td>{{ result | first.exam_date | date('d-m-Y') }}</td>
-    </tr>
-</table>
+<title>{{ results | first | first.examcode }}-results</title>
 
-<table style="width:100%;">
-    <tr>
-        <td>Studentnummer</td>
-        <td>Naam</td>
-        <td>Groep</td>
-        <td>Cohort</td>
-        <td>Opleidingscode</td>
-        <!--<td>Aanwezig</td>-->
-        <td>1e poging</td>
-        <td>2e poging</td>
-        <td>3e poging</td>
+</head>
+<body>
+<div class="wrapper">
+    <nav>
+        <ul>
+            <li><a href="/exam/new">Examens</a></li>
+            <li><a href="/students">Studenten</a></li>
+            <li><a href="/signout">Uitloggen</a></li>
+            <li><a href="/signup">Gebruiker toevoegen</a></li>
+        </ul>
+    </nav>
+    <div id="content">
+        {% for result in results %}
+        <h3>Aanwezigheid en resultaten Examen / Proces verbaal</h3>
+        <table style="width:100%;">
+            <tr>
+                <td>Examencode</td>
+                <td>{{ result | first.examcode }}</td>
+            </tr>
+            <tr>
+                <td>Examennaam</td>
+                <td>{{ result | first.exam_description }}</td>
+            </tr>
+            <tr>
+                <td>Crebo</td>
+                <td>25187</td>
+            </tr>
+            <tr>
+                <td>Datum</td>
+                <td>{{ result | first.exam_date | date('d-m-Y') }}</td>
+            </tr>
+        </table>
 
-        <!--<td>O/V/G</td>-->
-    </tr>
-    {% for student in result %}
-     <tr>
-         <td>{{ student.student_idstudent }}</td>
-         <td>{{ student.fullname }}</td>
-         <td>{{ student.idgroup }}</td>
-         <td>{{ student.cohort }}</td>
-         <td>25187</td>
-         <!--<td></td>-->
-         <td style="text-align: right;">{% if student.attempt.count == 1 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
-         <td style="text-align: right;">{% if student.attempt.count == 2 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
-         <td style="text-align: right;">{% if student.attempt.count == 3 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
-         <!--<td>{%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}</td>-->
-    </tr>
-    {% endfor %}
-</table>
-Opmerkingen n.a.v. examensessie
-<table style="width:100%;">
-    <tr>
-        <td><p style="padding:20px;"></p></td>
-    </tr>
-</table>
-<p>Naam surveillanten: ........................</p>
-<p>Paraaf surveillanten: ........................</p> <!--<img class="handtekening_klein" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png"><img class="handtekening_klein"  src="{{ base_url() }}/assets/img/handtekening_piet.png"></p>-->
+        <table style="width:100%;">
+            <tr>
+                <td>Studentnummer</td>
+                <td>Naam</td>
+                <td>Groep</td>
+                <td>Cohort</td>
+                <td>Opleidingscode</td>
+                <!--<td>Aanwezig</td>-->
+                <td>1e poging</td>
+                <td>2e poging</td>
+                <td>3e poging</td>
 
-Opmerkingen n.a.v. correctie
-<table style="width:100%;">
-    <tr>
-        <td><p style="padding:20px;"></p></td>
-    </tr>
-</table>
-<p>Datum: {{ result | first.exam_date | date_modify("+10 days") | date('d-m-Y') }}</p>
-<p>Naam correctoren: {%for assessor in result | first.assessors %} {{ assessor.fullname }}{% if not loop.last %},{% endif %}{% endfor %}</p>
-<p>Paraaf correctoren: </p> <!--<img class="handtekening_klein" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png"><img class="handtekening_klein"  src="{{ base_url() }}/assets/img/handtekening_piet.png"></p>-->
+                <!--<td>O/V/G</td>-->
+            </tr>
+            {% for student in result %}
+            <tr>
+                <td>{{ student.student_idstudent }}</td>
+                <td>{{ student.fullname }}</td>
+                <td>{{ student.idgroup }}</td>
+                <td>{{ student.cohort }}</td>
+                <td>25187</td>
+                <!--<td></td>-->
+                <td style="text-align: right;">{% if student.attempt.count == 1 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
+                <td style="text-align: right;">{% if student.attempt.count == 2 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
+                <td style="text-align: right;">{% if student.attempt.count == 3 %}{{ student.grade }} ({%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}){% endif %}</td>
+                <!--<td>{%if student.grade >= 8 %} G {% elseif student.grade >= 5.5 %} V {% else %} O {% endif %}</td>-->
+            </tr>
+            {% endfor %}
+        </table>
+        Opmerkingen n.a.v. examensessie
+        <table style="width:100%;">
+            <tr>
+                <td><p style="padding:20px;"></p></td>
+            </tr>
+        </table>
+        <p>Naam surveillanten: ........................</p>
+        <p>Paraaf surveillanten: ........................</p> <!--<img class="handtekening_klein" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png"><img class="handtekening_klein"  src="{{ base_url() }}/assets/img/handtekening_piet.png"></p>-->
 
-<table style="width:100%;">
-    <tr>
-        <td>Vastgesteld door TEC</td>
-        <td>
-            <p>Datum ....................</p>
-            <p>Naam  ....................</p>
-        </td>
-        <td>Invoer in Eduarte</td>
-        <td>
-            <p>Datum ....................</p>
-            <p>Naam  ....................</p>
-        </td>
-    </tr>
-</table>
-</table>
+        Opmerkingen n.a.v. correctie
+        <table style="width:100%;">
+            <tr>
+                <td><p style="padding:20px;"></p></td>
+            </tr>
+        </table>
+        <p>Datum: {{ result | first.exam_date | date_modify("+10 days") | date('d-m-Y') }}</p>
+        <p>Naam correctoren: {%for assessor in result | first.assessors %} {{ assessor.fullname }}{% if not loop.last %},{% endif %}{% endfor %}</p>
+        <p>Paraaf correctoren: </p> <!--<img class="handtekening_klein" src="{{ base_url() }}/assets/img/handtekening_jan_jaap.png"><img class="handtekening_klein"  src="{{ base_url() }}/assets/img/handtekening_piet.png"></p>-->
 
-<p class="pagebreak" p>
-    {% endfor %}
+        <table style="width:100%;">
+            <tr>
+                <td>Vastgesteld door TEC</td>
+                <td>
+                    <p>Datum ....................</p>
+                    <p>Naam  ....................</p>
+                </td>
+                <td>Invoer in Eduarte</td>
+                <td>
+                    <p>Datum ....................</p>
+                    <p>Naam  ....................</p>
+                </td>
+            </tr>
+        </table>
+        </table>
+
+        <p class="pagebreak"></p>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

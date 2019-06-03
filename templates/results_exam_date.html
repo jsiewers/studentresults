@@ -57,7 +57,7 @@ Opmerkingen n.a.v. examensessie
         <td><p style="padding:20px;"></p></td>
     </tr>
 </table>
-<p>Naam surveillanten .................................</p>
+<p>Naam surveillanten: {%for assessor in assessors %} {{ assessor.fullname }}{% if not loop.last %}, {% endif %}{% endfor %}</p>
 <p>Paraaf surveillanten ...............................</p>
 
 Opmerkingen n.a.v. correctie
@@ -67,7 +67,7 @@ Opmerkingen n.a.v. correctie
     </tr>
 </table>
 <p>Datum: {{ result | first.exam_date | date_modify("+10 days") | date('d-m-Y') }}</p>
-<p>Naam correctoren: {%for assessor in assessors %} {{ assessor.fullname }}{% if not loop.last %},{% endif %}{% endfor %}</p>
+<p>Naam correctoren: {%for assessor in assessors %} {{ assessor.fullname }}{% if not loop.last %}, {% endif %}{% endfor %}</p>
 <p>Paraaf correctoren: ...............................</p>
 
 <table style="width:100%;">

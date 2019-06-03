@@ -1,6 +1,6 @@
 {% extends "layoutv2.html" %}
 {% block content %}
-<title>{{ student.idstudent }}-{{ student.fullName() }}-[{{exam.examcode}}]</title>
+<title>{{ student.idstudent }}-{{ student.fullName() }}-[{{exam.examcode}}]-{{ results.exam_date | date('Ymd') }}</title>
 
 </head>
 <body>

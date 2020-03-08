@@ -50,6 +50,30 @@ class ResultController
 
     }
 
+    public function all_newresults(Request $request, Response $response, array $args = []) {
+        $student = new Student($this->db);
+        $student = $student->readById($request->getAttribute("idstudent"));
+        $exam = new Exam($this->db);
+        $exams = $exam->readByStudentIdResult($student->idstudent);
+        $r = new Result($this->db);
+        $r->idstudent = $student->idstudent;
+        $all_results = [];
+        foreach($exams as $exam) {
+            $r->idexam = $exam['idexam'];
+            $r->exam_date = $exam['exam_date'];
+            $assessors = $r->getAssessorsByExamByDate();
+            $all_results[] = $r->resultsByExamStudentsWithAllAspects();
+        }
+
+
+        $this->view->render($response, 'all_results_detail_with_aspects.html', [
+            'all_results' => $all_results,
+            'assessors' => $assessors,
+            'student' => $student,
+        ]);
+
+    }
+
     public function results(Request $request, Response $response, array $args = []) {
         $student = new Student($this->db);
         $exam = new Exam($this->db);
@@ -130,24 +154,24 @@ class ResultController
 
     }
 
-    public function studentResultsAll(Request $request, Response $response, array $args = []) {
-        $result = new Result($this->db);
-        $result->idexam = ($request->getAttribute('idexam'));
-
-        $dates = $result->getExamDates();
-        foreach($dates as $date) {
-            $result->exam_date = $date['exam_date'];
-            $results[] = $result->resultsByExamStudents();
-        }
-
-        //var_dump($results);
-
-        $this->view->render($response, 'results_exam.html', [
-            'results' => $results,
-            'assessorteams' => $assessorteams
-        ]);
-
-    }
+//    public function studentResultsAll(Request $request, Response $response, array $args = []) {
+//        $result = new Result($this->db);
+//        //result->idexam = ($request->getAttribute('idexam'));
+//
+//        $dates = $result->getExamDates();
+//        foreach($dates as $date) {
+//            $result->exam_date = $date['exam_date'];
+//            $results[] = $result->resultsByExamStudents();
+//        }
+//
+//        //var_dump($results);
+//
+//        $this->view->render($response, 'results_exam.html', [
+//            'results' => $results,
+//            //'assessorteams' => $assessorteams
+//        ]);
+//
+//    }
 
     public function detail(Request $request, Response $response, array $args = []) {
         $student = new Student($this->db);

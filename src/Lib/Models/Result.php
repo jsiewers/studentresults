@@ -103,6 +103,9 @@ class Result
     public function resultsByExamStudentsWithAllAspects() {
         $sql = "select
                 er.exam_date,
+                e.idexam,
+                e.description as exam_description,
+                e.examcode as exam_code,
                 p.idproces,
                 p.description as proces_description,
                 ass.idassignment,
@@ -143,13 +146,17 @@ class Result
             $results[] = $row['idaspect'];
         };
 
+        $assessors = $this->getAssessorsByExamByDate();
+
+        $examresults['idexam'] = $examdata[0]['idexam'];
+        $examresults['exam_description'] = $examdata[0]['exam_description'];
         $examresults['exam_date'] = $examdata[0]['exam_date'];
+        $examresults['exam_code'] = $examdata[0]['exam_code'];
         $examresults['comment'] = $examdata[0]['comment'];
-        $examresults['assessor1'] = $examdata[0]['assessor1'];
-        $examresults['assessor2'] = $examdata[0]['assessor2'];
+        $examresults['assessor1'] = $assessors[$examdata[0]['assessor1']]['fullname'];
+        $examresults['assessor2'] = $assessors[$examdata[0]['assessor2']]['fullname'];
         $examresults['caesura'] = explode(" ",$examdata[0]['caesura']);
         $examresults['criteria'] = 1;
-        //var_dump($examresults);
         foreach($examdata as $r) {
             $proces[$r['idproces']]['proces_description'] = $r['proces_description'];
             $proces[$r['idproces']]['assignments'][$r['idassignment']]['assignment_description'] = $r['assignment_description'];
@@ -165,7 +172,6 @@ class Result
                 $proces[$r['idproces']]['assignments'][$r['idassignment']]['aspects'][$r['idaspect']]['result'] = $r['score'];
                 if($r['score'] < $r['min_score']) {
                     $examresults['criteria'] = -1;
-                    //$examresults['critical_assignments'][$r['idassignment']]['description'] = $r['assignment_description'];
                     $examresults['critical_assignments'][$r['idassignment']]['passed'] = -1;
                 } else {
                     $proces[$r['idproces']]['proces_score'] += $r['score'];
@@ -188,7 +194,6 @@ class Result
             $examresults['grade']  = str_replace(",", ".", $examresults['caesura'][$total_score]);
         }
         $examresults['processes'] = $proces;
-        //var_dump($examresults);
         return $examresults;
     }
 

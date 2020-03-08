@@ -52,7 +52,7 @@ class Auth
     public function attempt($email, $password) {
         $user = new User($this->pdo);
         $authenticated_user = $user->readByEmailAndPassword($email, $password);
-        var_dump($authenticated_user);
+        //var_dump($authenticated_user);
         //$authenticated_user->pdo = null;
         if(!$authenticated_user) {
             return false;

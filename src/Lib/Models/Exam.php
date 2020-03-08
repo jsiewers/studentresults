@@ -30,6 +30,15 @@ class Exam
         return $stmt->fetchAll();
 
     }
+    public function readByStudentIdResult($idstudent)
+    {
+        $sql = "select distinct idexam, exam_date from exam_result er join student s on s.idstudent = er.idstudent where s.idstudent = :idstudent";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
+    }
 
     public function read()
     {

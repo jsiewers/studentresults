@@ -148,7 +148,8 @@ class User
             var_dump($e->getMessage());
         }
 
-        if(password_verify($password, $user->getPassword())) {
+
+        if(is_object($user) && password_verify($password, $user->getPassword())) {
             $user->roles = $this->setRoles($user->iduser);
             return $user;
         } else {

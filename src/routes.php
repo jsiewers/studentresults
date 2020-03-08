@@ -40,6 +40,7 @@ $app->group('', function () {
     $this->post('/aspect/{idexam }/{idproces }/{idassignment}/{idaspect}/update', 'AspectController:update');
     $this->get('/results/{idstudent}', 'ResultController:results')->setName('student.results');
     $this->get('/newresult/{idstudent}/{idexam}/{exam_date}', 'ResultController:newresult');
+    $this->get('/all_newresults/{idstudent}', 'ResultController:all_newresults');
     $this->get('/result/{idstudent}/{idexam}/{exam_date}/{template}', 'ResultController:detail');
     $this->get('/result/{idstudent}/{idexam}/{exam_date}/{template}/delete', 'ResultController:deleteResult');
     $this->get('/result/{idexam}/{exam_date}', 'ResultController:studentResults');

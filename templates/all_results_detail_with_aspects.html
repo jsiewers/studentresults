@@ -4,7 +4,6 @@
 
 </head>
 <body>
-{% for results in all_results %}
 <div class="wrapper">
     <nav>
         <ul>
@@ -15,7 +14,8 @@
         </ul>
     </nav>
     <div id="content">
-<table style="width:100%;">
+        {% for results in all_results %}
+        <table style="width:100%;">
     <tr>
         <td colspan="6"><b>{{ results.exam_description }}</b></td>
     </tr>
@@ -150,7 +150,7 @@
     </tr>
 </table>
 <p class="pagebreak"></p>
+        {% endfor %}
     </div>
 </div>
-{% endfor %}
 {% endblock %}

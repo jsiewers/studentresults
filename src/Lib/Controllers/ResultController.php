@@ -37,9 +37,10 @@ class ResultController
         $r->idstudent = $request->getAttribute("idstudent");
         $r->idexam = $request->getAttribute('idexam');
         $r->exam_date = $request->getAttribute("exam_date");
+        $assessors = $r->getAssessorsByExamByDate();
         $results = $r->resultsByExamStudentsWithAllAspects();
         $user = new User($this->db);
-        $assessors = $user->readByIds([$results['assessor1'], $results['assessor2']]);
+        //$assessors = $user->readByIds([$results['assessor1'], $results['assessor2']]);
 
         $this->view->render($response, 'result_detail_with_aspects.html', [
             'results' => $results,

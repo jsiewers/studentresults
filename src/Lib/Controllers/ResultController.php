@@ -41,12 +41,23 @@ class ResultController
         $results = $r->resultsByExamStudentsWithAllAspects();
         $user = new User($this->db);
         //$assessors = $user->readByIds([$results['assessor1'], $results['assessor2']]);
+        $report = $r->resultsByExamStudents($request->getAttribute('idstudent'));
 
-        $this->view->render($response, 'result_detail_with_aspects.html', [
+        if($exam->examcode == "LB") {
+            $page = 'lb_detail_with_aspects.html';
+        } elseif($exam->examcode == "BPV") {
+            $page = 'bpv_detail_with_aspects.html';
+        } else {
+            $page = 'result_detail_with_aspects.html';
+        }
+
+
+        $this->view->render($response, $page, [
             'results' => $results,
             'student' => $student,
             'exam' => $exam,
-            'assessors' => $assessors
+            'assessors' => $assessors,
+            'report' => $report
         ]);
 
     }
@@ -88,52 +99,81 @@ class ResultController
         ]);
     }
 
+    public function getNominationGroups($examgroups, $groups) {
+        $result = [];
+        foreach($examgroups as $group => $total) {
+            if(in_array($group, array_keys($groups))) {
+                $result[$group] = $total;
+                $result[$group]['description'] = $groups[$group];
+            }
+        }
+        return $result;
+    }
+
     public function nomination(Request $request, Response $response, array $args = []) {
         $student = new Student($this->db);
         $result = new Result($this->db);
-//        $result->getStudentExams($request->getAttribute('idstudent'));
-//        $r = new Result($this->db);
-//        $r->idstudent = $student->idstudent;
-//        $exam = new Exam($this->db);
-//        $exams = $exam->readByStudentIdResult($student->idstudent);
-//        foreach($exams as $exam) {
-//            $r->idexam = $exam['idexam'];
-//            $r->exam_date = $exam['exam_date'];
-//            $all_results[] = $r->resultsByExamStudentsWithAllAspects();
-//        }
-        $examgroups = $result->examgroupScores($result->examResultsByStudent($request->getAttribute('idstudent')));
+        $exams = $result->examResultsByStudent($request->getAttribute('idstudent'));
+        $examgroups = $result->examgroupScores($exams);
 
-        //Filter beroepsexamens
-        foreach($examgroups as $group => $total) {
-            $bgroups= array("B1-K1", "B1-K2", "B1-K3", "P1-K1");
-            if(in_array($group, $bgroups)) {
-                $beroepsexamens[$group] = $total;
-            }
-        }
+        //Filter basisberoepsexamens
+        $groups= [
+            "B1-K1" => "Levert een bijdrage aan het ontwikkeltraject",
+            "B1-K2" => "Realiseert en test onderdelen van een product",
+            "B1-K3" => "Levert een product op"
+        ];
 
-        //Filter BPV
-        foreach($examgroups as $group => $total) {
-            $bgroups= array("BPV  ");
-            if(in_array($group, $bgroups)) {
-                $bpv[$group] = $total;
-            }
-        }
+        $basisexamens = $this->getNominationGroups($examgroups, $groups);
 
-        //Filter LB
-        foreach($examgroups as $group => $total) {
-            $bgroups= array("LB   ");
-            if(in_array($group, $bgroups)) {
-                $lb[$group] = $total;
-            }
-        }
+        //Filter profieldeel
+        $groups= [
+                "P1-K1" => "Onderhoudt en beheert de applicatie",
+        ];
+
+        $profielexamens = $this->getNominationGroups($examgroups, $groups);
+
+        $groups= [
+            "BPV  " => "Eindoordeel BPV",
+        ];
+
+        $bpv = $this->getNominationGroups($examgroups, $groups);
+
+        $groups= [
+            "LB   " => "Loopbaan en burgerschap",
+        ];
+
+        $lb = $this->getNominationGroups($examgroups, $groups);
+
+        $groups= [
+            "K0497" => "Mobile Development (240 uur)",
+            "K0501" => "Veilig programmeren (240 uur)",
+            "K0505" => "Verdieping software (240 uur)",
+            "K0023" => "Digitale vaardigheden (240 uur)",
+            "K0842" => "Voorbereiding havo Biologie (480 uur)",
+            "K0846" => "Voorbereiding havo Natuurkunde (480 uur)",
+            "K0847" => "Voorbereiding havo Scheikunde (480 uur)",
+            "K0848" => "Voorbereiding havo Wiskunde A (480 uur)",
+        ];
+
+        $keuzedelen = $this->getNominationGroups($examgroups, $groups);
 
         $this->view->render($response, 'nomination.html', [
             'student' => $student->readById($request->getAttribute('idstudent')),
-            //'examresults' => $result->examResultsByStudent($request->getAttribute('idstudent')),
-            'beroepsexamens' => $beroepsexamens,
+            'exams' => $result->examResultsByStudent($request->getAttribute('idstudent')),
+            'basisexamens' => $basisexamens,
+            'profielexamens' => $profielexamens,
             'bpv' => $bpv,
             'lb' => $lb,
+            'keuzedelen' => $keuzedelen
         ]);
+
+    }
+
+    public function bpv(Request $request, Response $response, array $args = []) {
+        $student = new Student($this->db);
+        $idstudent = $request->getAttribute('idstudent');
+
+
 
     }
 
@@ -203,6 +243,17 @@ class ResultController
 
     }
 
+//    public function studentResultsByStudent(Request $request, Response $response, array $args = []) {
+//        $result = new Result($this->db);
+//        $result->idexam = $request->getAttribute('idexam');
+//        $result->exam_date = $request->getAttribute('exam_date');
+//        $result = $result->resultsByExamStudents($request->getAttribute('idstudent');
+//
+//        $this->view->render($response, 'results_exam_date.html', [
+//            'result' => $result,
+//        ]);
+
+//    }
     public function studentResultsAll(Request $request, Response $response, array $args = []) {
         $result = new Result($this->db);
         $result->idexam = ($request->getAttribute('idexam'));

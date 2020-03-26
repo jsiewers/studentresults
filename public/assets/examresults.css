@@ -66,26 +66,32 @@ table.noborder, table.noborder td, table.noborder tr {
     border:none;
 }
 
-table.nomination {
-    width:100%;
-}
 
 table.grey, tr.grey {
     background-color:lightgrey;
 }
 
-table.nomination {
+table.nomination, table.lb {
+    min-width:0px;
     width:100%;
     padding:1px;
     border:none;
     border-collapse: collapse;
 }
-table.exam td:first-child {
-    width:80%;
-}
+/*table.exam td:first-child {*/
+    /*width:80%;*/
+/*}*/
 
 table.algemeen td {
     width:33%;
+}
+
+table.lb td {
+    width:50%;
+}
+
+td.lb {
+    padding-bottom:0px;
 }
 
 table tr.white, tr.white td {
@@ -100,9 +106,21 @@ ul.list {
     list-style-type: none;
 }
 
+.handtekening img, img.handtekening {
+    max-width: 140px;
+    max-height: 70px;
+}
+
 .handtekening {
-    max-width: 200px;
-    max-height: 100px;
+    position: absolute;
+    left:100px
+}
+
+img.handtekening {
+    position: relative;
+    left:0px;
+    max-width: 180px;
+    max-height: 90px;
 }
 
 .handtekening_klein {

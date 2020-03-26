@@ -158,8 +158,10 @@ class Result
         $examresults['exam_date'] = $examdata[0]['exam_date'];
         $examresults['exam_code'] = $examdata[0]['exam_code'];
         $examresults['comment'] = $examdata[0]['comment'];
-        $examresults['assessor1'] = $examdata[0]['assessor1_fullname'];
-        $examresults['assessor2'] = $examdata[0]['assessor2_fullname'];
+        $examresults['assessor1_fullname'] = $examdata[0]['assessor1_fullname'];
+        $examresults['assessor2_fullname'] = $examdata[0]['assessor2_fullname'];
+        $examresults['assessor1'] = $examdata[0]['assessor1'];
+        $examresults['assessor2'] = $examdata[0]['assessor2'];
 //        $examresults['assessor1'] = $assessors[$examdata[0]['assessor1']]['fullname'];
 //        $examresults['assessor2'] = $assessors[$examdata[0]['assessor2']]['fullname'];
         $examresults['caesura'] = explode(" ",$examdata[0]['caesura']);
@@ -206,7 +208,8 @@ class Result
     }
 
 
-    public function resultsByExamStudents() {
+    public function resultsByExamStudents($idstudent = "") {
+        $where_student = ($idstudent == "") ? "" : " and s.idstudent = :idstudent";
         $sql = "select 
                 er.idexam,
                 e.examcode,
@@ -231,17 +234,22 @@ class Result
                 join assignment  as ass on a.idassignment = ass.idassignment
                 join user as u1 on er.assessor1 = u1.iduser
                 join user as u2 on er.assessor2 = u2.iduser
-                join basegroup b on s.idgroup = b.idgroup               
-                where er.idexam = :idexam and e.active = 1 and er.exam_date = :exam_date
-                group by student_idstudent order by idgroup, exam_description, caesura, s.last_name";
+                join basegroup b on s.idgroup = b.idgroup
+                where er.idexam = :idexam and e.active = 1 and er.exam_date = :exam_date". $where_student.
+                " group by student_idstudent order by idgroup, exam_description, caesura, s.last_name";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idexam', $this->idexam, PDO::PARAM_INT);
         $stmt->bindParam(':exam_date', $this->exam_date, PDO::PARAM_STR);
+        if($where_student != "") {
+            $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
+        }
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
         return $this->getGrade(explode(" ",$result[0]['caesura']), $result, $this->getOccurencesUntilDate());
     }
+
+
 
 
 
@@ -370,11 +378,13 @@ class Result
            if (!isset($exams[$r['idexam']]['highest_score'])) {
                $grade = (float) str_replace(",", ".", $caesura[$r['score']]);
                $exams[$r['idexam']]['highest_score'] = $grade;
+               $exams[$r['idexam']]['highest_letter_score'] = $this->getLetterGrade($grade);
            } else if($exams[$r['idexam']]['highest_score'] < $grade) {
                $exams[$r['idexam']]['highest_score'] = $grade;
+               $exams[$r['idexam']]['highest_letter_score'] = $this->getLetterGrade($grade);
            }
         }
-        $this->examgroupScores($exams);
+        //$this->examgroupScores($exams);
         return $exams;
     }
 

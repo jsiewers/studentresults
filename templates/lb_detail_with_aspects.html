@@ -1,0 +1,95 @@
+{% extends "layoutv2.html" %}
+{% block content %}
+<title>{{ student.idstudent }}-{{ student.fullName() }}-[{{exam.examcode}}]-{{ results.exam_date | date('Ymd') }}</title>
+
+</head>
+<body>
+<div class="wrapper">
+    <h3>
+        <b>Verklaring afronding Loopbaan en burgerschap</b>
+    </h3>
+<table class="lb">
+
+    <tr>
+        <td><b>Student:</b></td>
+        <td>{{ student.fullName() }}</td>
+    </tr>
+    <tr>
+        <td><b>OV-nummer:</b></td>
+        <td>{{ student.idstudent }}</td>
+    </tr>
+    <tr>
+        <td><b>Crebonummer</b></td>
+        <td>25187</td>
+    </tr>
+    <tr>
+        <td><b>Niveau:</b></td>
+        <td>4</td>
+    </tr>
+    <tr>
+        <td><b>Cohort:</b></td>
+        <td>{{ student.cohort }}</td>
+    </tr>
+    <tr>
+        <td><b>Coach/docent SLB:</b></td>
+        <td>Jan Jaap Siewers</td>
+    </tr>
+    <tr class="white"><td colspan="2">De student heeft voldaan aan de inspanningsverplichting zoals beschreven in de studiewijzer/OER van bovengenoemde opleiding.</td></tr>
+
+    <tr>
+        <td rowspan="2"><b>Loopbaan</b></td>
+        <td>Datum: {{ report | first.exam_date | date('d-m-Y') }}</td>
+    </tr>
+    <tr>
+        <td class="lb">
+            <p>Handtekening coach/docent SLB</p>
+            <p style="text-align:center"><img style="width:16%;" src="{{ base_url() }}/assets/img/handtekening_1.png"></p>
+        </td>
+    </tr>
+    <tr>
+        <td rowspan="2"><b>Politiek-juridische dimensie</b></td>
+        <td>Datum: {{ report | first.exam_date | date('d-m-Y') }}</td>
+    <tr>
+        <td class="lb">
+            <p>Handtekening coach/docent SLB</p>
+            <p style="text-align:center; height:100px;"><!--<img style="width:40%;" src="{{ base_url() }}/assets/img/handtekening_cynthia.png">--></p>
+        </td>
+    </tr>
+
+    <tr>
+        <td rowspan="2"><b>Economische dimensie</b></td>
+        <td>Handtekening coach/docent SLB</td>
+    <tr>
+    <td class="lb">
+        <p>Handtekening coach/docent SLB</p>
+        <p style="text-align:center; height:100px;"><!--<img style="width:40%;" src="{{ base_url() }}/assets/img/handtekening_cynthia.png">--></p>
+    </td>
+    </tr>
+
+    <tr>
+        <td rowspan="2"><b>Sociaal-maatschappelijke dimensie</b></td>
+        <td>Datum: {{ report | first.exam_date | date('d-m-Y') }}</td>
+    <tr>
+    <td class="lb">
+        <p>Handtekening coach/docent SLB</p>
+        <p style="text-align:center; height:100px;"><!--<img style="width:40%;" src="{{ base_url() }}/assets/img/handtekening_cynthia.png">--></p>
+    </td>
+    </tr>
+    <tr>
+        <td rowspan="2"><b>Dimensie vitaal burgerschap</b></td>
+        <td>Datum: {{ report | first.exam_date | date('d-m-Y') }}</td>
+    </tr>
+    <tr>
+        <td class="lb">
+            <p>Handtekening coach/docent SLB</p>
+            <p style="text-align:center; height:100px;"><!--<img style="width:40%;" src="{{ base_url() }}/assets/img/handtekening_cynthia.png">--></p>
+        </td>
+    </tr>
+</table>
+<p>MBO College Almere Verklaring Loopbaan en Burgerschap</p>
+
+<p class="pagebreak" p>
+    </div>
+</div>
+
+{% endblock %}

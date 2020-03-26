@@ -1,7 +1,7 @@
 
 {% extends "layoutv2.html" %}
 {% block content %}
-<title>{{ student.idstudent }}-{{ student.fullName() }}-{{ student.idgroup }}</title>
+<title>{{ student.idstudent }}-{{ student.fullName() }}-{{ student.idgroup }}-voordracht-diplomering</title>
 
 </head>
 <body>
@@ -40,159 +40,220 @@
         </table>
         <table class="nomination exam">
             <tr class="grey">
-                <td><b>Specifieke examens (inclusief specifieke taal-/rekenen-/kennistoetsen i.v.t)</b></td>
-                <td>O/V/G</td>
-                <td>S/Z</td>
+                <td colspan="3"><b>Specifieke examens (inclusief specifieke taal-/rekenen-/kennistoetsen i.v.t)</b></td>
             </tr>
-            <tr class="white"><td colspan="5"></td></tr>
-            {% for idexamgroup, examgroup in beroepsexamens %}
-            {% set counter = (counter | default(1) ) %}
+            <tr class="grey">
+                <td colspan="2"><b>Basisdeel</b></td>
+                <td>Document aanwezig</td>
+            </tr>
+        {% for idexamgroup, examgroup in basisexamens %}
+            <tr class="grey">
+                <td colspan="3"><b>{{ idexamgroup }}: {{ examgroup.description}}</b></td>
+            </tr>
+            {% for proces in examgroup.exams %}
+            <tr>
+                <td colspan="2">{{ proces.description }}</td>
+                <td style="text-align:right;">J</td>
+            </tr>
 
-            <tr>
-                <td>Kerntaak {{ counter }} ({{ idexamgroup }})</td>
-                <td>{{ examgroup.total}}</td>
-                <td>J</td>
-            </tr>
-            {% set counter = counter + 1 %}
-            {% endfor %}
-            <tr class="white"><td colspan="5"></td></tr>
-            <tr class="grey"><td colspan="3"><b>BPV</b></td></tr>
-            <tr class="white"><td colspan="5"></td></tr>
-            {% for idexamgroup, examgroup in bpv %}
-            <tr>
-                <td>Eindoordeel BPV</td>
-                <td>{{ examgroup.total}}</td>
-                <td>J</td>
             </tr>
             {% endfor %}
+        {% endfor %}
+            <tr class="white"><td colspan="3"></td></tr>
+            <tr class="grey">
+                <td colspan="2"><b>Profieldeel</b></td>
+                <td>Document aanwezig</td>
+            </tr>
+            {% for idexamgroup, examgroup in profielexamens %}
+            <tr class="grey">
+                <td colspan="3"><b>{{ idexamgroup }}: {{ examgroup.description}}</b></td>
+            </tr>
+            {% for proces in examgroup.exams %}
             <tr>
-                <td>POK laatste BPV op uitstroom: A=aanwezig; NA=niet aanwezig</td>
-                <td>A</td>
-                <td>J</td>
+                <td colspan="2">{{ proces.description }}</td>
+                <td style="text-align:right;">J</td>
+            </tr>
+
+            </tr>
+            {% endfor %}
+        {% endfor %}
+            <tr class="white"><td colspan="3"></td></tr>
+            <tr class="grey">
+                <td colspan="2"><b>Keuzedelen (keuzedeelverplichting: 720 uur)</b></td>
+                <td>Document aanwezig</td>
+            </tr>
+            {% for idexamgroup, examgroup in keuzedelen %}
+            <tr class="grey">
+                <td colspan="3"><b>{{ idexamgroup }}: {{ examgroup.description}}</b></td>
+            </tr>
+            {% for proces in examgroup.exams %}
+            <tr>
+                <td colspan="2">{{ proces.description }}</td>
+                <td style="text-align:right;">J</td>
+            </tr>
+
+            </tr>
+            {% endfor %}
+            {% endfor %}
+            <tr class="white"><td colspan="3"></td></tr>
+        {% for idexamgroup, examgroup in bpv %}
+            <tr class="grey">
+                <td class="grey" colspan="2"><b>BPV</b></td>
+                <td>Document aanwezig</td>
+            </tr>
+            {% for proces in examgroup.exams %}
+            <tr class="grey">
+                <td colspan="3"><b>{{ proces.description }}</b></td>
+            </tr>
+
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="2">Eindoordeel BPV</td>
+                <td style="text-align:right;">J</td>
+            </tr>
+            <tr>
+                <td colspan="2">POK(s) kwalificerende BPV</td>
+                <td style="text-align:right;">J</td>
+            </tr>
+            <tr>
+                <td colspan="2">Urenregistratie kwalificerende BPV</td>
+                <td style="text-align:right;">J</td>
+            </tr>
+            {% endfor %}
+            <tr class="white"><td colspan="3"></td></tr>
+            {% for idexamgroup, examgroup in lb %}
+            <tr class="grey">
+                <td class="grey" colspan="2"><b>Loopbaan en burgerschap</b></td>
+                <td>Document aanwezig</td>
+            </tr>
+            {% for proces in examgroup.exams %}
+            <tr class="grey">
+                <td colspan="3"><b>{{ proces.description }}</b></td>
+            </tr>
+
+            </tr>
+            {% endfor %}
+            {% endfor %}
+            <tr>
+                <td colspan="2">Inspanningsverplichting</td>
+                <td style="text-align:right">J</td>
             </tr>
         </table>
         <table class="nomination">
             <tr class="grey">
                 <td colspan="4"><b>Generieke examens</b></td>
-                <td>S/Z</td>
             </tr>
-            <tr class="white"><td colspan="5"></td></tr>
+            <tr class="white"><td colspan="4"></td></tr>
             <tr>
                 <td><b>Vak</b></td>
                 <td><b>Niveau</b></td>
                 <td><b>Onderdeel</b></td>
-                <td><b>Cijfer</b></td>
-                <td><b></b></td>
+                <td><b>Document aanwezig</b></td>
             </tr>
             <tr>
-                <td><b>Nederlands</b></td>
-                <td>F3</td>
-                <td>Lezen/Luisteren</td>
-                <td></td>
-                <td></td>
+                <td rowspan="2"><b>CE Nederlands</b></td>
+                <td rowspan="2">3F</td>
+                <td>Lezen</td>
+                <td style="text-align:right;"></td>
             </tr>
             <tr>
-                <td><b></b></td>
-                <td>F3</td>
+                <td>Luisteren</td>
+                <td style="text-align:right;"></td>
+            </tr>
+            <tr>
+                <td rowspan="3"><b>IE Nederlands</b></td>
+                <td rowspan="3">3F</td>
                 <td>Schrijven</td>
-                <td></td>
-                <td></td>
+                <td style="text-align:right;"></td>
             </tr>
             <tr>
-                <td><b></b></td>
-                <td>F3</td>
                 <td>Spreken</td>
-                <td></td>
-                <td></td>
+                <td style="text-align:right;"></td>
             </tr>
             <tr>
-                <td><b></b></td>
-                <td>F3</td>
                 <td>Gesprekken voeren</td>
-                <td></td>
-                <td></td>
+                <td style="text-align:right;"></td>
+            </tr>
+
+
+            <tr>
+                <td><b></b></td>
+                <td>3F</td>
+                <td>Schrijven</td>
+                <td style="text-align:right;"></td>
             </tr>
             <tr>
                 <td><b></b></td>
-                <td style="text-align:right;"><b>Eindcijfer</b></td>
-                <td><b>Nederlands</b></td>
-                <td></td>
-                <td>J</td>
+                <td>3F</td>
+                <td>Spreken</td>
+                <td style="text-align:right;"></td>
             </tr>
-            <tr class="white"><td colspan="5"></td></tr>
+            <tr>
+                <td><b></b></td>
+                <td>3F</td>
+                <td>Gesprekken voeren</td>
+                <td style="text-align:right;"></td>
+            </tr>
+           <tr class="white"><td colspan="4"></td></tr>
             <tr>
             <tr>
                 <td><b>Rekenen</b></td>
-                <td style="text-align:right;"><b>Eindcijfer</b></td>
-                <td><b>Rekenen</b></td>
+                <td>3F/3ER**</td>
                 <td></td>
-                <td></td>
+                <td style="text-align:right;"></td>
             </tr>
-            <tr class="white"><td colspan="5"></td></tr>
+            <tr class="white"><td colspan="4"></td></tr>
             <tr>
-                <td><b>Engels</b></td>
-                <td>F3</td>
-                <td>Lezen/Luisteren</td>
-                <td></td>
-                <td></td>
+                <td rowspan="2"><b>CE Engels</b></td>
+                <td rowspan="2">B1</td>
+                <td>Lezen</td>
+                <td style="text-align:right;"></td>
             </tr>
             <tr>
-                <td><b></b></td>
-                <td>F3</td>
+                <td>Luisteren</td>
+                <td style="text-align:right;"></td>
+            </tr>
+            <tr>
+                <td rowspan="3"><b>IE Engels</b></td>
+                <td rowspan="3">A2</td>
                 <td>Schrijven</td>
-                <td></td>
-                <td></td>
+                <td style="text-align:right;"></td>
             </tr>
             <tr>
-                <td><b></b></td>
-                <td>F3</td>
                 <td>Spreken</td>
-                <td></td>
-                <td></td>
+                <td style="text-align:right;"></td>
             </tr>
             <tr>
-                <td><b></b></td>
-                <td>F3</td>
                 <td>Gesprekken voeren</td>
-                <td></td>
-                <td></td>
+                <td style="text-align:right;"></td>
             </tr>
-            <tr>
-                <td><b></b></td>
-                <td style="text-align:right;"><b>Eindcijfer</b></td>
-                <td><b>Engels</b></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="white"><td colspan="5"></td></tr>
-            <tr class="grey"><td colspan="4"><b>Loopbaan en burgerschap</b></td><td>S/Z</td></tr>
+             <tr class="white"><td colspan="4"></td></tr>
+            <tr class="grey"><td colspan="4"><b>Loopbaan en burgerschap</b></td></tr>
             <tr class="white"><td colspan="3"></td></tr>
             {% for idexamgroup, examgroup in lb %}
             <tr>
                 <td colspan="3">Inspanningsverplichting voldaan</td>
-                <td>{{ examgroup.total}}</td>
-                <td>J</td>
+                <td style="text-align:right;">J</td>
             </tr>
             {% endfor %}
         </table>
 
-        <p class="pagebreak"></p>
-
         <table class="nomination">
-            <tr class="grey"><td colspan="4"><b>Conclusie diplomeringsvergadering</b></td><td>J/N</td></tr>
-            <tr class="grey"><td colspan="4"><b>Kandidaat wordt voorgedragen voor diplomering</b></td><td>J</td></tr>
-            <tr class="white"><td colspan="5"></td></tr>
-            <tr>
-                <td><b>Voor akkoord</b></td>
+            <tr class="grey"><td colspan="3"><b>Conclusie diplomeringsvergadering</b></td><td style="text-align:right;">J/N</td></tr>
+            <tr><td colspan="3"><b>Kandidaat wordt voorgedragen voor diplomering</b></td><td style="text-align:right;">J</td></tr>
+            <tr class="white"><td colspan="4"></td></tr>
+            <tr class="grey">
+                <td><b>Controle TEC (inclusief Eduarte)</b></td>
                 <td><b>Naam</b></td>
                 <td><b>Datum</b></td>
-                <td colspan="2"><b>Paraaf</b></td>
+                <td><b>Paraaf</b></td>
             </tr>
             <tr>
-                <td>Voorzitter diplomeringsvergadering</td>
-                <td>Jan Jaap Siewers</td>
-                <td>{{ "now" | date("d/m/Y") }}</td>
-                <td colspan="2"></td>
+                <td>Akkoord / niet akkoord**<br><br><br></td>
+                <td></td>
+                <td></td>
+                <td ></td>
             </tr>
         </table>
 

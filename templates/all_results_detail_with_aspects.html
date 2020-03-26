@@ -145,8 +145,16 @@
         <td>Handtekening beoordelaar 2:</td>
     </tr>
     <tr>
-        <td>{{ results.assessor1 }}</td>
-        <td>{{ results.assessor2 }}</td>
+        <td>
+            <img class="handtekening" src="{{ base_url() }}/assets/img/handtekening_{{ results.assessor1 }}.png">
+        </td>
+        <td>
+            <img class="handtekening"  src="{{ base_url() }}/assets/img/handtekening_{{ results.assessor2 }}.png">
+        </td>
+    </tr>
+    <tr>
+        <td>{{ results.assessor1_fullname }}</td>
+        <td>{{ results.assessor2_fullname }}</td>
     </tr>
 </table>
 <p class="pagebreak"></p>

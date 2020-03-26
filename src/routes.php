@@ -51,12 +51,16 @@ $app->group('', function () {
     $this->get('/attempt/{idstudent}/{idexam}', 'ExamController:attempt');
     $this->post('/attempt/{idstudent}/{idexam}', 'ResultController:save');
     $this->get('/nomination/{idstudent}', 'ResultController:nomination');
+    $this->get('/bpv/{idstudent}', 'ResultController:bpv');
+    $this->get('/lb/{idstudent}', 'ResultController:lb');
     //$app->get('/presence', 'PresenceController:show');
     //$app->post('/presence/store', 'PresenceController:save');
     //$app->post('/presence', 'PresenceController:show');
     $this->get('/students', 'StudentController:show');
     $this->post('/students', 'StudentController:show');
 })->add(new AuthMiddleware($container));
+
+//http://localhost:8888/result/2518713/2019-08-26
 
 $app->group('', function () {
     $this->get('/signup', 'AuthController:getSignUp')->setName('auth.signup');

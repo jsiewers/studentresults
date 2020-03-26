@@ -88,6 +88,55 @@ class ResultController
         ]);
     }
 
+    public function nomination(Request $request, Response $response, array $args = []) {
+        $student = new Student($this->db);
+        $result = new Result($this->db);
+//        $result->getStudentExams($request->getAttribute('idstudent'));
+//        $r = new Result($this->db);
+//        $r->idstudent = $student->idstudent;
+//        $exam = new Exam($this->db);
+//        $exams = $exam->readByStudentIdResult($student->idstudent);
+//        foreach($exams as $exam) {
+//            $r->idexam = $exam['idexam'];
+//            $r->exam_date = $exam['exam_date'];
+//            $all_results[] = $r->resultsByExamStudentsWithAllAspects();
+//        }
+        $examgroups = $result->examgroupScores($result->examResultsByStudent($request->getAttribute('idstudent')));
+
+        //Filter beroepsexamens
+        foreach($examgroups as $group => $total) {
+            $bgroups= array("B1-K1", "B1-K2", "B1-K3", "P1-K1");
+            if(in_array($group, $bgroups)) {
+                $beroepsexamens[$group] = $total;
+            }
+        }
+
+        //Filter BPV
+        foreach($examgroups as $group => $total) {
+            $bgroups= array("BPV  ");
+            if(in_array($group, $bgroups)) {
+                $bpv[$group] = $total;
+            }
+        }
+
+        //Filter LB
+        foreach($examgroups as $group => $total) {
+            $bgroups= array("LB   ");
+            if(in_array($group, $bgroups)) {
+                $lb[$group] = $total;
+            }
+        }
+
+        $this->view->render($response, 'nomination.html', [
+            'student' => $student->readById($request->getAttribute('idstudent')),
+            //'examresults' => $result->examResultsByStudent($request->getAttribute('idstudent')),
+            'beroepsexamens' => $beroepsexamens,
+            'bpv' => $bpv,
+            'lb' => $lb,
+        ]);
+
+    }
+
     public function deleteResult(Request $request, Response $response, array $args = []) {
         $er = new Exam_result($this->db);
         $er->idexam = ($request->getAttribute('idexam'));
@@ -142,7 +191,7 @@ class ResultController
         $result = new Result($this->db);
         $result->idexam = $request->getAttribute('idexam');
         $result->exam_date = $request->getAttribute('exam_date');
-        $assessors = $result->getAssessorsByExamByDate();
+        //$assessors = $result->getAssessorsByExamByDate();
         $result = $result->resultsByExamStudents();
 //        $er = new Exam_result($this->db);
 //        $er->idexam = $request->getAttribute('idexam');
@@ -150,29 +199,28 @@ class ResultController
 
         $this->view->render($response, 'results_exam_date.html', [
             'result' => $result,
-            'assessors' => $assessors
         ]);
 
     }
 
-//    public function studentResultsAll(Request $request, Response $response, array $args = []) {
-//        $result = new Result($this->db);
-//        //result->idexam = ($request->getAttribute('idexam'));
-//
-//        $dates = $result->getExamDates();
-//        foreach($dates as $date) {
-//            $result->exam_date = $date['exam_date'];
-//            $results[] = $result->resultsByExamStudents();
-//        }
-//
-//        //var_dump($results);
-//
-//        $this->view->render($response, 'results_exam.html', [
-//            'results' => $results,
-//            //'assessorteams' => $assessorteams
-//        ]);
-//
-//    }
+    public function studentResultsAll(Request $request, Response $response, array $args = []) {
+        $result = new Result($this->db);
+        $result->idexam = ($request->getAttribute('idexam'));
+
+        $dates = $result->getExamDates();
+        foreach($dates as $date) {
+            $result->exam_date = $date['exam_date'];
+            $results[] = $result->resultsByExamStudents();
+        }
+
+        //var_dump($results);
+
+        $this->view->render($response, 'results_exam.html', [
+            'results' => $results,
+            //'assessorteams' => $assessorteams
+        ]);
+
+    }
 
     public function detail(Request $request, Response $response, array $args = []) {
         $student = new Student($this->db);

@@ -3,14 +3,7 @@ body {
     font-size: 14px;
 }
 
-@media print {
-    body {
-        font-size: 11px;
-    }
-    .hide {
-        display:none;
-    }
-}
+
 div.wrapper {
     width:80%;
     margin:auto;
@@ -34,12 +27,6 @@ nav ul li a {
     text-decoration:none;
     font-weight:700;
     color:white;
-}
-
-@media print {
-    nav {
-        display: none;
-    }
 }
 
 
@@ -79,6 +66,33 @@ table.noborder, table.noborder td, table.noborder tr {
     border:none;
 }
 
+table.nomination {
+    width:100%;
+}
+
+table.grey, tr.grey {
+    background-color:lightgrey;
+}
+
+table.nomination {
+    width:100%;
+    padding:1px;
+    border:none;
+    border-collapse: collapse;
+}
+table.exam td:first-child {
+    width:80%;
+}
+
+table.algemeen td {
+    width:33%;
+}
+
+table tr.white, tr.white td {
+    padding:10px;
+    border-left:none;
+    border-right:none;
+}
 
 ul.list {
     border:black solid 1px;
@@ -104,6 +118,19 @@ p.pagebreak {
 
 @media print {
     p.pagebreak {page-break-after: always;}
+    body {
+        font-size: 11px;
+    }
+    .hide {
+        display:none;
+    }
+
+    a.noprint {
+        display:none;
+    }
+    nav {
+        display: none;
+    }
 }
 
 @page {

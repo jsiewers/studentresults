@@ -1,0 +1,200 @@
+
+{% extends "layoutv2.html" %}
+{% block content %}
+<title>{{ student.idstudent }}-{{ student.fullName() }}-{{ student.idgroup }}</title>
+
+</head>
+<body>
+<div class="wrapper">
+    <div id="content">
+        <h3>OVERZICHT VOORDRACHT DIPLOMERING</h3>
+        <table class="nomination grey">
+            <tr><td><b>Algemene gegevens</b></td></tr>
+        </table>
+        <table class="nomination algemeen">
+            <tr>
+                <td><b>Naam kandidaat</b></td>
+                <td>{{ student.fullName() }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>OV-nummer</b></td>
+                <td>{{ student.idstudent }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>Opleiding (naam)</b></td>
+                <td>Applicatieontwikkeling</td>
+                <td><b>Niveau:</b> 4</td>
+            </tr>
+            <tr>
+                <td><b>Crebonummer</b></td>
+                <td>25187</td>
+                <td><b>Cohort:</b> {{ student.cohort }}</td>
+            </tr>
+            <tr>
+                <td><b>Diplomeringsjaar</b></td>
+                <td>2020</td>
+                <td></td>
+            </tr>
+        </table>
+        <table class="nomination exam">
+            <tr class="grey">
+                <td><b>Specifieke examens (inclusief specifieke taal-/rekenen-/kennistoetsen i.v.t)</b></td>
+                <td>O/V/G</td>
+                <td>S/Z</td>
+            </tr>
+            <tr class="white"><td colspan="5"></td></tr>
+            {% for idexamgroup, examgroup in beroepsexamens %}
+            {% set counter = (counter | default(1) ) %}
+
+            <tr>
+                <td>Kerntaak {{ counter }} ({{ idexamgroup }})</td>
+                <td>{{ examgroup.total}}</td>
+                <td>J</td>
+            </tr>
+            {% set counter = counter + 1 %}
+            {% endfor %}
+            <tr class="white"><td colspan="5"></td></tr>
+            <tr class="grey"><td colspan="3"><b>BPV</b></td></tr>
+            <tr class="white"><td colspan="5"></td></tr>
+            {% for idexamgroup, examgroup in bpv %}
+            <tr>
+                <td>Eindoordeel BPV</td>
+                <td>{{ examgroup.total}}</td>
+                <td>J</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td>POK laatste BPV op uitstroom: A=aanwezig; NA=niet aanwezig</td>
+                <td>A</td>
+                <td>J</td>
+            </tr>
+        </table>
+        <table class="nomination">
+            <tr class="grey">
+                <td colspan="4"><b>Generieke examens</b></td>
+                <td>S/Z</td>
+            </tr>
+            <tr class="white"><td colspan="5"></td></tr>
+            <tr>
+                <td><b>Vak</b></td>
+                <td><b>Niveau</b></td>
+                <td><b>Onderdeel</b></td>
+                <td><b>Cijfer</b></td>
+                <td><b></b></td>
+            </tr>
+            <tr>
+                <td><b>Nederlands</b></td>
+                <td>F3</td>
+                <td>Lezen/Luisteren</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b></b></td>
+                <td>F3</td>
+                <td>Schrijven</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b></b></td>
+                <td>F3</td>
+                <td>Spreken</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b></b></td>
+                <td>F3</td>
+                <td>Gesprekken voeren</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b></b></td>
+                <td style="text-align:right;"><b>Eindcijfer</b></td>
+                <td><b>Nederlands</b></td>
+                <td></td>
+                <td>J</td>
+            </tr>
+            <tr class="white"><td colspan="5"></td></tr>
+            <tr>
+            <tr>
+                <td><b>Rekenen</b></td>
+                <td style="text-align:right;"><b>Eindcijfer</b></td>
+                <td><b>Rekenen</b></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr class="white"><td colspan="5"></td></tr>
+            <tr>
+                <td><b>Engels</b></td>
+                <td>F3</td>
+                <td>Lezen/Luisteren</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b></b></td>
+                <td>F3</td>
+                <td>Schrijven</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b></b></td>
+                <td>F3</td>
+                <td>Spreken</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b></b></td>
+                <td>F3</td>
+                <td>Gesprekken voeren</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b></b></td>
+                <td style="text-align:right;"><b>Eindcijfer</b></td>
+                <td><b>Engels</b></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr class="white"><td colspan="5"></td></tr>
+            <tr class="grey"><td colspan="4"><b>Loopbaan en burgerschap</b></td><td>S/Z</td></tr>
+            <tr class="white"><td colspan="3"></td></tr>
+            {% for idexamgroup, examgroup in lb %}
+            <tr>
+                <td colspan="3">Inspanningsverplichting voldaan</td>
+                <td>{{ examgroup.total}}</td>
+                <td>J</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <p class="pagebreak"></p>
+
+        <table class="nomination">
+            <tr class="grey"><td colspan="4"><b>Conclusie diplomeringsvergadering</b></td><td>J/N</td></tr>
+            <tr class="grey"><td colspan="4"><b>Kandidaat wordt voorgedragen voor diplomering</b></td><td>J</td></tr>
+            <tr class="white"><td colspan="5"></td></tr>
+            <tr>
+                <td><b>Voor akkoord</b></td>
+                <td><b>Naam</b></td>
+                <td><b>Datum</b></td>
+                <td colspan="2"><b>Paraaf</b></td>
+            </tr>
+            <tr>
+                <td>Voorzitter diplomeringsvergadering</td>
+                <td>Jan Jaap Siewers</td>
+                <td>{{ "now" | date("d/m/Y") }}</td>
+                <td colspan="2"></td>
+            </tr>
+        </table>
+
+        <a class="noprint" href="/all_newresults/{{student.idstudent}}">Alle resultaten voor deze student</a>
+        {% endblock %}

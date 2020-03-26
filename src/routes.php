@@ -50,6 +50,7 @@ $app->group('', function () {
     $this->post('/students/import', 'StudentController:import');
     $this->get('/attempt/{idstudent}/{idexam}', 'ExamController:attempt');
     $this->post('/attempt/{idstudent}/{idexam}', 'ResultController:save');
+    $this->get('/nomination/{idstudent}', 'ResultController:nomination');
     //$app->get('/presence', 'PresenceController:show');
     //$app->post('/presence/store', 'PresenceController:save');
     //$app->post('/presence', 'PresenceController:show');

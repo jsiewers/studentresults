@@ -101,8 +101,8 @@ class Result
     }
 
     public function resultsByExamStudentsWithAllAspects() {
-        $sql = "select
-                er.exam_date,
+        //Informatie over alle het gemaakte examen op een bepaalde datum
+        $sql = "select er.exam_date,
                 e.idexam,
                 e.description as exam_description,
                 e.examcode as exam_code,
@@ -116,13 +116,17 @@ class Result
                 a.score,
                 er.comment,
                 er.assessor1,
+                concat(u1.first_name, ' ',  u1.last_name) as assessor1_fullname,
                 er.assessor2,
+                concat(u2.first_name, ' ',  u2.last_name) as assessor2_fullname,
                 e.caesura
                 from exam_result as er
                 join exam as e on er.idexam = e.idexam
                 join proces as p on p.idexam = e.idexam
                 join assignment as ass on p.idproces = ass.idproces
                 join aspect as a on ass.idassignment = a.idassignment
+                join user as u1 on er.assessor1 = u1.iduser
+                join user as u2 on er.assessor2 = u2.iduser
                 where er.idexam = :idexam and er.idstudent = :idstudent and exam_date = :exam_date
                 order by p.idproces, ass.idassignment, a.score";
         $stmt = $this->pdo->prepare($sql);
@@ -133,6 +137,7 @@ class Result
         $stmt->execute();
         $examdata = $stmt->fetchAll();
 
+        //Score van de student. De aspects die zijn aangegeven in het beoordelingsformulier.
         $sql = "select idaspect from result
                 where idexam = :idexam and idstudent = :idstudent and exam_date = :exam_date";
         $stmt = $this->pdo->prepare($sql);
@@ -146,15 +151,17 @@ class Result
             $results[] = $row['idaspect'];
         };
 
-        $assessors = $this->getAssessorsByExamByDate();
+        //$assessors = $this->getAssessorsByExamByDate();
 
         $examresults['idexam'] = $examdata[0]['idexam'];
         $examresults['exam_description'] = $examdata[0]['exam_description'];
         $examresults['exam_date'] = $examdata[0]['exam_date'];
         $examresults['exam_code'] = $examdata[0]['exam_code'];
         $examresults['comment'] = $examdata[0]['comment'];
-        $examresults['assessor1'] = $assessors[$examdata[0]['assessor1']]['fullname'];
-        $examresults['assessor2'] = $assessors[$examdata[0]['assessor2']]['fullname'];
+        $examresults['assessor1'] = $examdata[0]['assessor1_fullname'];
+        $examresults['assessor2'] = $examdata[0]['assessor2_fullname'];
+//        $examresults['assessor1'] = $assessors[$examdata[0]['assessor1']]['fullname'];
+//        $examresults['assessor2'] = $assessors[$examdata[0]['assessor2']]['fullname'];
         $examresults['caesura'] = explode(" ",$examdata[0]['caesura']);
         $examresults['criteria'] = 1;
         foreach($examdata as $r) {
@@ -192,6 +199,7 @@ class Result
         } else {
             $examresults['total_score'] = $total_score;
             $examresults['grade']  = str_replace(",", ".", $examresults['caesura'][$total_score]);
+            $examresults['letter_grade'] = $this->getLetterGrade($examresults['grade']);
         }
         $examresults['processes'] = $proces;
         return $examresults;
@@ -204,18 +212,26 @@ class Result
                 e.examcode,
                 s.idstudent as student_idstudent,
                 s.idgroup,
-                IF(ISNULL(prefix), CONCAT(first_name, ' ', last_name), CONCAT(first_name, ' ', prefix, ' ', last_name )) AS fullname,
+                b.cohort,
+                IF(ISNULL(prefix), CONCAT(s.first_name, ' ', s.last_name), CONCAT(s.first_name, ' ', prefix, ' ', s.last_name )) AS fullname,
                 er.exam_date,
                 e.description as exam_description,
                 e.caesura as caesura,
                 SUM(a.score) as total_score,
-                SUM(CASE WHEN ass.min_score > a.score THEN 1 ELSE 0 END) as grade
+                SUM(CASE WHEN ass.min_score > a.score THEN 1 ELSE 0 END) as grade,
+                er.assessor1,
+                concat(u1.first_name, ' ',  u1.last_name) as assessor1_fullname,
+                er.assessor2,
+                concat(u2.first_name, ' ',  u2.last_name) as assessor2_fullname
                 from exam_result as er
                 join exam as e on er.idexam = e.idexam
                 join student as s on er.idstudent = s.idstudent
                 join result as r on er.idstudent = r.idstudent and er.exam_date = r.exam_date and er.idexam = r.idexam
                 join aspect as a on a.idaspect = r.idaspect
                 join assignment  as ass on a.idassignment = ass.idassignment
+                join user as u1 on er.assessor1 = u1.iduser
+                join user as u2 on er.assessor2 = u2.iduser
+                join basegroup b on s.idgroup = b.idgroup               
                 where er.idexam = :idexam and e.active = 1 and er.exam_date = :exam_date
                 group by student_idstudent order by idgroup, exam_description, caesura, s.last_name";
         $stmt = $this->pdo->prepare($sql);
@@ -224,19 +240,35 @@ class Result
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
-        $attempts = $this->getOccurencesUntilDate();
-        $caesura = explode(" ",$result[0]['caesura']);
+        return $this->getGrade(explode(" ",$result[0]['caesura']), $result, $this->getOccurencesUntilDate());
+    }
+
+
+
+    public function getGrade($caesura, $result, $attempts) {
         foreach($result as $key => $value) {
-            if($value['grade'] > 0) {
-                $result[$key]['grade'] = "1,0";
-            } else {
-                $result[$key]['grade'] = str_replace(",", ".", $caesura[$result[$key]['total_score']]);
-            }
-            $result[$key]['cohort'] = $this->getCohort($value['idgroup']);
+           // if($value['grade'] > 0) {
+            //    $result[$key]['grade'] = "1,0";
+           // } else {
+            $result[$key]['grade'] = str_replace(",", ".", $caesura[$result[$key]['total_score']]);
+            $result[$key]['letter_grade'] = $this->getLetterGrade($result[$key]['grade']);
+           // }
+            //$result[$key]['cohort'] = $this->getCohort($value['idgroup']);
             $result[$key]['attempt'] = $attempts[$result[$key]['student_idstudent']];
-            $result[$key]['assessors'] = $this->getAssessorsByExamByDate();
         }
         return $result;
+    }
+
+    public function getLetterGrade($grade) {
+        $grade = str_replace(",", ".", $grade);
+        if((float)$grade >= 8 ) {
+            return "G";
+        } else if((float)$grade >= 5.5) {
+            return "V";
+        } else {
+            return "O";
+        }
+
     }
 
     public function getCohort($idgroup) {
@@ -314,7 +346,8 @@ class Result
                 join proces as p on ass.idproces = p.idproces
                 join exam as e on p.idexam = e.idexam
                 where r.idstudent = :idstudent
-                group by e.idexam, exam_description, caesura, r.exam_date";
+                group by e.idexam, exam_description, caesura, r.exam_date
+                order by soort, exam_description ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
         $stmt->execute();
@@ -327,11 +360,76 @@ class Result
             $exams[$r['idexam']]['attempt'][$r['exam_date']]['score'] = $r['score'];
             if($r['grade'] == 0) {
                 $exams[$r['idexam']]['attempt'][$r['exam_date']]['grade'] = $caesura[$r['score']];
+                $exams[$r['idexam']]['attempt'][$r['exam_date']]['letter_grade'] = $this->getLetterGrade($caesura[$r['score']]);
             } else {
                 $exams[$r['idexam']]['attempt'][$r['exam_date']]['grade'] = "1,0";
+                $exams[$r['idexam']]['attempt'][$r['exam_date']]['letter_grade'] = "O";
             }
+
+            $grade = (float) str_replace(",", ".", $caesura[$r['score']]);
+           if (!isset($exams[$r['idexam']]['highest_score'])) {
+               $grade = (float) str_replace(",", ".", $caesura[$r['score']]);
+               $exams[$r['idexam']]['highest_score'] = $grade;
+           } else if($exams[$r['idexam']]['highest_score'] < $grade) {
+               $exams[$r['idexam']]['highest_score'] = $grade;
+           }
         }
+        $this->examgroupScores($exams);
         return $exams;
+    }
+
+    public function examgroupScores($exams) {
+        $eg = array();
+
+        $sql = "select description, soort from exam";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $examdescriptions = $stmt->fetchAll();
+        foreach($examdescriptions as $i) {
+            $idexamgroup = $this->getExamgroup($i['description']);
+            $eg[$i['soort']][$idexamgroup]['aantal']++;
+        }
+
+        //print_r($eg);
+
+        foreach($exams as $idexam => $i) {
+            $idexamgroup = $this->getExamgroup($i['description']);
+            $er[$idexamgroup]['scores'][] = $this->getLetterGrade($i['highest_score']);
+            $er[$idexamgroup]['exams'][$idexam] = $i;
+        }
+        foreach($er as $idexamgroup => $group) {
+            $v = 0;
+            $g = 0;
+            $total = "";
+
+            //Er zijn nog geen resultaten voor alle examens in een examengroup
+            if(count($group['scores']) < $eg[$idexamgroup]['aantal']) {
+                $total = "O";
+            }
+            foreach($group['scores'] as $score) {
+                if($score == "V") {
+                    $v++;
+                } elseif($score == "G") {
+                    $g++;
+                } else {
+                    $total = "O";
+                }
+                if($total == "") {
+                    if($g > $v) {
+                        $total = "G";
+                    } else {
+                        $total = "V";
+                    }
+                }
+            }
+            $er[$idexamgroup]['total'] = $total;
+        }
+        return $er;
+    }
+
+    public function getExamgroup($exam_description) {
+        return substr($exam_description, 0,5);
     }
 
     public function getAssessorsByExamByDate() {

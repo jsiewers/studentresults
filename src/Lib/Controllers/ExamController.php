@@ -59,6 +59,7 @@ class ExamController
         $exam->description = ($request->getParsedBodyParam('description'));
         $exam->caesura = ($request->getParsedBodyParam('caesura'));
         $exam->examcode = ($request->getParsedBodyParam('examcode'));
+        $exam->soort = ($request->getParsedBodyParam('soort'));
         $exam->save();
 
         $exams = $exam->read();

@@ -197,7 +197,7 @@ class Result
         }
         if($examresults['criteria'] == -1) {
             $examresults['total_score'] = 0;
-            $examresults['grade']  = "1,0";
+            $examresults['grade']  = $examresults['caesura'][0];
         } else {
             $examresults['total_score'] = $total_score;
             $examresults['grade']  = str_replace(",", ".", $examresults['caesura'][$total_score]);

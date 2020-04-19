@@ -32,7 +32,11 @@ class Exam
     }
     public function readByStudentIdResult($idstudent)
     {
-        $sql = "select distinct idexam, exam_date from exam_result er join student s on s.idstudent = er.idstudent where s.idstudent = :idstudent";
+        $sql = "select distinct e.idexam, soort, examcode, exam_date from exam_result er 
+                join student s on s.idstudent = er.idstudent 
+                join exam e on e.idexam = er.idexam
+                where s.idstudent = :idstudent
+                order by soort, examcode, exam_date;";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
         $stmt->execute();

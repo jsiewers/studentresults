@@ -52,7 +52,7 @@
     <tr>
         <td class="lb">
             <p>Handtekening coach/docent SLB</p>
-            <p style="text-align:center; height:100px;"><!--<img style="width:40%;" src="{{ base_url() }}/assets/img/handtekening_cynthia.png">--></p>
+            <p style="text-align:center; height:100px;"><img style="width:40%;" src="{{ base_url() }}/assets/img/handtekening_cynthia.png"></p>
         </td>
     </tr>
 
@@ -62,7 +62,7 @@
     <tr>
     <td class="lb">
         <p>Handtekening coach/docent SLB</p>
-        <p style="text-align:center; height:100px;"><!--<img style="width:40%;" src="{{ base_url() }}/assets/img/handtekening_cynthia.png">--></p>
+        <p style="text-align:center; height:100px;"><img style="width:40%;" src="{{ base_url() }}/assets/img/handtekening_cynthia.png"></p>
     </td>
     </tr>
 
@@ -72,7 +72,7 @@
     <tr>
     <td class="lb">
         <p>Handtekening coach/docent SLB</p>
-        <p style="text-align:center; height:100px;"><!--<img style="width:40%;" src="{{ base_url() }}/assets/img/handtekening_cynthia.png">--></p>
+        <p style="text-align:center; height:100px;"><img style="width:40%;" src="{{ base_url() }}/assets/img/handtekening_cynthia.png"></p>
     </td>
     </tr>
     <tr>
@@ -82,14 +82,114 @@
     <tr>
         <td class="lb">
             <p>Handtekening coach/docent SLB</p>
-            <p style="text-align:center; height:100px;"><!--<img style="width:40%;" src="{{ base_url() }}/assets/img/handtekening_cynthia.png">--></p>
+            <p style="text-align:center; height:100px;"><img style="width:40%;" src="{{ base_url() }}/assets/img/handtekening_cynthia.png"></p>
         </td>
     </tr>
 </table>
 <p>MBO College Almere Verklaring Loopbaan en Burgerschap</p>
 
-<p class="pagebreak" p>
-    </div>
-</div>
+    <p class="pagebreak"></p>
 
+    <h3>Aanwezigheid en resultaten Examen / Proces verbaal</h3>
+    <table style="width:100%;">
+        <tr>
+            <td>Examencode</td>
+            <td>{{ report | first.examcode }}</td>
+        </tr>
+        <tr>
+            <td>Examennaam</td>
+            <td>{{ report | first.exam_description }}</td>
+        </tr>
+        <tr>
+            <td>Onderwijsproduct</td>
+            <td>{{ report | first.exam_description }}</td>
+        </tr>
+        <tr>
+            <td>Crebo</td>
+            <td>25187</td>
+        </tr>
+        <tr>
+            <td>Datum</td>
+            <td>{{ report | first.exam_date | date('d-m-Y') }}</td>
+        </tr>
+    </table>
+
+    <table style="width:100%;">
+        <tr>
+            <td>Studentnummer</td>
+            <td>Naam</td>
+            <td>Groep</td>
+            <td>Cohort</td>
+            <td>Opleidingscode</td>
+            <td>1e beoordeling</td>
+            <td>2e beoordeling</td>
+            <td>3e beoordeling</td>
+
+            <!--<td>O/V/G</td>-->
+        </tr>
+        {% for student in report %}
+        <tr>
+            <td>{{ student.student_idstudent }}</td>
+            <td>{{ student.fullname }}</td>
+            <td>{{ student.idgroup }}</td>
+            <td>{{ student.cohort }}</td>
+            <td>25187</td>
+            <td style="text-align: right">{% if student.attempt.count == 1 %}{{ student.grade }} ({{student.letter_grade}}){% endif %}</td>
+            <td style="text-align: right">{% if student.attempt.count == 2 %}{{ student.grade }} ({{student.letter_grade}}){% endif %}</td>
+            <td style="text-align: right">{% if student.attempt.count == 3 %}{{ student.grade }} ({{student.letter_grade}}){% endif %}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    Opmerkingen n.a.v. examensessie
+    <table style="width:100%;">
+        <tr>
+            <td><p style="padding:20px;"></p></td>
+        </tr>
+    </table>
+    <p>Naam surveillanten: {{ report | first.assessor1_fullname }},  {{ report | first.assessor2_fullname }}</p>
+
+    <div style="position: relative;  height:100px;">
+        <div class="handtekening">
+            <img src="{{ base_url() }}/assets/img/handtekening_{{ report | first.assessor1 }}.png">
+            <img src="{{ base_url() }}/assets/img/handtekening_{{ report | first.assessor2 }}.png">
+        </div>
+        <div style="position: absolute; top:30px;">
+            <p>Paraaf surveillanten ......................................................................................................................</p>
+        </div>
+    </div>
+
+    Opmerkingen n.a.v. correctie
+    <table style="width:100%;">
+        <tr>
+            <td><p style="padding:20px;"></p></td>
+        </tr>
+    </table>
+    <p>Datum: {{ report | first.exam_date | date_modify("+10 days") | date('d-m-Y') }}</p>
+    <p>Naam correctoren: {{ report | first.assessor1_fullname }}, {{ report | first.assessor2_fullname }}</p>
+    <div style="position: relative;  height:100px;">
+        <div class="handtekening">
+            <img src="{{ base_url() }}/assets/img/handtekening_{{ report | first.assessor1 }}.png">
+            <img src="{{ base_url() }}/assets/img/handtekening_{{ report | first.assessor2 }}.png">
+        </div>
+        <div style="position: absolute; top:30px;">
+            <p>Paraaf correctoren ......................................................................................................................</p>
+        </div>
+    </div>
+    <table style="width:100%;">
+        <tr>
+            <td>Vastgesteld door TEC</td>
+            <td>
+                <p>Datum ....................</p>
+                <p>Naam  ....................</p>
+            </td>
+            <td>Invoer in Eduarte</td>
+            <td>
+                <p>Datum ....................</p>
+                <p>Naam  ....................</p>
+            </td>
+        </tr>
+    </table>
+    <p class="pagebreak" p>
+</div>
+</div>
 {% endblock %}

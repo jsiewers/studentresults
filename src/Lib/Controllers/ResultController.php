@@ -81,7 +81,27 @@ class ResultController
         $this->view->render($response, 'all_results_detail_with_aspects.html', [
             'all_results' => $all_results,
             'assessors' => $assessors,
-            'student' => $student,
+        ]);
+
+    }
+
+    public function allExamResults(Request $request, Response $response, array $args = []) {
+        $students = $request->getParsedBody()["idstudents"];
+        $r = new Result($this->db);
+        $r->idexam = $request->getAttribute("idexam");
+        $r->exam_date = $request->getAttribute("exam_date");
+        echo $r->exam_date." ".$r->idexam;
+        $assessors = $r->getAssessorsByExamByDate();
+        $all_results = [];
+        foreach($students as $student) {
+            $r->idstudent = $student;
+            $all_results[] = $r->resultsByExamStudentsWithAllAspects();
+        }
+
+
+        $this->view->render($response, 'all_results_detail_with_aspects.html', [
+            'all_results' => $all_results,
+            'assessors' => $assessors,
         ]);
 
     }
@@ -231,6 +251,30 @@ class ResultController
         $result = new Result($this->db);
         $result->idexam = $request->getAttribute('idexam');
         $result->exam_date = $request->getAttribute('exam_date');
+        if(isset($request->getParsedBody()["idstudents"])) {
+            $result->resultsByExamStudents($request->getParsedBody()["idstudents"]);
+        } else {
+            $result = $result->resultsByExamStudents();
+        }
+        //$assessors = $result->getAssessorsByExamByDate();
+
+//        $er = new Exam_result($this->db);
+//        $er->idexam = $request->getAttribute('idexam');
+//        $er->exam_date = $request->getAttribute('exam_date');
+
+        $this->view->render($response, 'results_exam_date.html', [
+            'result' => $result,
+        ]);
+
+    }
+
+
+    public function studentResultsByStudents(Request $request, Response $response, array $args = []) {
+        $result = new Result($this->db);
+        $result->idexam = $request->getAttribute('idexam');
+        $result->exam_date = $request->getAttribute('exam_date');
+        $students = $request->getAttribute('idstudents');
+
         //$assessors = $result->getAssessorsByExamByDate();
         $result = $result->resultsByExamStudents();
 //        $er = new Exam_result($this->db);

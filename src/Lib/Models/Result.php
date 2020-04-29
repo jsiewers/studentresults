@@ -102,7 +102,13 @@ class Result
 
     public function resultsByExamStudentsWithAllAspects() {
         //Informatie over alle het gemaakte examen op een bepaalde datum
-        $sql = "select er.exam_date,
+        $sql = "select 
+                s.idstudent,
+                s.first_name as student_firstname,
+                s.last_name as student_lastname,
+                s.prefix as student_prefix,
+                s.idgroup,
+                er.exam_date,
                 e.idexam,
                 e.description as exam_description,
                 e.examcode as exam_code,
@@ -121,6 +127,7 @@ class Result
                 concat(u2.first_name, ' ',  u2.last_name) as assessor2_fullname,
                 e.caesura
                 from exam_result as er
+                join student as s on er.idstudent = s.idstudent
                 join exam as e on er.idexam = e.idexam
                 join proces as p on p.idexam = e.idexam
                 join assignment as ass on p.idproces = ass.idproces
@@ -136,6 +143,8 @@ class Result
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         $examdata = $stmt->fetchAll();
+
+        print_r($examdata);
 
         //Score van de student. De aspects die zijn aangegeven in het beoordelingsformulier.
         $sql = "select idaspect from result
@@ -154,6 +163,9 @@ class Result
         //$assessors = $this->getAssessorsByExamByDate();
 
         $examresults['idexam'] = $examdata[0]['idexam'];
+        $examresults['idstudent'] = $examdata[0]['idstudent'];
+        $examresults['student_fullname'] = $examdata[0]['student_firstname']." ".$examdata[0]['student_prefix']." ".$examdata[0]['student_lastname'];
+        $examresults['idgroup'] = $examdata[0]['idgroup'];
         $examresults['exam_description'] = $examdata[0]['exam_description'];
         $examresults['exam_date'] = $examdata[0]['exam_date'];
         $examresults['exam_code'] = $examdata[0]['exam_code'];
@@ -204,12 +216,20 @@ class Result
             $examresults['letter_grade'] = $this->getLetterGrade($examresults['grade']);
         }
         $examresults['processes'] = $proces;
+        print_r($examresults);
         return $examresults;
     }
 
 
     public function resultsByExamStudents($idstudent = "") {
-        $where_student = ($idstudent == "") ? "" : " and s.idstudent = :idstudent";
+        if(is_array($idstudent)) {
+            $where_student = " and s.idstudent in (:idstudent)";
+        } else if($idstudent != "") {
+            $where_student = " and s.idstudent = :idstudent";
+        } else if($idstudent == "") {
+            $where_student = "";
+        }
+        //$where_student = ($idstudent == "") ? "" : " and s.idstudent = :idstudent";
         $sql = "select 
                 er.idexam,
                 e.examcode,

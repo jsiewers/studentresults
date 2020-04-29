@@ -23,7 +23,8 @@
         <td>{{ result | first.exam_date | date('d-m-Y') }}</td>
     </tr>
 </table>
-
+<form action="/result/{{ result | first.idexam }}/{{ result | first.exam_date | date('Y-m-d') }}" method="post">
+    {{ csrf.field | raw }}
 <table style="width:100%;">
     <tr>
         <td>Studentnummer</td>
@@ -38,8 +39,8 @@
         <!--<td>O/V/G</td>-->
     </tr>
     {% for student in result %}
-     <tr>
-         <td>{{ student.student_idstudent }}</td>
+     <tr id="r{{ student.student_idstudent }}">
+         <td><input class="studentselect noprint" id="i{{ student.student_idstudent }}" name="idstudents[]" type="checkbox" value="{{ student.student_idstudent }}" checked> {{ student.student_idstudent }}</td>
          <td>{{ student.fullname }}</td>
          <td>{{ student.idgroup }}</td>
          <td>{{ student.cohort }}</td>
@@ -50,6 +51,8 @@
     </tr>
     {% endfor %}
 </table>
+    <input class="noprint" type="submit">
+</form>
 Opmerkingen n.a.v. examensessie
 <table style="width:100%;">
     <tr>
@@ -84,4 +87,18 @@ Opmerkingen n.a.v. correctie
     </tr>
 </table>
 <p class="pagebreak" p>
+    <script>
+        let studentselector = document.getElementsByClassName("studentselect");
+        for (var i = 0; i < studentselector.length; i++) {
+            console.log(studentselector[i]);
+            var ss = document.getElementById("r"+studentselector[i].value);
+            ss.addEventListener('change', (event) => {
+                if(!event.target.checked){
+                    console.log(event.target.value);
+                    document.getElementById("r"+event.target.value).className = "noprint";
+                }
+            })
+        }
+
+    </script>
 {% endblock %}

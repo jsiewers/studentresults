@@ -44,6 +44,7 @@ $app->group('', function () {
     $this->get('/result/{idstudent}/{idexam}/{exam_date}/{template}', 'ResultController:detail');
     $this->get('/result/{idstudent}/{idexam}/{exam_date}/{template}/delete', 'ResultController:deleteResult');
     $this->get('/result/{idexam}/{exam_date}', 'ResultController:studentResults');
+    $this->post('/result/{idexam}/{exam_date}', 'ResultController:allExamResults');
     $this->get('/results/{idexam}/all', 'ResultController:studentResultsAll');
     $this->get('/studentresults/{idstudent}/all', 'ResultController:detail');
     $this->get('/students/{idstudent}/{idexam}/{exam_date}', 'StudentController:delete');

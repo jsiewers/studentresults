@@ -1,6 +1,6 @@
 {% extends "layoutv2.html" %}
 {% block content %}
-<title>{{ student.idstudent }}-{{ student.fullName() }}</title>
+<title>{{ all_results | first.idstudent }}-{{ all_results | first.student_fullname }}</title>
 
 </head>
 <body>
@@ -21,11 +21,11 @@
     </tr>
     <tr>
         <td>Naam student:</td>
-        <td>{{ student.fullName() }}</td>
+        <td>{{ results.student_fullname }}</td>
         <td>Studentnummer:</td>
-        <td>{{ student.idstudent }}</td>
+        <td>{{ results.idstudent }}</td>
         <td>Groep:</td>
-        <td>{{ student.idgroup }}</td>
+        <td>{{ results.idgroup }}</td>
     </tr>
     <tr>
         <td>Plaats:</td>
@@ -35,9 +35,9 @@
     </tr>
     <tr>
         <td>Beoordelaar 1:</td>
-        <td>{{ results.assessor1 }}</td>
+        <td>{{ results.assessor1_fullname }}</td>
         <td>Beoordelaar 2:</td>
-        <td>{{ results.assessor2 }}</td>
+        <td>{{ results.assessor2_fullname }}</td>
     </tr>
 </table>
 

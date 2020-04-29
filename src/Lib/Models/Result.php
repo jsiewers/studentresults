@@ -375,7 +375,7 @@ class Result
                 join exam as e on p.idexam = e.idexam
                 where r.idstudent = :idstudent
                 group by e.idexam, exam_description, caesura, r.exam_date
-                order by soort, exam_description ASC";
+                order by soort, exam_description, r.exam_date ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
         $stmt->execute();

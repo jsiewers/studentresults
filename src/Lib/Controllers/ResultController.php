@@ -90,7 +90,7 @@ class ResultController
         $r = new Result($this->db);
         $r->idexam = $request->getAttribute("idexam");
         $r->exam_date = $request->getAttribute("exam_date");
-        echo $r->exam_date." ".$r->idexam;
+        //echo $r->exam_date." ".$r->idexam;
         $assessors = $r->getAssessorsByExamByDate();
         $all_results = [];
         foreach($students as $student) {

@@ -50,8 +50,9 @@
          <td style="text-align: right">{% if student.attempt.count == 3 %}{{ student.grade }} ({{student.letter_grade}}){% endif %}</td>
     </tr>
     {% endfor %}
+    <tr class="noprint" ><td colspan="8" style="text-align:right;"><input type="submit"></td></tr>
 </table>
-    <input class="noprint" type="submit">
+
 </form>
 Opmerkingen n.a.v. examensessie
 <table style="width:100%;">

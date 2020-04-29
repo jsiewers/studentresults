@@ -144,7 +144,7 @@ class Result
         $stmt->execute();
         $examdata = $stmt->fetchAll();
 
-        print_r($examdata);
+        //print_r($examdata);
 
         //Score van de student. De aspects die zijn aangegeven in het beoordelingsformulier.
         $sql = "select idaspect from result
@@ -216,7 +216,7 @@ class Result
             $examresults['letter_grade'] = $this->getLetterGrade($examresults['grade']);
         }
         $examresults['processes'] = $proces;
-        print_r($examresults);
+        //print_r($examresults);
         return $examresults;
     }
 

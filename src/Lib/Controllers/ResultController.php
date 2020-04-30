@@ -228,21 +228,19 @@ class ResultController
         $er->idexam = $request->getAttribute('idexam');
         $er->assessor1 = $request->getParsedBodyParam("assessor1");
         $er->assessor2 = $request->getParsedBodyParam("assessor2");
-        $er->save();
 
-
-
-        foreach($request->getParsedBody() as $key => $value) {
-            if(substr($key, 0,1) == "_") {
-                $result = new Result($this->db);
-                $result->idstudent = $request->getAttribute("idstudent");
-                $result->idexam = $request->getAttribute('idexam');
-                $result->exam_date = $request->getParsedBodyParam("exam_date");
-                $result->idaspect = $value;
-                $result->save();
+        if($er->save()) {
+            foreach($request->getParsedBody() as $key => $value) {
+                if(substr($key, 0,1) == "_") {
+                    $result = new Result($this->db);
+                    $result->idstudent = $request->getAttribute("idstudent");
+                    $result->idexam = $request->getAttribute('idexam');
+                    $result->exam_date = $request->getParsedBodyParam("exam_date");
+                    $result->idaspect = $value;
+                    $result->save();
+                }
             }
         }
-
 
          $this->results( $request,  $response, $args = []);
     }

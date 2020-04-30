@@ -32,8 +32,10 @@ class Exam_result
             $stmt->bindParam(":assessor1", $this->assessor1, PDO::PARAM_INT);
             $stmt->bindParam(":assessor2", $this->assessor2, PDO::PARAM_INT);
             $stmt->execute();
+            return true;
         } catch (\PDOException $e) {
-            echo "Exam_result-error: ".$e->getMessage();
+            //echo "Exam_result-error: ".$e->getMessage();
+            return false;
         }
     }
 

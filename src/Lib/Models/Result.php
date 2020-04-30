@@ -275,12 +275,12 @@ class Result
 
     public function getGrade($caesura, $result, $attempts) {
         foreach($result as $key => $value) {
-           // if($value['grade'] > 0) {
-            //    $result[$key]['grade'] = "1,0";
-           // } else {
-            $result[$key]['grade'] = str_replace(",", ".", $caesura[$result[$key]['total_score']]);
+            if($value['grade'] > 0) {
+                $result[$key]['grade'] = str_replace(",", ".", $caesura[0]);
+            } else {
+                $result[$key]['grade'] = str_replace(",", ".", $caesura[$result[$key]['total_score']]);
+            }
             $result[$key]['letter_grade'] = $this->getLetterGrade($result[$key]['grade']);
-           // }
             //$result[$key]['cohort'] = $this->getCohort($value['idgroup']);
             $result[$key]['attempt'] = $attempts[$result[$key]['student_idstudent']];
         }

@@ -61,8 +61,15 @@ Opmerkingen n.a.v. examensessie
     </tr>
 </table>
 <p>Naam surveillanten: {{ result | first.assessor1_fullname }},  {{ result | first.assessor2_fullname }}</p>
-<p>Paraaf surveillanten ...............................</p>
-
+<div style="position: relative;  height:100px;">
+    <div class="handtekening">
+        <img src="{{ base_url() }}/assets/img/handtekening_{{ result | first.assessor1 }}.png">
+        <img src="{{ base_url() }}/assets/img/handtekening_{{ result | first.assessor2 }}.png">
+    </div>
+    <div style="position: absolute; top:30px;">
+        <p>Paraaf surveillanten ......................................................................................................................</p>
+    </div>
+</div>
 Opmerkingen n.a.v. correctie
 <table style="width:100%;">
     <tr>
@@ -70,9 +77,16 @@ Opmerkingen n.a.v. correctie
     </tr>
 </table>
 <p>Datum: {{ result | first.exam_date | date_modify("+10 days") | date('d-m-Y') }}</p>
-<p>Naam correctoren: {{ first.assessor1_fullname }}, {{ result | first.assessor2_fullname }}</p>
-<p>Paraaf correctoren: ...............................</p>
-
+<p>Naam correctoren: {{ result | first.assessor1_fullname }},  {{ result | first.assessor2_fullname }}</p>
+<div style="position: relative;  height:100px;">
+<div class="handtekening">
+    <img src="{{ base_url() }}/assets/img/handtekening_{{ result | first.assessor1 }}.png">
+    <img src="{{ base_url() }}/assets/img/handtekening_{{ result | first.assessor2 }}.png">
+</div>
+<div style="position: absolute; top:30px;">
+    <p>Paraaf correctoren ......................................................................................................................</p>
+</div>
+</div>
 <table style="width:100%;">
     <tr>
         <td>Vastgesteld door TEC</td>

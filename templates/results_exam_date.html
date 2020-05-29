@@ -41,7 +41,7 @@
     {% for student in result %}
      <tr id="r{{ student.student_idstudent }}">
          <td><input class="studentselect noprint" id="i{{ student.student_idstudent }}" name="idstudents[]" type="checkbox" value="{{ student.student_idstudent }}" checked> {{ student.student_idstudent }}</td>
-         <td>{{ student.fullname }}</td>
+         <td>{{ student.fullname }} <a class=noprint href="{{ base_url() }}/results/{{ student.student_idstudent }}">(Detail)</a></td>
          <td>{{ student.idgroup }}</td>
          <td>{{ student.cohort }}</td>
          <td>25187</td>

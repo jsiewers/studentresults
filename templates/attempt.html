@@ -22,7 +22,7 @@
 <form action="/attempt/{{ student.idstudent }}/{{ exam.idexam }}" method="post">
     {{ csrf.field | raw }}
 
-<p>Datum:&nbsp; <input type="date" name="exam_date"></p>
+<p>Datum:&nbsp; <input type="date" name="exam_date" required></p>
     <p>Assessor 1
         <select name="assessor1">
             {% for assessor in assessors %}
@@ -49,7 +49,7 @@
             </tr>
             <tr>
                 {% for aspect in assignment.aspects %}
-                <td style="vertical-align: top; width:2%;"><input type="radio" name="_{{ assignment.idassignment }}" value="{{ aspect.idaspect }}"></td>
+                <td style="vertical-align: top; width:2%;"><input type="radio" name="_{{ assignment.idassignment }}" value="{{ aspect.idaspect }}" required></td>
                 <td style="vertical-align: top; width:23%;">{{ aspect.description | nl2br }}</td>
                 {% endfor %}
             </tr>

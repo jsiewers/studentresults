@@ -19,6 +19,10 @@
         <td>{{ student.idstudent }}</td>
     </tr>
     <tr>
+        <td><b>Opleiding</b></td>
+        <td>Applicatieontwikkelaar</td>
+    </tr>
+    <tr>
         <td><b>Crebonummer</b></td>
         <td>25187</td>
     </tr>
@@ -29,14 +33,6 @@
     <tr>
         <td><b>Cohort:</b></td>
         <td>{{ student.cohort }}</td>
-    </tr>
-    <tr>
-        <td><b>BPV periode</b></td>
-        <td>{{ report | first.exam_date | date_modify('-6 months') | date('m-Y') }} - {{ report | first.exam_date | date('m-Y') }}</td>
-    </tr>
-    <tr>
-        <td><b>Praktijkbegeleider / Werkbegeleider</b></td>
-        <td>{{ results.comment }}</td>
     </tr>
 </table>
 

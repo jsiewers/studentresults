@@ -6,7 +6,7 @@
     {{ csrf.field | raw }}
     <select name="idgroup">
         {% for group in groups %}
-        <option {% if selected_group == group.idgroup%}selected{% endif %}>{{ group.idgroup }}</option>
+        <option {% if selected_group == group.idgroup %}selected{% endif %}>{{ group.idgroup }}</option>
         {% endfor %}
     </select>
 </form>

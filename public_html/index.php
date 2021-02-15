@@ -1,6 +1,7 @@
 <?php
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
+ini_set('display_startup_errors', 0);
+ini_set('display_errors', 0);
+error_reporting(E_ALL);
 ini_set('default_charset', 'UTF-8');
 setlocale(LC_ALL, 'nl_NL.utf-8');
 

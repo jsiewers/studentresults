@@ -1,0 +1,9 @@
+use sr;
+SELECT u.iduser, first_name, last_name, email, active, r.description 
+                FROM user as u 
+                JOIN user_has_role as ur ON ur.iduser = u.iduser
+                JOIN role as r ON r.idrole = ur.idrole 
+                ORDER BY last_name;
+#ALTER TABLE user
+#ADD COLUMN active TINYINT(1) AFTER email;
+#UPDATE user SET active = 1 WHERE iduser > 0;

@@ -5,3 +5,4 @@
 /uploads/*
 !/logs/README.md
 /composer.lock
+/.DS_Store

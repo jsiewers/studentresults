@@ -73,7 +73,7 @@ class AuthController
 		$validation = $this->validator->validate($request, [
 			'email' => v::noWhitespace()->notEmpty()->email(),
             'first_name' => v::noWhitespace()->notEmpty()->alpha(),
-            'last_name' => v::noWhitespace()->notEmpty()->alpha(),
+            'last_name' => v::notEmpty()->alpha(),
 			'password' => v::notEmpty()->length(8, 254),
             'roles' => v::arrayType()->notEmpty()
 		]);
@@ -92,6 +92,18 @@ class AuthController
 
 		//$this->auth->attempt($user->email,$request->getParam('password'));
 
-		return $response->withRedirect('/');
+		return $response->withRedirect('/signup');
+	}
+	
+	public function getDelete($request, $response) 
+	{
+		$validation = $this->validator->validate($request, [
+			'iduser' => v::notEmpty(),
+		]);
+		$user = new User($this->db);
+		$user->iduser = $request->getAttribute('iduser');
+		$user->delete();
+		return $response->withRedirect('/signup');
+
 	}
 }

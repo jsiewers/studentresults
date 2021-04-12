@@ -34,11 +34,22 @@ class User
 	public function getPassword() {
 	    return $this->password;
     }
+    
+    public function delete() {
+        try {
+            $sql = "UPDATE user SET active = 0 WHERE iduser = :iduser";
+            $stmt = $this->pdo->prepare($sql);           
+            $stmt->bindParam(':iduser', $this->iduser, PDO::PARAM_INT);
+            $stmt->execute();	
+        } catch (\PDOException $e) {
+            echo var_dump($result = $e->getMessage());
+        }
+    }
 
 	public function save() {
         try {
-            $sql = "INSERT INTO user (email, password, first_name, last_name) 
-                    VALUES (:email, :password, :first_name, :last_name)";
+            $sql = "INSERT INTO user (email, password, first_name, last_name, active) 
+                    VALUES (:email, :password, :first_name, :last_name, 1)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
             $stmt->bindParam(':password', $this->password, PDO::PARAM_STR);
@@ -54,7 +65,7 @@ class User
                 $stmt->execute();
             }
         } catch (\PDOException $e) {
-            var_dump($result = $e->getMessage());
+            echo var_dump($result = $e->getMessage());
         }
         return $result;
     }
@@ -97,6 +108,7 @@ class User
                 FROM user as u 
                 JOIN user_has_role as ur ON ur.iduser = u.iduser
                 JOIN role as r ON r.idrole = ur.idrole 
+                WHERE active = 1
                 ORDER BY last_name" ;
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute();
@@ -109,6 +121,7 @@ class User
             $users[$row['iduser']]['fullname'] = $row['first_name']. " " . $row['last_name'];
             $users[$row['iduser']]['email'] = $row['email'];
             $users[$row['iduser']]['roles'][] = $row['description'];
+            $users[$row['iduser']]['iduser'] = $row['iduser'];
         }
         return $users;
     }
@@ -119,7 +132,7 @@ class User
         try {
             $sql = "SELECT u.iduser, first_name, last_name, email 
                 FROM user as u 
-                WHERE u.iduser in (".$sids.")";
+                WHERE u.iduser in (".$sids.") AND active = 1";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -130,7 +143,7 @@ class User
         foreach($result as $row) {
             $users[$row['iduser']]['fullname'] = $row['first_name']. " " . $row['last_name'];
             $users[$row['iduser']]['email'] = $row['email'];
-            $users[$row['iduser']]['roles'][] = $row['description'];
+            //$users[$row['iduser']]['roles'][] = $row['description'];
         }
         return $users;
     }
@@ -138,7 +151,7 @@ class User
     public function readByEmailAndPassword($email, $password) {
         try {
             $sql = "SELECT iduser, first_name, last_name, email, password 
-                    FROM user WHERE email = :email";
+                    FROM user WHERE email = :email and active = 1";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->execute();

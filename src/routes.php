@@ -54,9 +54,6 @@ $app->group('', function () {
     $this->get('/nomination/{idstudent}', 'ResultController:nomination');
     $this->get('/bpv/{idstudent}', 'ResultController:bpv');
     $this->get('/lb/{idstudent}', 'ResultController:lb');
-    //$app->get('/presence', 'PresenceController:show');
-    //$app->post('/presence/store', 'PresenceController:save');
-    //$app->post('/presence', 'PresenceController:show');
     $this->get('/students', 'StudentController:show');
     $this->post('/students', 'StudentController:show');
 })->add(new AuthMiddleware($container));
@@ -66,6 +63,7 @@ $app->group('', function () {
 $app->group('', function () {
     $this->get('/signup', 'AuthController:getSignUp')->setName('auth.signup');
     $this->post('/signup', 'AuthController:postSignUp');
+    $this->get('/user/delete/{iduser}', 'AuthController:getDelete');
 })->add(new AdminMiddleware($container));
 
 

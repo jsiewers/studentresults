@@ -3,6 +3,7 @@
 namespace Lib\Auth;
 
 use Lib\Models\User;
+use Lib\Models\Exam;
 use PDO;
 
 /**

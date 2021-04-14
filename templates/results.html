@@ -2,7 +2,42 @@
 {% extends "layoutv2.html" %}
 {% block content %}
 <title>{{ student.idstudent }}-{{ student.fullName() }}-{{ student.idgroup }}</title>
+<style>
 
+	tr {
+		margin:0px;
+		border:none;
+	}
+	
+	
+	td.exam {
+		width:100%; 
+		border:none;
+		border-top:solid black 1px;
+	}
+	
+	td.separator {
+		border:none;
+		border-bottom: solid 1px black;
+	}
+	
+	table {
+			padding:0px;
+			margin:0px;
+			border:none;
+	}
+	
+	.showonscreen {
+	
+		display:block;
+	}
+	
+	.hideonscreen {
+		display: none;
+	}
+	
+
+</style>
 </head>
 <body>
 <div class="wrapper">
@@ -15,10 +50,10 @@
         </ul>
     </nav>
     <div id="content">
-<h1 class="noprint">Results</h1>
+    <h1 class="hide">Results</h1>
 <h3>{{ student.idstudent }} {{ student.fullName() }} {{ student.idgroup }}</h3>
-<p class="noprint">Beschikbare examens</p>
-<table class="noprint">
+<p class="hide">Beschikbare examens</p>
+<table class="hide">
     {% for exam in exams %}
     <tr>
         <td>{{ exam.examcode }}</td>
@@ -34,13 +69,101 @@
         <td>{{ key }}</td>
         <td>{{ result.description }}</td>
         {% for date, attempt in result.attempt%}
-        <td><a href="/result/{{ student.idstudent }}/{{ key }}/{{ date }}/detail">{{ date }}</a></td>
-        <td><a href="/newresult/{{ student.idstudent }}/{{ key }}/{{ date }}">V2</a></td>
+        <td><a href="/newresult/{{ student.idstudent }}/{{ key }}/{{ date }}">{{ date }}</a></td>
         <td><b>{{ attempt.grade }}</b></td>
         {% endfor %}
     </tr>
     {% endfor %}
 </table>
+<p class="pagebreak"></p>
+<div id="pv">
+    {% for key, result in examresults %}   
+        {% for date, attempt in result.attempt%}
+        <div id="r{{ result.examcode }}" >
+<h3>Resultaten examen / proces verbaal</h1>
+<table style="width:100%;margin-bottom:20px;">
+		<tr><td colspan="2"><input type="checkbox" class="ecode hide" id="i{{ result.examcode }}" value="{{ result.examcode }}" checked>&nbsp;Examencode</td><td colspan="6">{{ result.examcode }}</td>
+		<tr><td colspan="2">Examennaam</td><td colspan="6">{{ result.description }}</td>
+		<tr><td colspan="2">Onderwijsproduct</td><td colspan="6">{{ result.description }}</td>
+		<tr><td colspan="2">Datum</td><td colspan="6">{{ date }}</td>
+		</tr>
+		<tr>
+			<td>Studentnummer</td>
+			<td>Naam </td>
+			<td>Groep </td>
+			<td>Cohort </td>
+			<td>Opleidingscode</td>
+			<td>1e beoordeling</td>
+			<td>2e beoordeling</td>
+			<td>3e beoordeling</td>
+		</tr>    
+		<tr id="r{{ result.examcode }}">
+			<td>{{ student.idstudent }}</td>
+			<td>{{ student.fullName() }} <a class="hide" href="/newresult/{{ student.idstudent }}/{{ key }}/{{ date }}">(Detail)</a> </td>
+			<td>{{ student.idgroup }} </td>
+			<td>{{ student.begindatum|date("Y") }} </td>
+			<td>{{ student.opleiding }} </td>					
+			{% if loop.index == 1  %}
+				<td>{{ attempt.grade }}  ({{ attempt.letter_grade }})</td><td></td><td></td>
+			{% endif %}
+			{% if loop.index == 2  %}
+				<td></td><td>{{ attempt.grade }}  ({{ attempt.letter_grade }})</td><td></td>
+			{% endif %}
+			{% if loop.index == 3  %}
+				<td></td><td></td><td>{{ attempt.grade }}  ({{ attempt.letter_grade }})</td>
+			{% endif %}
+			</tr>
+			<tr>
+				<td colspan="8">
+					<p>Naam assessoren: {{ result.assessor1_fullname }},  {{ result.assessor2_fullname }}</p>
+					<div style="position: relative;  height:100px;">
+					<div class="handtekening">
+						<img src="{{ base_url() }}/assets/img/handtekening_{{ result.assessor1 }}.png">
+						<img src="{{ base_url() }}/assets/img/handtekening_{{ result.assessor2 }}.png">
+					</div>
+				</td>
+			</tr>
+</table>
+<table style="width:100%;margin-bottom:10px;">
+    <tr>
+        <td>Vastgesteld door TEC</td>
+        <td>
+            <p>Datum ....................</p>
+            <p>Naam  ....................</p>
+        </td>
+        <td>Invoer in Eduarte</td>
+        <td>
+            <p>Datum ....................</p>
+            <p>Naam  ....................</p>
+        </td>
+    </tr>
+</table>	
+</div>	
+<p class="pagebreak"></p>
+		{% endfor %}
+    {% endfor %}
+</div>
 <a class="noprint" href="/all_newresults/{{student.idstudent}}">Alle resultaten voor deze student</a>
 <a class="noprint" href="/nomination/{{student.idstudent}}">Voordrachtformulier</a>
+<p style="margin-bottom:100px"></p>
+
+    <script>
+        let examselector = document.getElementsByClassName("ecode");
+        //document.getElementById("counter").innerText = examselector.length;
+        for (var i = 0; i < examselector.length; i++) {
+            console.log(examselector[i]);
+            var ss = document.getElementById("r"+examselector[i].value);
+            ss.addEventListener('change', (event) => {
+                if(!event.target.checked){
+                    console.log("uit" + event.target.value);
+                    document.getElementById("r"+event.target.value).className = "hide";
+                } else {
+                  console.log("aan" + event.target.value);
+                   document.getElementById("r"+event.target.value).className = "bla";
+                }
+            })
+        }
+        
+
+    </script>
 {% endblock %}

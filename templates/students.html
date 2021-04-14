@@ -21,7 +21,7 @@
     </tr>
     {% endfor %}
 </table>
-<p>Format of csv-file: ovnummer;first_name;prefix;last_name;email;idgroup</p>
+<p>Format of csv-file: ovnummer;first_name;prefix;last_name;email;idgroup;opleiding;begindatum</p>
 <form action="/students/import" method="post" enctype="multipart/form-data">
     {{ csrf.field | raw }}
     Select csv file:

@@ -37,11 +37,10 @@ class ResultController
         $r->idstudent = $request->getAttribute("idstudent");
         $r->idexam = $request->getAttribute('idexam');
         $r->exam_date = $request->getAttribute("exam_date");
-        $assessors = $r->getAssessorsByExamByDate();
-        $results = $r->resultsByExamStudentsWithAllAspects();
-        $user = new User($this->db);
-        //$assessors = $user->readByIds([$results['assessor1'], $results['assessor2']]);
-        $report = $r->resultsByExamStudents($request->getAttribute('idstudent'));
+        //$assessors = $r->getAssessorsByExamByDate();
+        //$results = $r->resultsByExamStudentsWithAllAspects();
+        //$user = new User($this->db);
+        //$report = $r->resultsByExamStudents($request->getAttribute('idstudent'));
 
         if($exam->examcode == "LB") {
             $page = 'lb_detail_with_aspects.html';
@@ -53,11 +52,12 @@ class ResultController
 
 
         $this->view->render($response, $page, [
-            'results' => $results,
+            'results' => $r->resultsByExamStudentsWithAllAspects(),
             'student' => $student,
             'exam' => $exam,
-            'assessors' => $assessors,
-            'report' => $report
+            'exam_date' => $r->exam_date,
+            'assessors' => $r->getAssessorsByExamByDate(),
+            'report' => $r->resultsByExamStudents($request->getAttribute('idstudent'))
         ]);
 
     }

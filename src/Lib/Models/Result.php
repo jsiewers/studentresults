@@ -184,7 +184,7 @@ class Result
             $proces[$r['idproces']]['assignments'][$r['idassignment']]['min_score'] = $r['min_score'];
             if($r['min_score'] > 0) {
                 $examresults['critical_assignments'][$r['idassignment']]['description'] = $r['assignment_description'];
-                if(!$examresults['critical_assignments'][$r['idassignment']]['passed']) {
+                if(!isset($examresults['critical_assignments'][$r['idassignment']]['passed'])) {
                     $examresults['critical_assignments'][$r['idassignment']]['passed'] = 1;
                 }
             }
@@ -360,11 +360,19 @@ class Result
 
 
     public function examResultsByStudent($idstudent) {
+    	$exams = [];
         $sql = "select
                 e.description as exam_description,
                 e.caesura as caesura,
+                e.examcode as exam_code,
                 r.exam_date, 
                 e.idexam,
+                er.assessor1,
+                er.assessor2,
+                u1.first_name as assessor1_firstname,
+                u1.last_name as assessor1_lastname,
+                u2.first_name as assessor2_firstname,
+                u2.last_name as assessor2_lastname,
                 SUM(a.score) as score,
                 SUM(CASE WHEN ass.min_score > a.score THEN 1 ELSE 0 END) as grade
                 from result as r
@@ -373,17 +381,26 @@ class Result
                 join assignment as ass on a.idassignment = ass.idassignment
                 join proces as p on ass.idproces = p.idproces
                 join exam as e on p.idexam = e.idexam
+                join exam_result as er on er.idstudent = r.idstudent and er.exam_date = r.exam_date and er.idexam = r.idexam
+                join user as u1 on u1.iduser = er.assessor1
+                join user as u2 on u2.iduser = er.assessor2
                 where r.idstudent = :idstudent
-                group by e.idexam, exam_description, caesura, r.exam_date
+                group by e.idexam, exam_description, caesura, r.exam_date, er.assessor1, er.assessor2
                 order by soort, exam_description, r.exam_date ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);
         $stmt->execute();
         //$stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Result::class, [$this->db]);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        
         foreach($stmt->fetchAll() as $r) {
             $caesura = explode(" ", $r['caesura']);
             $exams[$r['idexam']]['description'] = $r['exam_description'];
+            $exams[$r['idexam']]['examcode'] = $r['exam_code'];
+            $exams[$r['idexam']]['assessor1'] = $r['assessor1'];
+            $exams[$r['idexam']]['assessor1_fullname'] = $r['assessor1_firstname']." ".$r['assessor1_lastname'];
+            $exams[$r['idexam']]['assessor2'] = $r['assessor2'];
+            $exams[$r['idexam']]['assessor2_fullname'] = $r['assessor2_firstname']." ".$r['assessor2_lastname'];
             //$exams[$r['idexam']]['attempt'][$r['exam_date']]['idaspect'] = $r['idaspect'];
             $exams[$r['idexam']]['attempt'][$r['exam_date']]['score'] = $r['score'];
             if($r['grade'] == 0) {
@@ -405,6 +422,7 @@ class Result
            }
         }
         //$this->examgroupScores($exams);
+        //print_r($exams);
         return $exams;
     }
 
@@ -486,8 +504,10 @@ class Result
     {
         $sql = "select 
                 er.idexam,
-                er.exam_date
+                er.exam_date,
+                e.examcode
                 from exam_result as er
+                join exam e on er.idexam = e.idexam
                 where er.idstudent = :idstudent";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':idstudent', $idstudent, PDO::PARAM_INT);

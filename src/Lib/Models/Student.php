@@ -8,13 +8,13 @@
 
 namespace Lib\Models;
 use PDO;
-
+use DateTime;
 
 
 class Student
 {
     protected $pdo;
-    public $idstudent, $first_name, $last_name, $prefix, $email, $idgroup, $stime;
+    public $idstudent, $first_name, $last_name, $prefix, $email, $idgroup, $opleiding, $begindatum, $stime;
 
     public function __construct($db)
     {
@@ -77,29 +77,32 @@ class Student
         return $stmt->fetch();
     }
 
-    public function setup() {
-        //$this->dropTable();
-        $this->createTable();
-        $this->seedTable();
-    }
-
-    public function createTable()
-    {
-
-        $sql = "CREATE TABLE IF NOT EXISTS `results` . `student` (
-        `idstudent` INT NOT NULL,
-        `first_name` VARCHAR(45) NOT NULL,
-        `last_name` VARCHAR(45) NOT NULL,
-        `prefix` VARCHAR(45) NULL,
-        PRIMARY KEY(`idstudent`))
-        ENGINE = InnoDB;";
-
-        $stmt = $this->pdo->query($sql);
-
-    }
+//     public function setup() {
+//         //$this->dropTable();
+//         $this->createTable();
+//         $this->seedTable();
+//     }
+// 
+//     public function createTable()
+//     {
+// 
+//         $sql = "CREATE TABLE IF NOT EXISTS `results` . `student` (
+//         `idstudent` INT NOT NULL,
+//         `first_name` VARCHAR(45) NOT NULL,
+//         `last_name` VARCHAR(45) NOT NULL,
+//         `prefix` VARCHAR(45) NULL,
+//         PRIMARY KEY(`idstudent`))
+//         ENGINE = InnoDB;";
+// 
+//         $stmt = $this->pdo->query($sql);
+// 
+//     }
 
     public function save() {
-        $sql = "REPLACE INTO student (idstudent, first_name, last_name, prefix, email, idgroup) VALUES (:idstudent, :first_name, :last_name, :prefix, :email, :idgroup);";
+    	$begindatum = DateTime::createFromFormat('d-m-Y',$this->begindatum)->format('Y-m-d');
+        
+        $sql = "REPLACE INTO student (idstudent, first_name, last_name, prefix, email, idgroup, opleiding, begindatum) VALUES (:idstudent, :first_name, :last_name, :prefix, :email, :idgroup, :opleiding, :begindatum);";
+        
         try {
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':idstudent', $this->idstudent, PDO::PARAM_INT);
@@ -108,28 +111,30 @@ class Student
             $stmt->bindParam(':prefix', $this->prefix, PDO::PARAM_STR);
             $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
             $stmt->bindParam(':idgroup', $this->idgroup, PDO::PARAM_STR);
+            $stmt->bindParam(':opleiding', $this->opleiding, PDO::PARAM_STR);
+            $stmt->bindParam(':begindatum', $begindatum);
             $stmt->execute();
         } catch (\PDOException $e){
             echo $e->getMessage();
         }
     }
 
-    public function dropTable() {
-        $sql = "DROP TABLE IF EXISTS `results`.`student` ;";
-        $stmt = $this->pdo->query($sql);
-   }
-
-    public function seedTable() {
-        $sql = [
-            "REPLACE INTO `results`.`student` (`idstudent`, `first_name`, `last_name`, `prefix`) VALUES (584999, 'Jan Jaap', 'Siewers', NULL);",
-            "REPLACE INTO `results`.`student` (`idstudent`, `first_name`, `last_name`, `prefix`) VALUES (788765, 'Piet', 'Vries', 'de');",
-            "REPLACE INTO `results`.`student` (`idstudent`, `first_name`, `last_name`, `prefix`) VALUES (654332, 'Klaas', 'Bruggeman', NULL);",
-            "REPLACE INTO `results`.`student` (`idstudent`, `first_name`, `last_name`, `prefix`) VALUES (203349, 'Wesley', 'Sneijder', NULL);",
-            ];
-
-        foreach($sql as $q) {
-            $stmt = $this->pdo->query($q);
-        }
-    }
+//     public function dropTable() {
+//         $sql = "DROP TABLE IF EXISTS `results`.`student` ;";
+//         $stmt = $this->pdo->query($sql);
+//    }
+// 
+//     public function seedTable() {
+//         $sql = [
+//             "REPLACE INTO `results`.`student` (`idstudent`, `first_name`, `last_name`, `prefix`) VALUES (584999, 'Jan Jaap', 'Siewers', NULL);",
+//             "REPLACE INTO `results`.`student` (`idstudent`, `first_name`, `last_name`, `prefix`) VALUES (788765, 'Piet', 'Vries', 'de');",
+//             "REPLACE INTO `results`.`student` (`idstudent`, `first_name`, `last_name`, `prefix`) VALUES (654332, 'Klaas', 'Bruggeman', NULL);",
+//             "REPLACE INTO `results`.`student` (`idstudent`, `first_name`, `last_name`, `prefix`) VALUES (203349, 'Wesley', 'Sneijder', NULL);",
+//             ];
+// 
+//         foreach($sql as $q) {
+//             $stmt = $this->pdo->query($q);
+//         }
+//     }
 
 }

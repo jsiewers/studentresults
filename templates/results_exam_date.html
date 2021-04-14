@@ -110,8 +110,11 @@ Opmerkingen n.a.v. correctie
             var ss = document.getElementById("r"+studentselector[i].value);
             ss.addEventListener('change', (event) => {
                 if(!event.target.checked){
-                    console.log(event.target.value);
+                    console.log("uit" + event.target.value);
                     document.getElementById("r"+event.target.value).className = "noprint";
+                } else {
+                  console.log("aan" + event.target.value);
+                   document.getElementById("r"+event.target.value).className = "bla";
                 }
             })
         }

@@ -39,6 +39,7 @@ $app->group('', function () {
     $this->post('/aspect/{idexam }/{idproces }/{idassignment}/new', 'AspectController:save');
     $this->post('/aspect/{idexam }/{idproces }/{idassignment}/{idaspect}/update', 'AspectController:update');
     $this->get('/results/{idstudent}', 'ResultController:results')->setName('student.results');
+    
     $this->get('/newresult/{idstudent}/{idexam}/{exam_date}', 'ResultController:newresult');
     $this->get('/all_newresults/{idstudent}', 'ResultController:all_newresults');
     $this->get('/result/{idstudent}/{idexam}/{exam_date}/{template}', 'ResultController:detail');
@@ -58,6 +59,8 @@ $app->group('', function () {
     $this->post('/students', 'StudentController:show');
 })->add(new AuthMiddleware($container));
 
+
+//http://sr.test/result/2080398/2518701/2021-04-12/detail/delete
 //http://localhost:8888/result/2518713/2019-08-26
 
 $app->group('', function () {

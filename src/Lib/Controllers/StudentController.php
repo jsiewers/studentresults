@@ -86,6 +86,8 @@ class StudentController
                 $student->last_name = $arr[3];
                 $student->email = $arr[4];
                 $student->idgroup = $arr[5];
+                $student->opleiding = $arr[6];
+                $student->begindatum = $arr[7];
                 $student->save();
                 $sts[] = $student;
                 $rowcount++;

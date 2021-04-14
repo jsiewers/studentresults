@@ -7,3 +7,18 @@ SELECT u.iduser, first_name, last_name, email, active, r.description
 #ALTER TABLE user
 #ADD COLUMN active TINYINT(1) AFTER email;
 #UPDATE user SET active = 1 WHERE iduser > 0;
+#update exam set crebo = "25187" where description like "B%";
+
+
+#ALTER TABLE student
+#ADD COLUMN opleiding VARCHAR(254) AFTER email;
+#update student set opleiding = "MMV25187OR - Applicatieontwikkelaar" where idgroup in ("MMVAOO6A", "MMVAOO6B","MMVAOO6C", "MMVAOO7A","MMVAOO7B", "MMVAOO8A","MMVAOO8B", "MMVAOO8C", "MMVAOO9A","MMVAOO9B", "MMVAOO9C", "MMVAOO9D");
+#update student set opleiding = "MMV25604OR - Software Developer" where idgroup in ("MMVAOO0A", "MMVAOO0B","MMVAOO0C");
+
+#ALTER TABLE student
+#ADD COLUMN begindatum DATE AFTER opleiding;
+#update student set begindatum = STR_TO_DATE('01-08-2016', '%d-%m-%Y') WHERE idgroup like "%6%";
+#update student set begindatum = STR_TO_DATE('01-08-2017', '%d-%m-%Y') WHERE idgroup like "%7%";
+#update student set begindatum = STR_TO_DATE('01-08-2018', '%d-%m-%Y') WHERE idgroup like "%8%";
+#update student set begindatum = STR_TO_DATE('01-08-2019', '%d-%m-%Y') WHERE idgroup like "%9%";
+#update student set begindatum = STR_TO_DATE('01-08-2020', '%d-%m-%Y') WHERE idgroup like "%0%";
